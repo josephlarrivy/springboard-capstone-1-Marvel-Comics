@@ -1,8 +1,8 @@
 from flask import Flask, render_template, redirect, session, flash
 from flask_debugtoolbar import DebugToolbarExtension
-# from forms import FormName
-from models import connect_db, db, User
-# from sqlalchemy.exc import IntegrityError
+from forms import AddUserForm, UserForm
+from models import connect_db, db, User, List, ListTitle, ComicTitle
+from sqlalchemy.exc import IntegrityError
 
 app = Flask(__name__)
 app.config["SQLALCHEMY_DATABASE_URI"] = "postgresql:///Springboard-Capstone-1"
@@ -21,9 +21,9 @@ toolbar = DebugToolbarExtension(app)
 
 @app.route('/')
 def redirect_home():
-    return redirect('/')
+    return redirect('/home')
 
 @app.route('/home')
 def show_homepage():
-    return render_template('/main/home.html')
-
+    user = User.query.get('user1')
+    return render_template('/main/home.html', user=user)

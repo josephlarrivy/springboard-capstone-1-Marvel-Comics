@@ -1,4 +1,6 @@
 from flask_sqlalchemy import SQLAlchemy
+from flask_bcrypt import Bcrypt
+
 db = SQLAlchemy()
 
 def connect_db(app):
@@ -20,3 +22,32 @@ class User(db.Model):
     last_name = db.Column(db.String(30), nullable=False)
     email = db.Column(db.String)
 
+    lists = db.relationship('Lists', backref='user')
+
+
+class List(db.Model):
+    
+    __tablename__ = 'lists'
+
+    id = db.Column(db.Integer, autoincrement=True, primary_key=True)
+    list_name = db.Column(db.String(30),nullable=False)
+    username = db.Column(db.Text, db.ForeignKey('users.username'), nullable=False)
+
+    comics = db.relationship('Comic', secondary='lists_comics', backref='lists')
+
+
+class ListComic(db.Model):
+
+    __tablename__ = 'lists_comics'
+
+    id = db.Column(db.Integer, autoincrement=True, primary_key=True)
+    list_id = db.Column(db.Integer, db.ForeignKey('lists.id'))
+    comic_id = db.Column(db.Integer, db.ForeignKey('comics.id'))
+
+
+class Comic(db.Model):
+
+    __tablename__ = 'comics'
+
+    id = db.Column(db.Integer, autoincrement=True, primary_key=True)
+    name = db.Column(db.Text, nullable=False)

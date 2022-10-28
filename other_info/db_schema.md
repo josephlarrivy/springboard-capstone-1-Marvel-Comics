@@ -1,4 +1,4 @@
-QuickDB formatted schema layout
+QuickDB formatted database schema layout
 
 <!-- xxxxxxxxxxxxxxxxxxxxxxxx -->
 
@@ -15,7 +15,7 @@ lists
 id (pk)
 user_id FK >- user.id
 list_name
-list_items FK >- title.title_name
+list_items
 list_user_content
 comments FK >- user.id
 
@@ -27,7 +27,7 @@ name
 title
 -
 title_id
-title_name
+title_name FK >- lists.list_items
 characters
 
 title_character
