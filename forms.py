@@ -12,6 +12,13 @@ class AddUserForm(FlaskForm):
     last_name = StringField('Last Name', validators=[InputRequired()])
     email = StringField('email', validators=[InputRequired()])
 
+class DisposableUserForm(FlaskForm):
+    username = StringField('Username')
+    password = PasswordField('Password')
+    first_name = StringField('First Name')
+    last_name = StringField('Last Name')
+    email = StringField('email')
+
 class UserForm(FlaskForm):
     username = StringField('Username', validators=[InputRequired()])
     password = PasswordField('Password', validators=[InputRequired()])

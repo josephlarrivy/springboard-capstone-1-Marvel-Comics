@@ -1,0 +1,34 @@
+{% extends '/main/base.html' %}
+{% block title %}Home{% endblock %}
+{% block content %}
+
+<form method='POST'>
+    {{form.hidden_tag()}}
+    
+    <p>Are you sure you don't want to save your activity?</p>
+
+<!--     
+
+    {% for field in form if field.widget.input_type != 'hidden' %}
+    <p>
+        {{field.label}}
+        {{field}}
+    </p>
+    {% endfor %}
+
+    {% with messages = get_flashed_messages() %}
+    {% if messages %}
+    <ul class=flashes>
+        {% for message in messages %}
+        <li>{{ message }}</li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+    {% endwith %} -->
+
+    <button class="btn btn-dark">Yes</button>
+</form>
+
+<a href="/register"><button type="button" class="btn btn-dark">No</button></a>
+
+{% endblock %}

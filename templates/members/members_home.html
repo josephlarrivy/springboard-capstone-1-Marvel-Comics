@@ -4,10 +4,11 @@
 
 <h1>Members Home</h1>
 
-<h2>Welcome {{user.username}}</h2>
+<h2>Welcome {{user.first_name}} {{user.last_name}}</h2>
 
-
-
+<p>{{user.first_name}}</p>
+<p>{{user.last_name}}</p>
+<p>{{user.email}}</p>
 
 
 {% with messages = get_flashed_messages() %}
