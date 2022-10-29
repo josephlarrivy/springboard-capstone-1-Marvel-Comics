@@ -2,13 +2,18 @@
 {% block title %}Home{% endblock %}
 {% block content %}
 
-<h1>{{user.username}}</h1>
+<h1>Own Profile</h1>
 
+<h2>username: {{user.username}}</h2>
+
+
+<!-- 
 <h2>Welcome {{user.first_name}} {{user.last_name}}</h2>
 
-<p>{{user.first_name}}</p>
-<p>{{user.last_name}}</p>
-<p>{{user.email}}</p>
+<p>username: {{user.username}}</p>
+<p>first name: {{user.first_name}}</p>
+<p>last name: {{user.last_name}}</p>
+<p>email: {{user.email}}</p>
 
 
 {% with messages = get_flashed_messages() %}
@@ -19,6 +24,6 @@
     {% endfor %}
 </ul>
 {% endif %}
-{% endwith %}
+{% endwith %} -->
 
 {% endblock %}

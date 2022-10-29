@@ -6,9 +6,19 @@
 
 <h2>Welcome {{user.first_name}} {{user.last_name}}</h2>
 
-<p>{{user.first_name}}</p>
-<p>{{user.last_name}}</p>
-<p>{{user.email}}</p>
+<p>username: {{user.username}}</p>
+<p>first name: {{user.first_name}}</p>
+<p>last name: {{user.last_name}}</p>
+<p>email: {{user.email}}</p>
+
+
+<br>
+<br>
+
+
+<h1>Other Members</h1>
+
+<a href="/members/ExampleUser/view"><button type="button" class="btn btn-dark">Example User</button></a>
 
 
 {% with messages = get_flashed_messages() %}

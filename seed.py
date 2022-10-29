@@ -22,6 +22,15 @@ user2 = User(
     email='user2_email@test.com'
 )
 
-db.session.add_all([user1, user2])
+user3 = User(
+    username='ExampleUser',
+    password='ExampleUser',
+    first_name='ExampleFirstName',
+    last_name='ExampleLastName',
+    email='example@example.com'
+)
+
+
+db.session.add_all([user1, user2, user3])
 db.session.commit()
 

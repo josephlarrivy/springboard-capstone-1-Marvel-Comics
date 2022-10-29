@@ -122,7 +122,29 @@ def show_members_home(username):
     if 'username' not in session or username != session['username']:
         flash('must log in or register to view')
         return redirect('/login')
-
     curr_user = User.query.get(username)
     if curr_user.username == session['username']:
         return render_template('/members/members_home.html', user=curr_user, username=username)
+
+
+@app.route('/members/<username>/profile')
+def show_own_profile(username):
+    user = User.query.get(username)
+    if 'username' not in session:
+        flash('must log in or register to view')
+        return redirect('/login')
+    elif username == session['username']:
+        return render_template('/members/own_member_profile.html', user=user, username=username)
+    else:
+        return redirect(f'/members/{{user.username}}/view')
+
+
+@app.route('/members/<view_user>/view')
+def show_other_profile(view_user):
+    if 'username' not in session:
+        flash('must log in or register to view')
+        return redirect('/login')
+    else:
+        view_user = User.query.get(view_user)
+        username = session['username']
+        return render_template('/members/other_member_profile.html', view_user=view_user, username=username)
