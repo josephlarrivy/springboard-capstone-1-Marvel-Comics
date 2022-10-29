@@ -9,7 +9,7 @@ import random
 app = Flask(__name__)
 app.config["SQLALCHEMY_DATABASE_URI"] = "postgresql:///Springboard-Capstone-1"
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
-app.config["SQLALCHEMY_ECHO"] = True
+app.config["SQLALCHEMY_ECHO"] = False
 app.config["SECRET_KEY"] = "W89#kU*67jL9##fhy@$hdj"
 app.config['DEBUG_TB_INTERCEPT_REDIRECTS'] = False
 
@@ -49,7 +49,6 @@ def register_new_user():
         except IntegrityError:
             flash('username already taken')
         
-        session['username'] = username
         return redirect(f'/members/members_home/{username}')
     
     return render_template('/users/register.html', form=form)
