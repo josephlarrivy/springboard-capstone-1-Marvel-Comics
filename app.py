@@ -1,7 +1,7 @@
 from flask import Flask, render_template, redirect, session, flash
 from flask_debugtoolbar import DebugToolbarExtension
 from forms import AddUserForm, DisposableUserForm, UserForm
-from models import connect_db, db, User, List, ListComic, Comic
+from models import connect_db, db, User, List
 from sqlalchemy.exc import IntegrityError
 import string
 import random
