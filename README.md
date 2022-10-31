@@ -4,4 +4,4 @@ https://developer.marvel.com/
 https://developer.marvel.com/docs
 
 Public key: 2ac97a968bcc7e93db871c96a5dfd4d3
-Private key in /other_info/secrets.py
+Private key in secrets.py

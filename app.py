@@ -5,6 +5,9 @@ from models import connect_db, db, User, List
 from sqlalchemy.exc import IntegrityError
 import string
 import random
+import requests
+from marvel import Marvel
+from keys import PUBLIC_KEY, PRIVATE_KEY
 
 app = Flask(__name__)
 app.config["SQLALCHEMY_DATABASE_URI"] = "postgresql:///Springboard-Capstone-1"
@@ -16,6 +19,7 @@ app.config['DEBUG_TB_INTERCEPT_REDIRECTS'] = False
 connect_db(app)
 
 toolbar = DebugToolbarExtension(app)
+marvel = Marvel(PUBLIC_KEY=PUBLIC_KEY, PRIVATE_KEY=PRIVATE_KEY)
 
 #################################
 
@@ -147,3 +151,26 @@ def show_other_profile(view_user):
         view_user = User.query.get(view_user)
         username = session['username']
         return render_template('/members/other_member_profile.html', view_user=view_user, username=username)
+
+
+
+
+
+
+
+
+
+@app.route('/test_view')
+def test_comic_view():
+    
+
+    characters = marvel.characters
+
+    # my_character = characters.all(name='Black Panther')['data']['results']
+    my_character = characters.all(name='black widow')['data']['results']
+
+
+    my_char = characters.all(nameStartsWith='Black')['data']['results']
+
+
+    return render_template('/main/test_comic_view.html', my_character=my_character, my_char=my_char)
