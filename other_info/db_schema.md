@@ -1,4 +1,4 @@
-QuickDB formatted database schema layout
+QuickDstsBaseDiagrams-formatted database schema layout (copy & paste into quickdbd)
 
 <!-- xxxxxxxxxxxxxxxxxxxxxxxx -->
 
@@ -12,25 +12,31 @@ last_name
 
 lists
 -
+list_name
 id (pk)
 user_id FK >- user.id
-list_name
-list_items
-list_user_content
-comments FK >- user.id
+
+list_series
+-
+list_id FK >- lists.id
+series_id FK >- series.series_id
 
 characters
 -
 character_id
 name
 
-title
+series
 -
-title_id
-title_name FK >- lists.list_items
-characters
+series_id
+comic_name
 
-title_character
+series_character
 -
-title_id FK >- title.title_id
+series_id FK >- series.series_id
+character_id FK >- characters.character_id
+
+list_character
+-
+list_id FK >- lists.id
 character_id FK >- characters.character_id

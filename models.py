@@ -43,26 +43,7 @@ class User(db.Model):
 class List(db.Model):
     
     __tablename__ = 'lists'
-
+    
+    list_name = db.Column(db.String(30), nullable=False)
     id = db.Column(db.Integer, autoincrement=True, primary_key=True)
-    list_name = db.Column(db.String(30),nullable=False)
-    username = db.Column(db.Text, db.ForeignKey('users.username'), nullable=False)
-
-    comics = db.relationship('Comic', secondary='lists_comics', backref='lists')
-
-
-class ListComic(db.Model):
-
-    __tablename__ = 'lists_comics'
-
-    id = db.Column(db.Integer, autoincrement=True, primary_key=True)
-    list_id = db.Column(db.Integer, db.ForeignKey('lists.id'))
-    comic_id = db.Column(db.Integer, db.ForeignKey('comics.id'))
-
-
-class Comic(db.Model):
-
-    __tablename__ = 'comics'
-
-    id = db.Column(db.Integer, autoincrement=True, primary_key=True)
-    name = db.Column(db.Text, nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'), nullable=False)
