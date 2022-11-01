@@ -1,8 +1,22 @@
 {% extends '/main/base.html' %}
 {% block title %}Search Characters{% endblock %}
 {% block content %}
+<div class="text-center">
 
-<h1>Search</h1>
+<br>
+<h1>Characters</h1>
+<br>
+<div class="row">
+<img src="http://i.annihil.us/u/prod/marvel/i/mg/3/50/537ba56d31087.jpg" class="rounded mx-auto d-block" style="width: 300px">
+<img src="http://i.annihil.us/u/prod/marvel/i/mg/9/c0/527bb7b37ff55.jpg" class="rounded mx-auto d-block" style="width: 300px">
+<img src="http://i.annihil.us/u/prod/marvel/i/mg/d/d0/5269657a74350.jpg" class="rounded mx-auto d-block" style="width: 300px">
+</div>
+<br>
+<br>
+
+
+
+<h1>Search Characters</h1>
 
 <form method='POST'>
     {{form.hidden_tag()}}
@@ -18,18 +32,18 @@
     {% if messages %}
     <ul class=flashes>
         {% for message in messages %}
-        <li>{{ message }}</li>
+        <li class="list-unstyled">{{ message }}</li>
         {% endfor %}
     </ul>
     {% endif %}
     {% endwith %}
 
-    <button>Submit</button>
+    <button class="btn btn-dark">Submit</button>
 </form>
 
 
 
 
 
-
+</div>
 {% endblock %}

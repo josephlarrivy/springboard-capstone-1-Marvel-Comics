@@ -1,6 +1,6 @@
 from flask import Flask, render_template, redirect, session, flash
 from flask_debugtoolbar import DebugToolbarExtension
-from forms import AddUserForm, CharacterSearch, DisposableUserForm, UserForm
+from forms import AddUserForm, CharacterSearch, DisposableUserForm, UserForm, IssueSearch
 from models import connect_db, db, User, List
 from sqlalchemy.exc import IntegrityError
 import string
@@ -166,7 +166,7 @@ def show_other_profile(view_user):
 
 ##########################
 
-# content routes
+# search characters
 
 @app.route('/search/characters', methods=['GET', 'POST'])
 def search_characters():
@@ -175,25 +175,79 @@ def search_characters():
 
     if form.validate_on_submit():
         character_search_term = form.character_search_term.data
-
         return redirect(f'/view_character/{character_search_term}')
 
     return render_template('/content/characters/search_characters.html', form=form, username=username)
 
 
-
 @app.route('/view_character/<character_name>')
-def view_raw_data(character_name):
+def show_characters(character_name):
     username = session['username']
     characters = marvel.characters
     comics = marvel.comics
 
-    single_character = characters.all(name=f'{character_name}')['data']['results'][0]
+    try:
+        single_character = characters.all(name=f'{character_name}')['data']['results'][0]
 
-    character_id = single_character['id']
+        character_id = single_character['id']
 
-    character_data = characters.get(f'{character_id}')['data']['results'][0]
+        character_data = characters.get(f'{character_id}')['data']['results'][0]
 
-    comic_series = characters.comics(f'{character_id}')['data']['results']
+        comic_series = characters.comics(f'{character_id}')['data']['results']
 
-    return render_template('/content/characters/view_character.html', username=username, single_character=single_character, character_id=character_id, comics=comics, character_data=character_data, comic_series=comic_series)
+        return render_template('/content/characters/view_character.html', username=username, single_character=single_character, character_id=character_id, comics=comics, character_data=character_data, comic_series=comic_series)
+    
+    except IndexError:
+        flash('Character not found. Please check your spelling.')
+        return redirect('/search/characters')
+
+##########################
+
+# view issues
+
+
+
+@app.route('/view/issues', methods=['GET', 'POST'])
+def view_issues():
+    username = session['username']
+    comics = marvel.comics
+
+    get_comics = comics.all()['data']['results']
+
+
+
+
+    return render_template('/content/issues/view_issues.html', username=username, get_comics=get_comics, comics=comics)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+@app.route('/search/issues', methods=['GET', 'POST'])
+def search_issues():
+    username = session['username']
+    form = IssueSearch()
+
+    if form.validate_on_submit():
+        issue_search_term = form.issue_search_term.data
+        return redirect(f'/view_issues/{issue_search_term}')
+
+    return render_template('/content/issues/search_issues.html', form=form, username=username)
+
+
+@app.route('/view_issues/<issue_search_term>')
+def show_searched_issues(issue_search_term):
+    username = session['username']
+
+
+    return render_template('/content/issues/view_issues.html', username=username)
+

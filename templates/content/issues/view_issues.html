@@ -1,0 +1,43 @@
+{% extends '/main/base.html' %}
+{% block title %}Issues{% endblock %}
+{% block content %}
+
+<!-- <div class="text-center"> -->
+<br>
+
+<ul>
+    {% for comic in get_comics %}
+        <li>{{comic['id']}}</li>
+    {% endfor %}
+</ul>
+
+<h4>BREAK1</h4>
+
+<p>{{comics.get(82970)['data']['results'][0]['thumbnail']['path']}}</p>
+
+<img src="{{comics.get(1689)['data']['results'][0]['thumbnail']['path']}}">
+
+<h4>BREAK2</h4>
+
+<ul>
+    {% for comic in get_comics %}
+    <li>{{comic['title']}}</li>
+    {% endfor %}
+</ul>
+
+<br>
+<br>
+<h1>BREAK3</h1>
+<br>
+<br>
+
+<p>{{get_comics}}</p>
+
+
+
+
+
+
+
+<!-- </div> -->
+{% endblock %}
