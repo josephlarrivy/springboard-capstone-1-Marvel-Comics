@@ -1,6 +1,6 @@
 from flask import Flask, render_template, redirect, session, flash
 from flask_debugtoolbar import DebugToolbarExtension
-from forms import AddUserForm, DisposableUserForm, UserForm
+from forms import AddUserForm, CharacterSearch, DisposableUserForm, UserForm
 from models import connect_db, db, User, List
 from sqlalchemy.exc import IntegrityError
 import string
@@ -23,7 +23,7 @@ marvel = Marvel(PUBLIC_KEY=PUBLIC_KEY, PRIVATE_KEY=PRIVATE_KEY)
 
 #################################
 
-# Home/register/login/logout
+# home routes
 
 @app.route('/')
 def redirect_home():
@@ -31,7 +31,17 @@ def redirect_home():
 
 @app.route('/home')
 def show_homepage():
-    return render_template('/main/home.html')
+    if 'username' not in session:
+        return render_template('/main/home.html')
+    else:
+        username = session['username']
+        curr_user = User.query.get(username)
+        return render_template('/members/members_home.html', user=curr_user, username=username)
+
+
+##########################
+
+# register/login/logout routes
 
 @app.route('/register', methods=['GET', 'POST'])
 def register_new_user():
@@ -118,11 +128,11 @@ def logout():
 
 ################################
 
-# routes for logged-in users
+# user routes
 
 @app.route('/members/members_home/<username>')
 def show_members_home(username):
-    if 'username' not in session or username != session['username']:
+    if 'username' not in session:
         flash('must log in or register to view')
         return redirect('/login')
     curr_user = User.query.get(username)
@@ -154,23 +164,36 @@ def show_other_profile(view_user):
 
 
 
+##########################
+
+# content routes
+
+@app.route('/search/characters', methods=['GET', 'POST'])
+def search_characters():
+    username = session['username']
+    form = CharacterSearch()
+
+    if form.validate_on_submit():
+        character_search_term = form.character_search_term.data
+
+        return redirect(f'/view_character/{character_search_term}')
+
+    return render_template('/content/characters/search_characters.html', form=form, username=username)
 
 
 
-
-
-
-@app.route('/test_view')
-def test_comic_view():
-    
-
+@app.route('/view_character/<character_name>')
+def view_raw_data(character_name):
+    username = session['username']
     characters = marvel.characters
+    comics = marvel.comics
 
-    # my_character = characters.all(name='Black Panther')['data']['results']
-    my_character = characters.all(name='black widow')['data']['results']
+    single_character = characters.all(name=f'{character_name}')['data']['results'][0]
 
+    character_id = single_character['id']
 
-    my_char = characters.all(nameStartsWith='Black')['data']['results']
+    character_data = characters.get(f'{character_id}')['data']['results'][0]
 
+    comic_series = characters.comics(f'{character_id}')['data']['results']
 
-    return render_template('/main/test_comic_view.html', my_character=my_character, my_char=my_char)
+    return render_template('/content/characters/view_character.html', username=username, single_character=single_character, character_id=character_id, comics=comics, character_data=character_data, comic_series=comic_series)

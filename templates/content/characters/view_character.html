@@ -1,0 +1,26 @@
+{% extends '/main/base.html' %}
+{% block title %}Character Details{% endblock %}
+{% block content %}
+
+
+<div class="text-center">
+<br>
+    <h1>{{single_character['name']}}</h1>
+<br>
+    <img src="{{single_character['thumbnail']['path']}}.jpg" class="rounded mx-auto d-block" style="width: 400px">
+<br>
+    <h3>Biography</h3>
+    <p>{{single_character['description']}}</p>
+<br>
+    <h3>Appearances</h3>
+    <ul class="list-unstyled">
+        {% for comic in comic_series %}
+        <li>{{comic['title']}}</li>
+        {% endfor %}
+    </ul>
+
+
+    <p>{{character_data}}</p>
+
+</div>
+{% endblock %}

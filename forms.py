@@ -22,3 +22,6 @@ class DisposableUserForm(FlaskForm):
 class UserForm(FlaskForm):
     username = StringField('Username', validators=[InputRequired()])
     password = PasswordField('Password', validators=[InputRequired()])
+
+class CharacterSearch(FlaskForm):
+    character_search_term = StringField('Search Characters', validators=[InputRequired()])

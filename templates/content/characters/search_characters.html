@@ -1,0 +1,35 @@
+{% extends '/main/base.html' %}
+{% block title %}Search Characters{% endblock %}
+{% block content %}
+
+<h1>Search</h1>
+
+<form method='POST'>
+    {{form.hidden_tag()}}
+
+    {% for field in form if field.widget.input_type != 'hidden' %}
+    <p>
+        {{field.label}}
+        {{field}}
+    </p>
+    {% endfor %}
+
+    {% with messages = get_flashed_messages() %}
+    {% if messages %}
+    <ul class=flashes>
+        {% for message in messages %}
+        <li>{{ message }}</li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+    {% endwith %}
+
+    <button>Submit</button>
+</form>
+
+
+
+
+
+
+{% endblock %}
