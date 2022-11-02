@@ -11,7 +11,32 @@
 <br>
     <h3>Description</h3>
     <p>{{issue_data['description']}}</p>
-<br>
+
+
+{% with messages = get_flashed_messages() %}
+{% if messages %}
+<ul class="flashes list-unstyled">
+    {% for message in messages %}
+    <li>{{ message }}</li>
+    {% endfor %}
+</ul>
+{% endif %}
+{% endwith %}
+
+
+
+    <div class="m-4">
+        <div class="dropdown">
+            <a href="#" class="dropdown-toggle" data-bs-toggle="dropdown">Add this issue to a list</a>
+            <div class="dropdown-menu">
+                {% for list in lists %}
+                <a href="/add_issue/{{issue_data['id']}}/to/{{list.list_id}}" class="dropdown-item">{{list.list_name}}</a>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+
     <h3>Creators</h3>
     <ul class="list-unstyled">
     {% for creator in creators %}

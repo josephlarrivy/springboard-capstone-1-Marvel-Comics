@@ -1,7 +1,7 @@
 from flask import Flask, render_template, redirect, session, flash
 from flask_debugtoolbar import DebugToolbarExtension
 from forms import AddUserForm, CharacterSearch, DisposableUserForm, UserForm, IssueSearch, CreateListForm
-from models import connect_db, db, User, List
+from models import connect_db, db, User, List, ListIssue, Issue
 from sqlalchemy.exc import IntegrityError
 import string
 import random
@@ -12,7 +12,7 @@ from keys import PUBLIC_KEY, PRIVATE_KEY
 app = Flask(__name__)
 app.config["SQLALCHEMY_DATABASE_URI"] = "postgresql:///Springboard-Capstone-1"
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
-app.config["SQLALCHEMY_ECHO"] = False
+app.config["SQLALCHEMY_ECHO"] = True
 app.config["SECRET_KEY"] = "W89#kU*67jL9##fhy@$hdj"
 app.config['DEBUG_TB_INTERCEPT_REDIRECTS'] = False
 
@@ -197,26 +197,7 @@ def show_member_lists(username):
     curr_user = User.query.get(username)
     lists = curr_user.lists
 
-
     return render_template('/members/member_lists.html', username=username, lists=lists)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 ##########################
@@ -269,7 +250,49 @@ def view_single_issue(issue_id):
     creators = comics.get(f'{issue_id}')['data']['results'][0]['creators']['items']
     characters = comics.get(f'{issue_id}')['data']['results'][0]['characters']['items']
 
-    return render_template('/content/issues/view_single_issue.html', issue_data=issue_data, creators=creators, characters=characters)
+    user = User.query.get(username)
+    lists = user.lists
+
+    return render_template('/content/issues/view_single_issue.html', issue_data=issue_data, creators=creators, characters=characters, user=user, lists=lists, username=username)
+
+
+@app.route('/add_issue/<int:issue_id>/to/<list_id>', methods=['GET', 'POST'])
+def add_issue_to_list(issue_id, list_id):
+    if 'username' not in session:
+        flash('must log in or register to view')
+        return redirect('/login')
+    
+    issue_key = ''.join(random.choices(string.ascii_uppercase + string.digits, k=20))
+
+    save_issue_num = Issue.commit_issue_to_db(issue_key, issue_id)
+    db.session.add(save_issue_num)
+    db.session.commit()
+
+    commit_to_list = ListIssue.add_issue_to_list(list_id, issue_key)
+    db.session.add(commit_to_list)
+    db.session.commit()
+
+    return redirect(f'/view_single_issue/{issue_id}')
+
+
+
+@app.route('/view_list_contents/<username>/<list_id>', methods=['GET', 'POST'])
+def show_list_items(username, list_id):
+    comics = marvel.comics
+
+    
+    list = List.query.get(list_id)
+    issue_ids = list.issues
+
+    return render_template('/members/view_list_contents.html', list=list, issue_ids=issue_ids)
+
+
+
+
+    
+
+
+
 
 
 
@@ -285,7 +308,7 @@ def view_single_issue(issue_id):
 
 
 #####################
-# user these to return a search that matches some keywords?
+# use these to return a search that matches some keywords?
 
 @app.route('/search/issues', methods=['GET', 'POST'])
 def search_issues():
@@ -303,26 +326,15 @@ def search_issues():
 def show_searched_issues(issue_search_term):
     username = session['username']
 
-
     return render_template('/content/issues/view_issues.html', username=username)
 
 
 
+@app.route('/view/issues', methods=['GET', 'POST'])
+def view_issues():
+    username = session['username']
+    comics = marvel.comics
 
+    get_comics = comics.all()['data']['results']
 
-
-
-
-
-
-######################################
-# functions below this are probably trash
-
-# @app.route('/view/issues', methods=['GET', 'POST'])
-# def view_issues():
-#     username = session['username']
-#     comics = marvel.comics
-
-#     get_comics = comics.all()['data']['results']
-
-#     return render_template('/content/issues/view_issues.html', username=username, get_comics=get_comics, comics=comics)
+    return render_template('/content/issues/view_issues.html', username=username, get_comics=get_comics, comics=comics)

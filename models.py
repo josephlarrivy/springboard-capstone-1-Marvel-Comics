@@ -16,10 +16,10 @@ class User(db.Model):
 
     __tablename__ = 'users'
 
-    username = db.Column(db.String(25), primary_key=True, nullable=False, unique=True)
+    username = db.Column(db.Text, primary_key=True, nullable=False, unique=True)
     password = db.Column(db.Text, nullable=False)
-    first_name = db.Column(db.String(30), nullable=False)
-    last_name = db.Column(db.String(30), nullable=False)
+    first_name = db.Column(db.Text, nullable=False)
+    last_name = db.Column(db.Text, nullable=False)
     email = db.Column(db.String)
 
     lists = db.relationship('List')
@@ -43,12 +43,37 @@ class List(db.Model):
     
     __tablename__ = 'lists'
     
-    list_name = db.Column(db.String(25), nullable=False)
+    list_name = db.Column(db.Text, nullable=False)
     list_id = db.Column(db.Text, unique=True, primary_key=True, nullable=False)
-    username = db.Column(db.String, db.ForeignKey('users.username'), nullable=False)
+    username = db.Column(db.Text, db.ForeignKey('users.username'), nullable=False)
+
+    user = db.relationship('User')
+    issues = db.relationship('Issue', secondary='lists_issues', backref='lists')
 
     @classmethod
     def create_new_list(cls, list_name, list_id, username):
         return cls(list_name=list_name, list_id=list_id, username=username)
 
-    user = db.relationship('User')
+
+class ListIssue(db.Model):
+
+    __tablename__ = 'lists_issues'
+
+    list_id = db.Column(db.Text, db.ForeignKey('lists.list_id'), primary_key=True)
+    issue_key = db.Column(db.Text, db.ForeignKey('issues.issue_key'), primary_key=True)
+
+    @classmethod
+    def add_issue_to_list(cls, list_id, issue_key):
+        return cls(list_id=list_id, issue_key=issue_key)
+
+
+class Issue(db.Model):
+
+    __tablename__ = 'issues'
+
+    issue_key = db.Column(db.Text, primary_key=True, unique=True)
+    issue_id = db.Column(db.Integer)
+
+    @classmethod
+    def commit_issue_to_db(cls, issue_key, issue_id):
+        return cls(issue_key=issue_key, issue_id=issue_id)
