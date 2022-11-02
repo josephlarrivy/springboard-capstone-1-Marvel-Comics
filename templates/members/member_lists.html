@@ -1,0 +1,25 @@
+{% extends '/main/base.html' %}
+{% block title %}Home{% endblock %}
+{% block content %}
+<h1>{{username}}'s Lists</h1>
+
+<ul>
+    {% for list in lists %}
+        <li>{{list.list_name}}</li>
+    {% endfor %}
+</ul>
+
+
+
+
+{% with messages = get_flashed_messages() %}
+{% if messages %}
+<ul class=flashes>
+    {% for message in messages %}
+    <li>{{ message }}</li>
+    {% endfor %}
+</ul>
+{% endif %}
+{% endwith %}
+
+{% endblock %}

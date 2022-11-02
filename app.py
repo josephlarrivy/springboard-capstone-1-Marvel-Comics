@@ -1,6 +1,6 @@
 from flask import Flask, render_template, redirect, session, flash
 from flask_debugtoolbar import DebugToolbarExtension
-from forms import AddUserForm, CharacterSearch, DisposableUserForm, UserForm, IssueSearch
+from forms import AddUserForm, CharacterSearch, DisposableUserForm, UserForm, IssueSearch, CreateListForm
 from models import connect_db, db, User, List
 from sqlalchemy.exc import IntegrityError
 import string
@@ -74,12 +74,11 @@ def register_disposable():
     form = DisposableUserForm()
 
     if form.validate_on_submit():
-        N=20
-        username = ''.join(random.choices(string.ascii_uppercase + string.digits, k=N))
-        password = ''.join(random.choices(string.ascii_uppercase + string.digits, k=N))
+        username = ''.join(random.choices(string.ascii_uppercase + string.digits, k=20))
+        password = ''.join(random.choices(string.ascii_uppercase + string.digits, k=20))
         first_name = 'Guest'
         last_name = 'User'
-        email = ''.join(random.choices(string.ascii_uppercase + string.digits, k=N))
+        email = ''.join(random.choices(string.ascii_uppercase + string.digits, k=20))
 
         new_user = User.register_new_user(username, password, first_name, last_name, email)
         db.session.add(new_user)
@@ -128,7 +127,7 @@ def logout():
 
 ################################
 
-# user routes
+# member routes
 
 @app.route('/members/members_home/<username>')
 def show_members_home(username):
@@ -147,7 +146,8 @@ def show_own_profile(username):
         flash('must log in or register to view')
         return redirect('/login')
     elif username == session['username']:
-        return render_template('/members/own_member_profile.html', user=user, username=username)
+        lists = user.lists
+        return render_template('/members/own_member_profile.html', user=user, username=username, lists=lists)
     else:
         return redirect(f'/members/{{user.username}}/view')
 
@@ -161,6 +161,61 @@ def show_other_profile(view_user):
         view_user = User.query.get(view_user)
         username = session['username']
         return render_template('/members/other_member_profile.html', view_user=view_user, username=username)
+
+
+@app.route('/members/create_list_form', methods=['GET', 'POST'])
+def create_list_form():
+    if 'username' not in session:
+        flash('must log in or register to view')
+        return redirect('/login')
+
+    username = session['username']
+    form = CreateListForm()
+
+    if form.validate_on_submit():
+        list_name = form.list_name.data
+        list_id = ''.join(random.choices(string.ascii_uppercase + string.digits, k=20))
+        username = username
+
+        new_list = List.create_new_list(list_name, list_id, username)
+
+        db.session.add(new_list)
+        db.session.commit()
+
+        return redirect(f'/members/{username}/profile')
+
+    else:
+        return render_template('/members/create_list_form.html', form=form, username=username)
+
+
+@app.route('/members/<username>/lists', methods=['GET', 'POST'])
+def show_member_lists(username):
+    if 'username' not in session:
+        flash('must log in or register to view')
+        return redirect('/login')
+
+    curr_user = User.query.get(username)
+    lists = curr_user.lists
+
+
+    return render_template('/members/member_lists.html', username=username, lists=lists)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -205,23 +260,16 @@ def show_characters(character_name):
 
 # view issues
 
-
-
-@app.route('/view/issues', methods=['GET', 'POST'])
-def view_issues():
+@app.route('/view_single_issue/<int:issue_id>', methods=['POST', 'GET'])
+def view_single_issue(issue_id):
     username = session['username']
     comics = marvel.comics
 
-    get_comics = comics.all()['data']['results']
+    issue_data = comics.get(f'{issue_id}')['data']['results'][0]
+    creators = comics.get(f'{issue_id}')['data']['results'][0]['creators']['items']
+    characters = comics.get(f'{issue_id}')['data']['results'][0]['characters']['items']
 
-
-
-
-    return render_template('/content/issues/view_issues.html', username=username, get_comics=get_comics, comics=comics)
-
-
-
-
+    return render_template('/content/issues/view_single_issue.html', issue_data=issue_data, creators=creators, characters=characters)
 
 
 
@@ -231,6 +279,13 @@ def view_issues():
 
 
 
+
+
+
+
+
+#####################
+# user these to return a search that matches some keywords?
 
 @app.route('/search/issues', methods=['GET', 'POST'])
 def search_issues():
@@ -251,3 +306,23 @@ def show_searched_issues(issue_search_term):
 
     return render_template('/content/issues/view_issues.html', username=username)
 
+
+
+
+
+
+
+
+
+
+######################################
+# functions below this are probably trash
+
+# @app.route('/view/issues', methods=['GET', 'POST'])
+# def view_issues():
+#     username = session['username']
+#     comics = marvel.comics
+
+#     get_comics = comics.all()['data']['results']
+
+#     return render_template('/content/issues/view_issues.html', username=username, get_comics=get_comics, comics=comics)

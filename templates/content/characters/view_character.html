@@ -14,9 +14,17 @@
 <br>
     <h3>Appearances</h3>
     <ul class="list-unstyled">
+        <!-- <div class="row"> -->
         {% for comic in comic_series %}
-        <li>{{comic['title']}}</li>
+        <li>
+            <img src="{{comics.get(comic['id'])['data']['results'][0]['thumbnail']['path']}}.jpg" style="width: 300px">
+        </li>
+        <li>
+            <a href="/view_single_issue/{{comic['id']}}">{{comic['title']}}</a>
+        </li>
+        <br>
         {% endfor %}
+        <!-- </div> -->
     </ul>
 
 

@@ -11,8 +11,15 @@
 <p>last name: {{user.last_name}}</p>
 <p>email: {{user.email}}</p>
 
+<h2>Lists</h2>
+<a href="/members/{{user.username}}/lists"><button>My Lists</button></a>
+<a href="/members/create_list_form"><button>Create New List</button></a>
 
-
+<ul>
+    {% for list in lists %}
+    <li>{{list.list_name}}</li>
+    {% endfor %}
+</ul>
 
 {% with messages = get_flashed_messages() %}
 {% if messages %}

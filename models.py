@@ -16,14 +16,13 @@ class User(db.Model):
 
     __tablename__ = 'users'
 
-
     username = db.Column(db.String(25), primary_key=True, nullable=False, unique=True)
     password = db.Column(db.Text, nullable=False)
     first_name = db.Column(db.String(30), nullable=False)
     last_name = db.Column(db.String(30), nullable=False)
     email = db.Column(db.String)
 
-    # lists = db.relationship('Lists', backref='user')
+    lists = db.relationship('List')
 
     @classmethod
     def register_new_user(cls, username, password, first_name, last_name,email):
@@ -44,6 +43,12 @@ class List(db.Model):
     
     __tablename__ = 'lists'
     
-    list_name = db.Column(db.String(30), nullable=False)
-    id = db.Column(db.Integer, autoincrement=True, primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'), nullable=False)
+    list_name = db.Column(db.String(25), nullable=False)
+    list_id = db.Column(db.Text, unique=True, primary_key=True, nullable=False)
+    username = db.Column(db.String, db.ForeignKey('users.username'), nullable=False)
+
+    @classmethod
+    def create_new_list(cls, list_name, list_id, username):
+        return cls(list_name=list_name, list_id=list_id, username=username)
+
+    user = db.relationship('User')

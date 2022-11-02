@@ -14,8 +14,19 @@
 
 <a href="/search/characters"><button type="button" class="btn btn-dark">Search Characters</button></a>
 
-
 <br>
+<br>
+
+<h1>Lists</h1>
+<a href="/members/{{user.username}}/lists"><button type="button" class="btn btn-dark">My Lists</button></a>
+<a href="/members/create_list_form"><button type="button" class="btn btn-dark">Create New List</button></a>
+
+<ul>
+    {% for list in lists %}
+    <li>{{list.list_name}}</li>
+    {% endfor %}
+</ul>
+
 <br>
 <br>
 

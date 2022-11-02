@@ -1,0 +1,33 @@
+{% extends '/main/base.html' %}
+{% block title %}{{issue_data['title']}}{% endblock %}
+{% block content %}
+
+<div class="text-center">
+<br>
+    <h1>{{issue_data['title']}}</h1>
+<br>
+    <img src="{{issue_data['thumbnail']['path']}}.jpg" style="width: 300px">
+<br>
+<br>
+    <h3>Description</h3>
+    <p>{{issue_data['description']}}</p>
+<br>
+    <h3>Creators</h3>
+    <ul class="list-unstyled">
+    {% for creator in creators %}
+        <li>{{creator['name']}}: {{creator['role']}}</li>
+    {% endfor %}
+    </ul>
+<br>
+    <h3>Characters</h3>
+    <ul class="list-unstyled">
+    {% for character in characters %}
+        <a href="/view_character/{{character['name']}}"><li>{{character['name']}}</li></a>
+    {% endfor %}
+    </ul>
+
+<br>
+<br>
+<br>
+</div>
+{% endblock %}

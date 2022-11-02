@@ -1,5 +1,5 @@
-from app import app
-from models import db, User, List, ListComic, Comic
+from app import app, db
+from models import db, User, List
 
 db.drop_all()
 db.create_all()
@@ -11,7 +11,8 @@ user1 = User(
     password = 'user1',
     first_name = 'user1_first_name',
     last_name = 'user1_last_name',
-    email = 'user1_email@test.com'
+    email = 'user1_email@test.com',
+    lists = 'XN61QBX4N3I2INVJHWKB'
 )
 
 user2 = User(
@@ -34,3 +35,11 @@ user3 = User(
 db.session.add_all([user1, user2, user3])
 db.session.commit()
 
+list1 = List(
+    list_name = 'test_list_1',
+    list_id = 'VP0M7SUK9ILL5KV499VV',
+    username = 'user1'
+)
+
+db.session.add(list1)
+db.session.commit()
