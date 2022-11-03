@@ -1,0 +1,22 @@
+{% extends '/main/base.html' %}
+{% block title %}{{series_data['title']}}{% endblock %}
+{% block content %}
+
+<h1>{{series_data['title']}}</h1>
+<br>
+<div class="row text-center">
+    {% for comic in series_comics %}
+    <div class="p-2 m-2">
+        <figure>
+            <img src="{{comics.get(comic['resourceURI'].removeprefix('http://gateway.marvel.com/v1/public/comics/'))['data']['results'][0]['thumbnail']['path']}}.jpg" style="width: 300px">
+            <a href="/view_single_issue/{{comic['resourceURI'].removeprefix('http://gateway.marvel.com/v1/public/comics/')}}">
+                <figcaption style="width: 250px; text-align:center">{{comic['name']}}</figcaption>
+            </a>
+        </figure>
+    </div>
+    {% endfor %}
+</div>
+
+
+
+{% endblock %}

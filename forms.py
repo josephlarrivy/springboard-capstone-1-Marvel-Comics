@@ -26,8 +26,10 @@ class UserForm(FlaskForm):
 class CharacterSearch(FlaskForm):
     character_search_term = StringField('Search Characters', validators=[InputRequired()])
 
-class IssueSearch(FlaskForm):
-    issue_search_term = StringField('Search Issues', validators=[InputRequired()])
-
 class CreateListForm(FlaskForm):
     list_name = StringField('List Name', validators=[InputRequired()])
+
+
+    
+class IssueSearch(FlaskForm):
+    issue_search_term = StringField('Search Issues', validators=[InputRequired()])

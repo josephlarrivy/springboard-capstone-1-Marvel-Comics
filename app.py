@@ -45,6 +45,7 @@ def show_homepage():
 
 @app.route('/register', methods=['GET', 'POST'])
 def register_new_user():
+    """register a new user"""
 
     form = AddUserForm()
 
@@ -80,6 +81,7 @@ def register_new_user():
 
 @app.route('/register_disposable', methods=['GET', 'POST'])
 def register_disposable():
+    """register an account with randomized data to bypass registration process. user can access all features, but data will not be available after logout"""
 
     form = DisposableUserForm()
 
@@ -116,6 +118,7 @@ def register_disposable():
 
 @app.route('/login', methods=['GET', 'POST'])
 def log_in_user():
+    """existing user login"""
 
     form = UserForm()
 
@@ -136,6 +139,7 @@ def log_in_user():
 
 @app.route('/logout')
 def logout():
+    """logout"""
     if 'username' not in session:
         return redirect('/')
     else:
@@ -151,6 +155,7 @@ def logout():
 
 @app.route('/members/members_home/<username>')
 def show_members_home(username):
+    """show user with login data homepage"""
     if 'username' not in session:
         flash('must log in or register to view')
         return redirect('/login')
@@ -161,6 +166,7 @@ def show_members_home(username):
 
 @app.route('/members/<username>/profile')
 def show_own_profile(username):
+    """show a user their own profile"""
     user = User.query.get(username)
     if 'username' not in session:
         flash('must log in or register to view')
@@ -174,6 +180,7 @@ def show_own_profile(username):
 
 @app.route('/members/<view_user>/view')
 def show_other_profile(view_user):
+    """show a user another user's profile"""
     if 'username' not in session:
         flash('must log in or register to view')
         return redirect('/login')
@@ -189,6 +196,7 @@ def show_other_profile(view_user):
 
 @app.route('/members/create_list_form', methods=['GET', 'POST'])
 def create_list_form():
+    """show user the form to create a new list with custom name"""
     if 'username' not in session:
         flash('must log in or register to view')
         return redirect('/login')
@@ -214,6 +222,7 @@ def create_list_form():
 
 @app.route('/members/<username>/lists', methods=['GET', 'POST'])
 def show_member_lists(username):
+    """show a user all of their lists"""
     if 'username' not in session:
         flash('must log in or register to view')
         return redirect('/login')
@@ -231,6 +240,7 @@ def show_member_lists(username):
 
 @app.route('/search/characters', methods=['GET', 'POST'])
 def search_characters():
+    """search for a character by name"""
     username = session['username']
     form = CharacterSearch()
 
@@ -241,83 +251,9 @@ def search_characters():
     return render_template('/content/characters/search_characters.html', form=form, username=username)
 
 
-# @app.route('/view_character/<character_name>')
-# def show_characters(character_name):
-#     username = session['username']
-#     characters = marvel.characters
-#     comics = marvel.comics
-
-#     try:
-#         single_character = characters.all(name=f'{character_name}')['data']['results'][0]
-
-#         character_id = single_character['id']
-
-#         character_data = characters.get(f'{character_id}')['data']['results'][0]
-
-#         comic_series = characters.comics(f'{character_id}')['data']['results']
-
-#         return render_template('/content/characters/view_character.html', username=username, single_character=single_character, character_id=character_id, comics=comics, character_data=character_data, comic_series=comic_series)
-    
-#     except IndexError:
-#         flash('Character not found. Please check your spelling.')
-#         return redirect('/search/characters')
-
-##########################
-
-# view issues
-
-@app.route('/view_single_issue/<int:issue_id>', methods=['POST', 'GET'])
-def view_single_issue(issue_id):
-    username = session['username']
-    comics = marvel.comics
-
-    issue_data = comics.get(f'{issue_id}')['data']['results'][0]
-    creators = comics.get(f'{issue_id}')['data']['results'][0]['creators']['items']
-    characters = comics.get(f'{issue_id}')['data']['results'][0]['characters']['items']
-
-    user = User.query.get(username)
-    lists = user.lists
-
-    return render_template('/content/issues/view_single_issue.html', issue_data=issue_data, creators=creators, characters=characters, user=user, lists=lists, username=username)
-
-#########################
-
-# add items to lists
-
-@app.route('/add_issue/<int:issue_id>/to/<list_id>', methods=['GET', 'POST'])
-def add_issue_to_list(issue_id, list_id):
-    if 'username' not in session:
-        flash('must log in or register to view')
-        return redirect('/login')
-    username = session['username']
-    comics = marvel.comics
-    
-    issue_data = comics.get(f'{issue_id}')['data']['results'][0]
-
-    issue_key = ''.join(random.choices(string.ascii_uppercase + string.digits, k=20))
-    thumbnail_path = issue_data['thumbnail']['path']
-    thumbnail = f'{thumbnail_path}.jpg'
-    title = issue_data['title']
-
-    save_issue = Issue.commit_issue_to_db(issue_key, issue_id, thumbnail, title)
-    db.session.add(save_issue)
-    db.session.commit()
-
-    commit_to_list = ListIssue.add_issue_to_list(list_id, issue_key)
-    db.session.add(commit_to_list)
-    db.session.commit()
-
-    return redirect(f'/view_single_issue/{issue_id}')
-
-
-
-
-
-
-
-
 @app.route('/view_character/<character_name>')
 def show_characters(character_name):
+    """show a user the results of their character search. if no character exists for thet name, redirect back to rearch form"""
     username = session['username']
     characters = marvel.characters
     comics = marvel.comics
@@ -343,8 +279,101 @@ def show_characters(character_name):
         return redirect('/search/characters')
 
 
+##########################
+
+# view issues
+
+@app.route('/view_single_issue/<int:issue_id>', methods=['POST', 'GET'])
+def view_single_issue(issue_id):
+    """view a single comic book issue"""
+    username = session['username']
+    comics = marvel.comics
+    series = marvel.series
+
+    issue_data = comics.get(f'{issue_id}')['data']['results'][0]
+    creators = issue_data['creators']['items']
+    characters = issue_data['characters']['items']
+##
+    url = issue_data['series']['resourceURI']
+    series_id = url.removeprefix('http://gateway.marvel.com/v1/public/series/')
+
+    series_data = series.get(series_id)['data']['results'][0]
+    comics = series_data['comics']['items']
+
+##
+    user = User.query.get(username)
+    lists = user.lists
+
+    return render_template('/content/issues/view_single_issue.html', issue_data=issue_data, creators=creators, characters=characters, series_data=series_data, series_id=series_id, comics=comics, user=user, lists=lists, username=username)
+
+
+@app.route('/series/<int:series_id>', methods=['GET', 'POST'])
+def view_series(series_id):
+
+    comics = marvel.comics
+    series = marvel.series
+    series_data = series.get(series_id)['data']['results'][0]
+    series_comics = series_data['comics']['items']
+
+    return render_template('/content/issues/view_series.html', series_data=series_data, series_comics=series_comics, comics=comics)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#########################
+
+# add items to lists
+
+@app.route('/add_issue/<int:issue_id>/to/<list_id>', methods=['GET', 'POST'])
+def add_issue_to_list(issue_id, list_id):
+    """add a comic book issue to a user's list"""
+    if 'username' not in session:
+        flash('must log in or register to view')
+        return redirect('/login')
+    username = session['username']
+    comics = marvel.comics
+    
+    issue_data = comics.get(f'{issue_id}')['data']['results'][0]
+
+    issue_key = ''.join(random.choices(string.ascii_uppercase + string.digits, k=20))
+    thumbnail_path = issue_data['thumbnail']['path']
+    thumbnail = f'{thumbnail_path}.jpg'
+    title = issue_data['title']
+
+    save_issue = Issue.commit_issue_to_db(issue_key, issue_id, thumbnail, title)
+    db.session.add(save_issue)
+    db.session.commit()
+
+    commit_to_list = ListIssue.add_issue_to_list(list_id, issue_key)
+    db.session.add(commit_to_list)
+    db.session.commit()
+
+    return redirect(f'/view_single_issue/{issue_id}')
+
+
+
 @app.route('/add_character/<character_name>/to/<list_id>', methods=['GET', 'POST'])
 def add_character_to_list(character_name, list_id):
+    """add a character to a user's list"""
     if 'username' not in session:
         flash('must log in or register to view')
         return redirect('/login')
@@ -372,37 +401,9 @@ def add_character_to_list(character_name, list_id):
     return redirect(f'/view_character/{character_name}')
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 @app.route('/view_list_contents/<username>/<list_id>', methods=['GET', 'POST'])
 def show_list_items(username, list_id):
+    """view content of a list"""
     if 'username' not in session:
         flash('must log in or register to view')
         return redirect('/login')
@@ -412,8 +413,6 @@ def show_list_items(username, list_id):
     list = List.query.get(list_id)
     issues = list.issues
     characters = list.characters
-
-    
 
     return render_template('/members/view_list_contents.html', list=list, issues=issues, characters=characters, username=username)
 
@@ -443,6 +442,7 @@ def show_list_items(username, list_id):
 
 @app.route('/search/issues', methods=['GET', 'POST'])
 def search_issues():
+    """search for a comic book issue"""
     username = session['username']
     form = IssueSearch()
 
@@ -456,8 +456,28 @@ def search_issues():
 @app.route('/view_issues/<issue_search_term>')
 def show_searched_issues(issue_search_term):
     username = session['username']
+    characters = marvel.characters
+    comics = marvel.comics
 
-    return render_template('/content/issues/view_issues.html', username=username)
+    issue_search_term = issue_search_term
+
+    issues = comics.get(issue_search_term)
+
+
+
+
+
+    return render_template('/content/issues/issue_search_results.html', username=username, issues=issues, issue_search_term=issue_search_term)
+
+
+
+
+
+
+
+
+
+
 
 
 

@@ -6,7 +6,7 @@
 <br>
     <h1>{{issue_data['title']}}</h1>
 <br>
-    <img src="{{issue_data['thumbnail']['path']}}.jpg" style="width: 300px">
+    <img src="{{issue_data['thumbnail']['path']}}.jpg" style="width: 300px; height: 463px">
 <br>
 <br>
     <h3>Description</h3>
@@ -50,7 +50,20 @@
         <a href="/view_character/{{character['name']}}"><li>{{character['name']}}</li></a>
     {% endfor %}
     </ul>
+<br>
+<br>
 
+<a href="/series/{{series_id}}"><h4>{{series_data['title']}}</h4></a>
+
+<ul class="list-unstyled">
+{% for comic in comics %}
+    <li>{{comic['name']}}</li>
+{% endfor %}
+</ul>
+
+
+<!-- {{series_data['']}} -->
+<p>{{series_data}}</p>
 <br>
 <br>
 <br>
