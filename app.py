@@ -158,7 +158,7 @@ def show_members_home(username):
     """show user with login data homepage"""
     if 'username' not in session:
         flash('must log in or register to view')
-        return redirect('/login')
+        return redirect('/register')
     curr_user = User.query.get(username)
     if curr_user.username == session['username']:
         return render_template('/members/members_home.html', user=curr_user, username=username)
@@ -170,7 +170,7 @@ def show_own_profile(username):
     user = User.query.get(username)
     if 'username' not in session:
         flash('must log in or register to view')
-        return redirect('/login')
+        return redirect('/register')
     elif username == session['username']:
         lists = user.lists
         return render_template('/members/own_member_profile.html', user=user, username=username, lists=lists)
@@ -183,7 +183,7 @@ def show_other_profile(view_user):
     """show a user another user's profile"""
     if 'username' not in session:
         flash('must log in or register to view')
-        return redirect('/login')
+        return redirect('/register')
     else:
         view_user = User.query.get(view_user)
         username = session['username']
@@ -309,33 +309,14 @@ def view_single_issue(issue_id):
 
 @app.route('/series/<int:series_id>', methods=['GET', 'POST'])
 def view_series(series_id):
+    username = session['username']
 
     comics = marvel.comics
     series = marvel.series
     series_data = series.get(series_id)['data']['results'][0]
     series_comics = series_data['comics']['items']
 
-    return render_template('/content/issues/view_series.html', series_data=series_data, series_comics=series_comics, comics=comics)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    return render_template('/content/issues/view_series.html', series_data=series_data, series_comics=series_comics, comics=comics, username=username)
 
 
 
@@ -415,12 +396,6 @@ def show_list_items(username, list_id):
     characters = list.characters
 
     return render_template('/members/view_list_contents.html', list=list, issues=issues, characters=characters, username=username)
-
-
-
-
-    
-
 
 
 

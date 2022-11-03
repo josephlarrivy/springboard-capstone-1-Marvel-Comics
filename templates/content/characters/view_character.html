@@ -32,7 +32,7 @@
     {% for comic in comic_series %}
     <div class="p-2 m-2">
         <figure>
-            <img src="{{comics.get(comic['id'])['data']['results'][0]['thumbnail']['path']}}.jpg" style="width: 300px">
+            <img src="{{comics.get(comic['id'])['data']['results'][0]['thumbnail']['path']}}.jpg" style="width: 300px; height: 463px">
             <a href="/view_single_issue/{{comic['id']}}">
                 <figcaption style="width: 250px; text-align:center">{{comic['title']}}</figcaption>
             </a>

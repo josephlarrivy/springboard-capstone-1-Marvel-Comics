@@ -2,9 +2,19 @@
 {% block title %}Home{% endblock %}
 {% block content %}
 
-<h1>Members Home</h1>
+<div class="text-center">
+<h1>Welcome {{user.first_name}} {{user.last_name}}</h1>
+<br>
+<br>
+<h2>Featured Characters</h2>
 
-<h2>Welcome {{user.first_name}} {{user.last_name}}</h2>
+
+<br>
+<br>
+<img src="/images/50fecad1f395b.jpg"/>
+<br>
+
+
 
 <br>
 <br>
@@ -45,4 +55,9 @@
 {% endif %}
 {% endwith %}
 
+
+
+
+
+</div>
 {% endblock %}
