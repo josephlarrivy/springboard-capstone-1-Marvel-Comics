@@ -1,7 +1,7 @@
 from flask import Flask, render_template, redirect, session, flash
 from flask_debugtoolbar import DebugToolbarExtension
 from forms import AddUserForm, CharacterSearch, DisposableUserForm, UserForm, IssueSearch, CreateListForm
-from models import connect_db, db, User, List, ListIssue, Issue
+from models import connect_db, db, User, List, ListIssue, Issue, ListCharacter, Character
 from sqlalchemy.exc import IntegrityError
 import string
 import random
@@ -63,6 +63,16 @@ def register_new_user():
         except IntegrityError:
             flash('username already taken')
         
+        list_name = 'Wish List'
+        list_id = ''.join(random.choices(string.ascii_uppercase + string.digits, k=20))
+        username = username
+
+        new_list = List.create_new_list(list_name, list_id, username)
+
+        db.session.add(new_list)
+        db.session.commit()
+       
+        session['username'] = username
         return redirect(f'/members/members_home/{username}')
     
     return render_template('/users/register.html', form=form)
@@ -87,6 +97,16 @@ def register_disposable():
             db.session.commit()
         except IntegrityError:
             flash('username already taken')
+        
+        list_name = 'Wish List'
+        list_id = ''.join(random.choices(
+            string.ascii_uppercase + string.digits, k=20))
+        username = username
+
+        new_list = List.create_new_list(list_name, list_id, username)
+
+        db.session.add(new_list)
+        db.session.commit()
         
         session['username'] = username
         return redirect(f'/members/members_home/{username}')
@@ -163,6 +183,10 @@ def show_other_profile(view_user):
         return render_template('/members/other_member_profile.html', view_user=view_user, username=username)
 
 
+#######################
+
+# lists
+
 @app.route('/members/create_list_form', methods=['GET', 'POST'])
 def create_list_form():
     if 'username' not in session:
@@ -193,6 +217,7 @@ def show_member_lists(username):
     if 'username' not in session:
         flash('must log in or register to view')
         return redirect('/login')
+    username = session['username']
 
     curr_user = User.query.get(username)
     lists = curr_user.lists
@@ -216,26 +241,26 @@ def search_characters():
     return render_template('/content/characters/search_characters.html', form=form, username=username)
 
 
-@app.route('/view_character/<character_name>')
-def show_characters(character_name):
-    username = session['username']
-    characters = marvel.characters
-    comics = marvel.comics
+# @app.route('/view_character/<character_name>')
+# def show_characters(character_name):
+#     username = session['username']
+#     characters = marvel.characters
+#     comics = marvel.comics
 
-    try:
-        single_character = characters.all(name=f'{character_name}')['data']['results'][0]
+#     try:
+#         single_character = characters.all(name=f'{character_name}')['data']['results'][0]
 
-        character_id = single_character['id']
+#         character_id = single_character['id']
 
-        character_data = characters.get(f'{character_id}')['data']['results'][0]
+#         character_data = characters.get(f'{character_id}')['data']['results'][0]
 
-        comic_series = characters.comics(f'{character_id}')['data']['results']
+#         comic_series = characters.comics(f'{character_id}')['data']['results']
 
-        return render_template('/content/characters/view_character.html', username=username, single_character=single_character, character_id=character_id, comics=comics, character_data=character_data, comic_series=comic_series)
+#         return render_template('/content/characters/view_character.html', username=username, single_character=single_character, character_id=character_id, comics=comics, character_data=character_data, comic_series=comic_series)
     
-    except IndexError:
-        flash('Character not found. Please check your spelling.')
-        return redirect('/search/characters')
+#     except IndexError:
+#         flash('Character not found. Please check your spelling.')
+#         return redirect('/search/characters')
 
 ##########################
 
@@ -255,17 +280,27 @@ def view_single_issue(issue_id):
 
     return render_template('/content/issues/view_single_issue.html', issue_data=issue_data, creators=creators, characters=characters, user=user, lists=lists, username=username)
 
+#########################
+
+# add items to lists
 
 @app.route('/add_issue/<int:issue_id>/to/<list_id>', methods=['GET', 'POST'])
 def add_issue_to_list(issue_id, list_id):
     if 'username' not in session:
         flash('must log in or register to view')
         return redirect('/login')
+    username = session['username']
+    comics = marvel.comics
     
-    issue_key = ''.join(random.choices(string.ascii_uppercase + string.digits, k=20))
+    issue_data = comics.get(f'{issue_id}')['data']['results'][0]
 
-    save_issue_num = Issue.commit_issue_to_db(issue_key, issue_id)
-    db.session.add(save_issue_num)
+    issue_key = ''.join(random.choices(string.ascii_uppercase + string.digits, k=20))
+    thumbnail_path = issue_data['thumbnail']['path']
+    thumbnail = f'{thumbnail_path}.jpg'
+    title = issue_data['title']
+
+    save_issue = Issue.commit_issue_to_db(issue_key, issue_id, thumbnail, title)
+    db.session.add(save_issue)
     db.session.commit()
 
     commit_to_list = ListIssue.add_issue_to_list(list_id, issue_key)
@@ -276,15 +311,111 @@ def add_issue_to_list(issue_id, list_id):
 
 
 
-@app.route('/view_list_contents/<username>/<list_id>', methods=['GET', 'POST'])
-def show_list_items(username, list_id):
+
+
+
+
+
+@app.route('/view_character/<character_name>')
+def show_characters(character_name):
+    username = session['username']
+    characters = marvel.characters
     comics = marvel.comics
 
-    
-    list = List.query.get(list_id)
-    issue_ids = list.issues
+    try:
+        single_character = characters.all(name=f'{character_name}')[
+            'data']['results'][0]
 
-    return render_template('/members/view_list_contents.html', list=list, issue_ids=issue_ids)
+        character_id = single_character['id']
+
+        character_data = characters.get(f'{character_id}')[
+            'data']['results'][0]
+
+        comic_series = characters.comics(f'{character_id}')['data']['results']
+
+        user = User.query.get(username)
+        lists = user.lists
+
+        return render_template('/content/characters/view_character.html', username=username, single_character=single_character, character_id=character_id, comics=comics, character_data=character_data, comic_series=comic_series, lists=lists)
+
+    except IndexError:
+        flash('Character not found. Please check your spelling.')
+        return redirect('/search/characters')
+
+
+@app.route('/add_character/<character_name>/to/<list_id>', methods=['GET', 'POST'])
+def add_character_to_list(character_name, list_id):
+    if 'username' not in session:
+        flash('must log in or register to view')
+        return redirect('/login')
+    username = session['username']
+    comics = marvel.comics
+    characters = marvel.characters
+
+    single_character = characters.all(name=f'{character_name}')['data']['results'][0]
+
+    character_key = ''.join(random.choices(
+        string.ascii_uppercase + string.digits, k=20))
+    character_name = single_character['name']
+    thumbnail_path = single_character['thumbnail']['path']
+    thumbnail = f'{thumbnail_path}.jpg'
+
+    save_character = Character.commit_character_to_db(
+        character_key, character_name, thumbnail)
+    db.session.add(save_character)
+    db.session.commit()
+
+    commit_to_list = ListCharacter.add_character_to_list(list_id, character_key)
+    db.session.add(commit_to_list)
+    db.session.commit()
+
+    return redirect(f'/view_character/{character_name}')
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+@app.route('/view_list_contents/<username>/<list_id>', methods=['GET', 'POST'])
+def show_list_items(username, list_id):
+    if 'username' not in session:
+        flash('must log in or register to view')
+        return redirect('/login')
+    username = session['username']
+    comics = marvel.comics
+
+    list = List.query.get(list_id)
+    issues = list.issues
+    characters = list.characters
+
+    
+
+    return render_template('/members/view_list_contents.html', list=list, issues=issues, characters=characters, username=username)
 
 
 

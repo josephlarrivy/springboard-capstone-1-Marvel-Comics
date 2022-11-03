@@ -49,6 +49,7 @@ class List(db.Model):
 
     user = db.relationship('User')
     issues = db.relationship('Issue', secondary='lists_issues', backref='lists')
+    characters = db.relationship('Character', secondary='lists_characters', backref='lists')
 
     @classmethod
     def create_new_list(cls, list_name, list_id, username):
@@ -73,7 +74,38 @@ class Issue(db.Model):
 
     issue_key = db.Column(db.Text, primary_key=True, unique=True)
     issue_id = db.Column(db.Integer)
+    thumbnail = db.Column(db.Text)
+    title = db.Column(db.Text)
 
     @classmethod
-    def commit_issue_to_db(cls, issue_key, issue_id):
-        return cls(issue_key=issue_key, issue_id=issue_id)
+    def commit_issue_to_db(cls, issue_key, issue_id, thumbnail, title):
+        return cls(issue_key=issue_key, issue_id=issue_id, thumbnail=thumbnail, title=title)
+
+##################
+
+
+class ListCharacter(db.Model):
+
+    __tablename__ = 'lists_characters'
+
+    list_id = db.Column(db.Text, db.ForeignKey(
+        'lists.list_id'), primary_key=True)
+    character_key = db.Column(db.Text, db.ForeignKey(
+        'characters.character_key'), primary_key=True)
+
+    @classmethod
+    def add_character_to_list(cls, list_id, character_key):
+        return cls(list_id=list_id, character_key=character_key)
+
+
+class Character(db.Model):
+
+    __tablename__ = 'characters'
+
+    character_key = db.Column(db.Text, primary_key=True, unique=True)
+    character_name = db.Column(db.Text)
+    thumbnail = db.Column(db.Text)
+
+    @classmethod
+    def commit_character_to_db(cls, character_key, character_name, thumbnail):
+        return cls(character_key=character_key, character_name=character_name, thumbnail=thumbnail)

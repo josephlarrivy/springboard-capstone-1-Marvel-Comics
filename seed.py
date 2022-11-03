@@ -1,5 +1,5 @@
 from app import app, db
-from models import db, User, List, ListIssue, Issue
+from models import db, User, List, ListIssue, Issue, ListCharacter, Character
 
 db.drop_all()
 db.create_all()
@@ -33,7 +33,26 @@ db.session.add(listissue1)
 db.session.commit()
 
 issue1 = Issue(
-    issue_key = 'asdf1234'
+    issue_key = 'asdf1234',
+    issue_id = 1,
+    thumbnail = 'test',
+    title = 'comic1'
 )
 db.session.add(issue1)
+db.session.commit()
+
+listcharacter1 = ListCharacter(
+    list_id='VP0M7SUK9ILL5KV499VV',
+    character_key = 'qwertyuiop'
+)
+db.session.add(listcharacter1)
+db.session.commit()
+
+character1 = Character(
+    character_key='qwertyuiop',
+    character_id = '123456',
+    thumbnail = 'thumbnail1',
+    name = 'character5'
+)
+db.session.add(character1)
 db.session.commit()

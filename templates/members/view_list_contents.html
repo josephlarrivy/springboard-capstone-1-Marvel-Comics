@@ -2,8 +2,35 @@
 {% block title %}Home{% endblock %}
 {% block content %}
 
+<br>
 <h1>{{list.list_name}}</h1>
+<br>
 
+
+<div class="row text-center">
+{% for issue in issues %}
+<div class="col-xs-2">
+<figure>
+    <img src="{{issue.thumbnail}}" style="width: 300px">
+    <a href="/view_single_issue/{{issue.issue_id}}"><figcaption>{{issue.title}}</figcaption></a>
+</figure>
+</div>
+{% endfor %}
+</div>
+
+
+<div class="row text-center">
+    {% for character in characters %}
+    <div class="col-xs-2">
+        <figure>
+            <img src="{{character.thumbnail}}" style="width: 300px">
+            <a href="/view_character/{{character.character_name}}">
+                <figcaption>{{character.character_name}}</figcaption>
+            </a>
+        </figure>
+    </div>
+    {% endfor %}
+</div>
 
 
 {% with messages = get_flashed_messages() %}
