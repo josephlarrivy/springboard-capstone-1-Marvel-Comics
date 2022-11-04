@@ -32,24 +32,20 @@ def redirect_home():
 
 @app.route('/home')
 def show_homepage():
-    if 'username' not in session:
-        return render_template('/main/home.html')
-
-    username = session['username']
-    curr_user = User.query.get(username)
-
-    n = len(rand_issues)
-    show_rand_issue1 = rand_issues[random.randrange(0, n)]
-    show_rand_issue2 = rand_issues[random.randrange(0, n)]
-    show_rand_issue3 = rand_issues[random.randrange(0, n)]
 
     i = len(rand_characters)
     show_rand_character1 = rand_characters[random.randrange(0, i)]
     show_rand_character2 = rand_characters[random.randrange(0, i)]
     show_rand_character3 = rand_characters[random.randrange(0, i)]
 
+    n = len(rand_issues)
+    show_rand_issue1 = rand_issues[random.randrange(0, n)]
+    show_rand_issue2 = rand_issues[random.randrange(0, n)]
+    show_rand_issue3 = rand_issues[random.randrange(0, n)]
+    show_rand_issue4 = rand_issues[random.randrange(0, n)]
 
-    return render_template('/members/members_home.html', user=curr_user, username=username, show_rand_issue1=show_rand_issue1, show_rand_issue2=show_rand_issue2, show_rand_issue3=show_rand_issue3,
+    return render_template('/main/home.html',show_rand_issue1=show_rand_issue1, show_rand_issue2=show_rand_issue2, show_rand_issue3=show_rand_issue3,
+    show_rand_issue4=show_rand_issue4,
     show_rand_character1=show_rand_character1,
     show_rand_character2=show_rand_character2,
     show_rand_character3=show_rand_character3)
@@ -79,14 +75,19 @@ def register_new_user():
             db.session.commit()
         except IntegrityError:
             flash('username already taken')
+            return redirect('/register')
         
+        list_name = 'Favorites'
+        list_id = ''.join(random.choices(string.ascii_uppercase + string.digits, k=20))
+        username = username
+        default_list1 = List.create_new_list(list_name, list_id, username)
+
         list_name = 'Wish List'
         list_id = ''.join(random.choices(string.ascii_uppercase + string.digits, k=20))
         username = username
+        default_list2 = List.create_new_list(list_name, list_id, username)
 
-        new_list = List.create_new_list(list_name, list_id, username)
-
-        db.session.add(new_list)
+        db.session.add_all([default_list1, default_list2])
         db.session.commit()
        
         session['username'] = username
@@ -161,7 +162,7 @@ def logout():
     else:
         session.pop('username')
         flash('logged out')
-        return redirect('/')
+        return redirect('/home')
 
 
 
@@ -171,10 +172,12 @@ def logout():
 
 @app.route('/members/members_home/<username>')
 def show_members_home(username):
-    """show user with login data homepage"""
+    """show user with login data the homepage"""
+
     if 'username' not in session:
         flash('must log in or register to view')
         return redirect('/register')
+        
     curr_user = User.query.get(username)
     if curr_user.username == session['username']:
         return render_template('/members/members_home.html', user=curr_user, username=username)
@@ -257,28 +260,26 @@ def show_member_lists(username):
 @app.route('/search/characters', methods=['GET', 'POST'])
 def search_characters():
     """search for a character by name"""
-    username = session['username']
+    # if session['username']:
+    #     username = session['username']
+
     form = CharacterSearch()
 
     if form.validate_on_submit():
         character_search_term = form.character_search_term.data
         return redirect(f'/view_character/{character_search_term}')
 
-    return render_template('/content/characters/search_characters.html', form=form, username=username)
+    return render_template('/content/characters/search_characters.html', form=form)
 
 
 @app.route('/view_character/<character_name>')
 def show_characters(character_name):
-    """show a user the results of their character search. if no character exists for thet name, redirect back to rearch form"""
-    username = session['username']
+    """show a user the results of their character search. if no character exists for thet name, redirect back to search form"""
+    if session['username']:
+        username = session['username']
+    
     characters = marvel.characters
     comics = marvel.comics
-
-    # try:
-    #     d
-    
-    # except:
-    #     pass
 
     try:
         single_character = characters.all(name=f'{character_name}')[
@@ -294,7 +295,7 @@ def show_characters(character_name):
         user = User.query.get(username)
         lists = user.lists
 
-        return render_template('/content/characters/view_character.html', username=username, single_character=single_character, character_id=character_id, comics=comics, character_data=character_data, comic_series=comic_series, lists=lists)
+        return render_template('/content/characters/view_character.html', single_character=single_character, character_id=character_id, comics=comics, character_data=character_data, comic_series=comic_series, lists=lists)
 
     except IndexError:
         flash('Character not found. Please check your spelling.')
