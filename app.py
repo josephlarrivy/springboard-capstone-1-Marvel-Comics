@@ -258,6 +258,7 @@ def show_characters(character_name):
     characters = marvel.characters
     comics = marvel.comics
 
+
     try:
         single_character = characters.all(name=f'{character_name}')[
             'data']['results'][0]
