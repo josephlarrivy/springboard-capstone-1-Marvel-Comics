@@ -2,33 +2,29 @@
 {% block title %}Home{% endblock %}
 {% block content %}
 
-<form method='POST'>
-    {{form.hidden_tag()}}
-    
-    <p>Are you sure you don't want to save your activity?</p>
+<br>
+<br>
+<br>
 
-<!--     
+<div style="text-align: center">
+    <form method='POST'>
+        {{form.hidden_tag()}}
+        <p>If you are a developer and wish to bypass the registration process, clicking Agree will generate random credentials. You will have full access, but will not be able to return to your account.</p>
+        <button class="btn btn-dark">Agree</button>
+    </form>
 
-    {% for field in form if field.widget.input_type != 'hidden' %}
-    <p>
-        {{field.label}}
-        {{field}}
-    </p>
-    {% endfor %}
+    <br>
 
-    {% with messages = get_flashed_messages() %}
-    {% if messages %}
-    <ul class=flashes>
-        {% for message in messages %}
-        <li>{{ message }}</li>
-        {% endfor %}
-    </ul>
-    {% endif %}
-    {% endwith %} -->
+    <a href="/register"><button type="button" class="btn btn-dark">Register an account instead</button></a>
 
-    <button class="btn btn-dark">Yes</button>
-</form>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
 
-<a href="/register"><button type="button" class="btn btn-dark">No</button></a>
+    <p>Be sure to check out the GitHub for this application</p>
+    <a href="https://github.com/josephlarrivy/springboard-capstone-1" target="_blank"><button type="button" class="btn btn-dark">View GitHub</button></a>
+</div>
 
 {% endblock %}

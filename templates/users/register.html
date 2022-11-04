@@ -2,8 +2,8 @@
 {% block title %}Home{% endblock %}
 {% block content %}
 
+<div class="p-4 m-4">
 <h1>Register</h1>
-
 <form method='POST'>
     {{form.hidden_tag()}}
     
@@ -24,8 +24,8 @@
     {% endif %}
     {% endwith %}
     
-    <button>Submit</button>
+    <button class="btn btn-dark">Submit</button>
 </form>
-
+</div>
 
 {% endblock %}
