@@ -260,8 +260,10 @@ def show_member_lists(username):
 @app.route('/search/characters', methods=['GET', 'POST'])
 def search_characters():
     """search for a character by name"""
-    # if session['username']:
-    #     username = session['username']
+    if 'username' not in session:
+        flash('must log in or register to view')
+        return redirect('/login')
+    username = session['username']
 
     form = CharacterSearch()
 
@@ -269,15 +271,17 @@ def search_characters():
         character_search_term = form.character_search_term.data
         return redirect(f'/view_character/{character_search_term}')
 
-    return render_template('/content/characters/search_characters.html', form=form)
+    return render_template('/content/characters/search_characters.html', username=username, form=form)
 
 
 @app.route('/view_character/<character_name>')
 def show_characters(character_name):
     """show a user the results of their character search. if no character exists for thet name, redirect back to search form"""
-    if session['username']:
-        username = session['username']
-    
+    if 'username' not in session:
+        flash('must log in or register to view')
+        return redirect('/login')
+    username = session['username']
+
     characters = marvel.characters
     comics = marvel.comics
 
@@ -295,7 +299,7 @@ def show_characters(character_name):
         user = User.query.get(username)
         lists = user.lists
 
-        return render_template('/content/characters/view_character.html', single_character=single_character, character_id=character_id, comics=comics, character_data=character_data, comic_series=comic_series, lists=lists)
+        return render_template('/content/characters/view_character.html', single_character=single_character, character_id=character_id, comics=comics, character_data=character_data, comic_series=comic_series, lists=lists, username=username)
 
     except IndexError:
         flash('Character not found. Please check your spelling.')
@@ -309,21 +313,24 @@ def show_characters(character_name):
 @app.route('/view_single_issue/<int:issue_id>', methods=['POST', 'GET'])
 def view_single_issue(issue_id):
     """view a single comic book issue"""
+    if 'username' not in session:
+        flash('must log in or register to view')
+        return redirect('/login')
     username = session['username']
+
     comics = marvel.comics
     series = marvel.series
 
     issue_data = comics.get(f'{issue_id}')['data']['results'][0]
     creators = issue_data['creators']['items']
     characters = issue_data['characters']['items']
-##
+
     url = issue_data['series']['resourceURI']
     series_id = url.removeprefix('http://gateway.marvel.com/v1/public/series/')
 
     series_data = series.get(series_id)['data']['results'][0]
     comics = series_data['comics']['items']
 
-##
     user = User.query.get(username)
     lists = user.lists
 
@@ -332,6 +339,9 @@ def view_single_issue(issue_id):
 
 @app.route('/series/<int:series_id>', methods=['GET', 'POST'])
 def view_series(series_id):
+    if 'username' not in session:
+        flash('must log in or register to view')
+        return redirect('/login')
     username = session['username']
 
     comics = marvel.comics
@@ -382,6 +392,7 @@ def add_character_to_list(character_name, list_id):
         flash('must log in or register to view')
         return redirect('/login')
     username = session['username']
+    
     comics = marvel.comics
     characters = marvel.characters
 
@@ -412,6 +423,7 @@ def show_list_items(username, list_id):
         flash('must log in or register to view')
         return redirect('/login')
     username = session['username']
+
     comics = marvel.comics
 
     list = List.query.get(list_id)
