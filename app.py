@@ -8,6 +8,7 @@ import random
 import requests
 from marvel import Marvel
 from keys import PUBLIC_KEY, PRIVATE_KEY
+from random_content import rand_issues, rand_characters
 
 app = Flask(__name__)
 app.config["SQLALCHEMY_DATABASE_URI"] = "postgresql:///Springboard-Capstone-1"
@@ -33,10 +34,16 @@ def redirect_home():
 def show_homepage():
     if 'username' not in session:
         return render_template('/main/home.html')
-    else:
-        username = session['username']
-        curr_user = User.query.get(username)
-        return render_template('/members/members_home.html', user=curr_user, username=username)
+
+    username = session['username']
+    curr_user = User.query.get(username)
+
+    n = len(rand_issues)
+    show_rand_issue1 = rand_issues[random.randrange(0, n)]
+    show_rand_issue2 = rand_issues[random.randrange(0, n)]
+    show_rand_issue3 = rand_issues[random.randrange(0, n)]
+
+    return render_template('/members/members_home.html', user=curr_user, username=username, show_rand_issue1=show_rand_issue1, show_rand_issue2=show_rand_issue2, show_rand_issue3=show_rand_issue3)
 
 
 ##########################
@@ -258,6 +265,11 @@ def show_characters(character_name):
     characters = marvel.characters
     comics = marvel.comics
 
+    # try:
+    #     d
+    
+    # except:
+    #     pass
 
     try:
         single_character = characters.all(name=f'{character_name}')[

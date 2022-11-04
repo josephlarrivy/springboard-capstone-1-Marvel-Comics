@@ -3,17 +3,35 @@
 {% block content %}
 
 <div class="text-center">
-<h1>Welcome {{user.first_name}} {{user.last_name}}</h1>
-<br>
-<br>
-<h2>Featured Characters</h2>
+    <br>
+    <h1>Welcome {{user.first_name}} {{user.last_name}}</h1>
+    <br>
 
-
+<h2>Featured Issues</h2>
 <br>
-<br>
-<img src="/images/50fecad1f395b.jpg"/>
-<br>
-
+<div class="row text-center">
+    <div class="p-2 m-2">
+        <figure>
+            <img src="{{show_rand_issue1.image}}"
+                style="width: 300px; height: 463px">
+            <a href="{{show_rand_issue1.href}}">
+                <figcaption style="width: 250px; text-align:center">{{show_rand_issue1.title}}</figcaption>
+            </a>
+        </figure>
+        <figure>
+            <img src="{{show_rand_issue2.image}}" style="width: 300px; height: 463px">
+            <a href="{{show_rand_issue2.href}}">
+                <figcaption style="width: 250px; text-align:center">{{show_rand_issue2.title}}</figcaption>
+            </a>
+        </figure>
+        <figure>
+            <img src="{{show_rand_issue3.image}}" style="width: 300px; height: 463px">
+            <a href="{{show_rand_issue3.href}}">
+                <figcaption style="width: 250px; text-align:center">{{show_rand_issue3.title}}</figcaption>
+            </a>
+        </figure>
+    </div>
+</div>
 
 
 <br>
