@@ -43,7 +43,16 @@ def show_homepage():
     show_rand_issue2 = rand_issues[random.randrange(0, n)]
     show_rand_issue3 = rand_issues[random.randrange(0, n)]
 
-    return render_template('/members/members_home.html', user=curr_user, username=username, show_rand_issue1=show_rand_issue1, show_rand_issue2=show_rand_issue2, show_rand_issue3=show_rand_issue3)
+    i = len(rand_characters)
+    show_rand_character1 = rand_characters[random.randrange(0, i)]
+    show_rand_character2 = rand_characters[random.randrange(0, i)]
+    show_rand_character3 = rand_characters[random.randrange(0, i)]
+
+
+    return render_template('/members/members_home.html', user=curr_user, username=username, show_rand_issue1=show_rand_issue1, show_rand_issue2=show_rand_issue2, show_rand_issue3=show_rand_issue3,
+    show_rand_character1=show_rand_character1,
+    show_rand_character2=show_rand_character2,
+    show_rand_character3=show_rand_character3)
 
 
 ##########################
