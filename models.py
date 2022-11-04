@@ -13,7 +13,6 @@ def connect_db(app):
 """ Models """
 
 class User(db.Model):
-
     __tablename__ = 'users'
 
     username = db.Column(db.Text, primary_key=True, nullable=False, unique=True)
@@ -29,7 +28,6 @@ class User(db.Model):
         hashed = bcrypt.generate_password_hash(password)
         hashed_utf8 = hashed.decode('utf8')
         return cls(username=username, password=hashed_utf8, email=email, first_name=first_name, last_name=last_name)
-
     @classmethod
     def authenticate(cls, username, password):
         u = User.query.filter_by(username=username).first()
@@ -40,7 +38,6 @@ class User(db.Model):
 
 
 class List(db.Model):
-    
     __tablename__ = 'lists'
     
     list_name = db.Column(db.Text, nullable=False)
@@ -57,7 +54,6 @@ class List(db.Model):
 
 
 class ListIssue(db.Model):
-
     __tablename__ = 'lists_issues'
 
     list_id = db.Column(db.Text, db.ForeignKey('lists.list_id'), primary_key=True)
@@ -69,7 +65,6 @@ class ListIssue(db.Model):
 
 
 class Issue(db.Model):
-
     __tablename__ = 'issues'
 
     issue_key = db.Column(db.Text, primary_key=True, unique=True)
@@ -77,15 +72,15 @@ class Issue(db.Model):
     thumbnail = db.Column(db.Text)
     title = db.Column(db.Text)
 
+    characters = db.relationship('Character', secondary='characters_issues', backref='issues')
+
     @classmethod
     def commit_issue_to_db(cls, issue_key, issue_id, thumbnail, title):
         return cls(issue_key=issue_key, issue_id=issue_id, thumbnail=thumbnail, title=title)
 
 ##################
 
-
 class ListCharacter(db.Model):
-
     __tablename__ = 'lists_characters'
 
     list_id = db.Column(db.Text, db.ForeignKey(
@@ -99,7 +94,6 @@ class ListCharacter(db.Model):
 
 
 class Character(db.Model):
-
     __tablename__ = 'characters'
 
     character_key = db.Column(db.Text, primary_key=True, unique=True)
@@ -109,3 +103,16 @@ class Character(db.Model):
     @classmethod
     def commit_character_to_db(cls, character_key, character_name, thumbnail):
         return cls(character_key=character_key, character_name=character_name, thumbnail=thumbnail)
+
+
+class CharacterIssue(db.Model):
+    __tablename__ = 'characters_issues'
+
+    character_key = db.Column(db.Text, db.ForeignKey(
+        'characters.character_key'), primary_key=True)
+    issue_key = db.Column(db.Text, db.ForeignKey(
+        'issues.issue_key'), primary_key=True)
+
+    @classmethod
+    def link_character_to_issue(cls, character_key, issue_key):
+        return cls(character_key=character_key, issue_key=issue_key)
