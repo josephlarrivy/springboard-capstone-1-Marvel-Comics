@@ -316,12 +316,8 @@ def show_characters(character_name):
             db.session.add(save_character)
             db.session.commit()
 
-            for comic in comic_series:
-                issue_key = x
-                issue_id = x
-                thumbnail = x
-                title = x
-                characters = 
+            # add issues to DB here or in view_issue?
+            # maybe continue to display issues for 'if Character.query.get(character_name):' by pulling them from the api. They would still need to be added to the db - perhaps so that in the 'view issue' page?
 
 
             return render_template('/content/characters/view_character.html', single_character=single_character, character_id=character_id, comics=comics, character_data=character_data, comic_series=comic_series, lists=lists, username=username)
