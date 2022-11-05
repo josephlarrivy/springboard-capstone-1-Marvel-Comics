@@ -268,7 +268,7 @@ def search_characters():
     form = CharacterSearch()
 
     if form.validate_on_submit():
-        character_search_term = form.character_search_term.data
+        character_search_term = form.character_search_term.data.title()
         return redirect(f'/view_character/{character_search_term}')
 
     return render_template('/content/characters/search_characters.html', username=username, form=form)
@@ -285,36 +285,50 @@ def show_characters(character_name):
     characters = marvel.characters
     comics = marvel.comics
 
-    try:
-        single_character = characters.all(name=f'{character_name}')[
-            'data']['results'][0]
-
-        character_id = single_character['id']
-
-        character_data = characters.get(f'{character_id}')[
-            'data']['results'][0]
-
-        comic_series = characters.comics(f'{character_id}')['data']['results']
-
+    if Character.query.get(character_name):
+        character = Character.query.get(character_name)
         user = User.query.get(username)
         lists = user.lists
 
-################
+        return render_template('/content/characters/view_db_character.html', character=character, user=user, lists=lists)
 
-# need to figure out how to use CharacterIssue class method to link_character_to_issue
 
-        for comic in comic_series:
-            character_key = 
+    else:
+        try:
+            single_character = characters.all(name=f'{character_name}')[
+                'data']['results'][0]
+            character_id = single_character['id']
+            character_data = characters.get(f'{character_id}')[
+                'data']['results'][0]
+            comic_series = characters.comics(f'{character_id}')['data']['results']
 
-            issue = CharacterIssue.link_character_to_issue(character_key, issue_key)
+            user = User.query.get(username)
+            lists = user.lists
 
-################
+            character_key = ''.join(random.choices(string.ascii_uppercase + string.digits, k=20))
+            character_id = single_character['id']
+            character_name = single_character['name'].title()
+            biography = single_character['description']
+            thumbnail_path = single_character['thumbnail']['path']
+            thumbnail = f'{thumbnail_path}.jpg'
 
-        return render_template('/content/characters/view_character.html', single_character=single_character, character_id=character_id, comics=comics, character_data=character_data, comic_series=comic_series, lists=lists, username=username)
+            save_character = Character.commit_character_to_db(character_key, character_id, character_name, biography, thumbnail)
+            db.session.add(save_character)
+            db.session.commit()
 
-    except IndexError:
-        flash('Character not found. Please check your spelling.')
-        return redirect('/search/characters')
+            for comic in comic_series:
+                issue_key = x
+                issue_id = x
+                thumbnail = x
+                title = x
+                characters = 
+
+
+            return render_template('/content/characters/view_character.html', single_character=single_character, character_id=character_id, comics=comics, character_data=character_data, comic_series=comic_series, lists=lists, username=username)
+
+        except IndexError:
+            flash('Character not found. Please check your spelling.')
+            return redirect('/search/characters')
 
 
 ##########################
@@ -404,21 +418,8 @@ def add_character_to_list(character_name, list_id):
         return redirect('/login')
     username = session['username']
     
-    comics = marvel.comics
-    characters = marvel.characters
-
-    single_character = characters.all(name=f'{character_name}')['data']['results'][0]
-
-    character_key = ''.join(random.choices(
-        string.ascii_uppercase + string.digits, k=20))
-    character_name = single_character['name']
-    thumbnail_path = single_character['thumbnail']['path']
-    thumbnail = f'{thumbnail_path}.jpg'
-
-    save_character = Character.commit_character_to_db(
-        character_key, character_name, thumbnail)
-    db.session.add(save_character)
-    db.session.commit()
+    character = Character.query.get(character_name)
+    character_key = character.character_key
 
     commit_to_list = ListCharacter.add_character_to_list(list_id, character_key)
     db.session.add(commit_to_list)

@@ -1,0 +1,31 @@
+{% extends '/main/base.html' %}
+{% block title %}Character Details{% endblock %}
+{% block content %}
+
+
+<div class="text-center">
+    <br>
+    <h1>{{character.character_name}}</h1>
+    <br>
+    <img src="{{character.thumbnail}}" class="rounded mx-auto d-block" style="width: 400px">
+    <br>
+    <h3>Biography</h3>
+    <p>{{character.biography}}</p>
+    <br>
+
+
+    <div class="m-4">
+        <div class="dropdown">
+            <a href="#" class="dropdown-toggle" data-bs-toggle="dropdown">Add this character to a list</a>
+            <div class="dropdown-menu">
+                {% for list in lists %}
+                <a href="/add_character/{{character.character_name}}/to/{{list.list_id}}"
+                    class="dropdown-item">{{list.list_name}}</a>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+
+</div>
+{% endblock %}

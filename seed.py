@@ -1,5 +1,5 @@
 from app import app, db
-from models import db, User, List, ListIssue, Issue, ListCharacter, Character
+from models import db, User, List, ListIssue, Issue, ListCharacter, Character, CharacterIssue
 
 db.drop_all()
 db.create_all()
@@ -56,3 +56,8 @@ character1 = Character(
 )
 db.session.add(character1)
 db.session.commit()
+
+characterissue1 = CharacterIssue(
+    character_key='qwertyuiop',
+    issue_key='asdf1234'
+)

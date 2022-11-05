@@ -78,7 +78,6 @@ class Issue(db.Model):
     def commit_issue_to_db(cls, issue_key, issue_id, thumbnail, title):
         return cls(issue_key=issue_key, issue_id=issue_id, thumbnail=thumbnail, title=title)
 
-##################
 
 class ListCharacter(db.Model):
     __tablename__ = 'lists_characters'
@@ -96,13 +95,15 @@ class ListCharacter(db.Model):
 class Character(db.Model):
     __tablename__ = 'characters'
 
-    character_key = db.Column(db.Text, primary_key=True, unique=True)
-    character_name = db.Column(db.Text)
+    character_key = db.Column(db.Text, unique=True)
+    character_id = db.Column(db.Integer)
+    character_name = db.Column(db.Text, primary_key=True, unique=True)
+    biography = db.Column(db.Text)
     thumbnail = db.Column(db.Text)
 
     @classmethod
-    def commit_character_to_db(cls, character_key, character_name, thumbnail):
-        return cls(character_key=character_key, character_name=character_name, thumbnail=thumbnail)
+    def commit_character_to_db(cls, character_key, character_id, character_name, biography, thumbnail):
+        return cls(character_key=character_key, character_id=character_id, character_name=character_name, biography=biography, thumbnail=thumbnail)
 
 
 class CharacterIssue(db.Model):
