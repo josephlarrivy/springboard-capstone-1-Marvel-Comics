@@ -1,7 +1,7 @@
 from flask import Flask, render_template, redirect, session, flash
 from flask_debugtoolbar import DebugToolbarExtension
 from forms import AddUserForm, CharacterSearch, DisposableUserForm, UserForm, IssueSearch, CreateListForm
-from models import connect_db, db, User, List, ListIssue, Issue, ListCharacter, Character
+from models import connect_db, db, User, List, ListIssue, Issue, ListCharacter, Character, CharacterIssue
 from sqlalchemy.exc import IntegrityError
 import string
 import random
@@ -298,6 +298,17 @@ def show_characters(character_name):
 
         user = User.query.get(username)
         lists = user.lists
+
+################
+
+# need to figure out how to use CharacterIssue class method to link_character_to_issue
+
+        for comic in comic_series:
+            character_key = 
+
+            issue = CharacterIssue.link_character_to_issue(character_key, issue_key)
+
+################
 
         return render_template('/content/characters/view_character.html', single_character=single_character, character_id=character_id, comics=comics, character_data=character_data, comic_series=comic_series, lists=lists, username=username)
 
