@@ -22,20 +22,5 @@
 
 <a href="/members/ExampleUser/view"><button type="button" class="btn btn-dark">Example User</button></a>
 
-
-{% with messages = get_flashed_messages() %}
-{% if messages %}
-<ul class=flashes>
-    {% for message in messages %}
-    <li>{{ message }}</li>
-    {% endfor %}
-</ul>
-{% endif %}
-{% endwith %}
-
-
-
-
-
 </div>
 {% endblock %}

@@ -12,7 +12,7 @@
 <body>
 <div class="bg-dark text-center">
     <span>
-        <h1 class="display-1 text-white p-4">Website Name</h1>
+        <h1 class="display-1 text-white p-4">Application Name</h1>
     </span>
 </div>
 <!-- start navbar formatting -->
@@ -57,7 +57,19 @@
     {% endif %}
     </nav>
 <!-- end navbar formatting -->
-
+<!-- flash messages -->
+<div class="text-center">
+{% with messages = get_flashed_messages() %}
+{% if messages %}
+<ul class="alert alert-dark">
+    {% for message in messages %}
+    <li class="list-unstyled">{{ message }}</li>
+    {% endfor %}
+</ul>
+{% endif %}
+{% endwith %}
+</div>
+<!-- end flash messages -->
 
 {% block content %}
 {% endblock %}

@@ -32,11 +32,16 @@ listissue1 = ListIssue(
 db.session.add(listissue1)
 db.session.commit()
 
+# need to update Issue to include all data from model
 issue1 = Issue(
     issue_key = 'asdf1234',
     issue_id = 1,
+    title = 'comic1',
     thumbnail = 'test',
-    title = 'comic1'
+    description = 'description1',
+    characters = 'character5',
+    series = 'series1',
+    series_id = 1
 )
 db.session.add(issue1)
 db.session.commit()

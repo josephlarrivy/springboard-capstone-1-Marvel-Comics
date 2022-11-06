@@ -57,26 +57,29 @@ class ListIssue(db.Model):
     __tablename__ = 'lists_issues'
 
     list_id = db.Column(db.Text, db.ForeignKey('lists.list_id'), primary_key=True)
-    issue_key = db.Column(db.Text, db.ForeignKey('issues.issue_key'), primary_key=True)
+    issue_id = db.Column(db.Integer, db.ForeignKey('issues.issue_id'), primary_key=True)
 
     @classmethod
-    def add_issue_to_list(cls, list_id, issue_key):
-        return cls(list_id=list_id, issue_key=issue_key)
+    def add_issue_to_list(cls, list_id, issue_id):
+        return cls(list_id=list_id, issue_id=issue_id)
 
 
 class Issue(db.Model):
     __tablename__ = 'issues'
 
-    issue_key = db.Column(db.Text, primary_key=True, unique=True)
-    issue_id = db.Column(db.Integer)
-    thumbnail = db.Column(db.Text)
+    issue_key = db.Column(db.Text, unique=True)
+    issue_id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.Text)
+    thumbnail = db.Column(db.Text)
+    description = db.Column(db.Text)
+    # series = db.Column(db.Text)
+    # series_id = db.Column(db.String)
 
-    characters = db.relationship('Character', secondary='characters_issues', backref='issues')
+    # characters = db.relationship('Character', secondary='characters_issues', backref='issues')
 
     @classmethod
-    def commit_issue_to_db(cls, issue_key, issue_id, thumbnail, title):
-        return cls(issue_key=issue_key, issue_id=issue_id, thumbnail=thumbnail, title=title)
+    def commit_issue_to_db(cls, issue_key, issue_id, title, thumbnail, description):
+        return cls(issue_key=issue_key, issue_id=issue_id, title=title, thumbnail=thumbnail, description=description)
 
 
 class ListCharacter(db.Model):
@@ -111,7 +114,7 @@ class CharacterIssue(db.Model):
 
     character_key = db.Column(db.Text, db.ForeignKey(
         'characters.character_key'), primary_key=True)
-    issue_key = db.Column(db.Text, db.ForeignKey(
+    issue_key = db.Column(db.String, db.ForeignKey(
         'issues.issue_key'), primary_key=True)
 
     @classmethod

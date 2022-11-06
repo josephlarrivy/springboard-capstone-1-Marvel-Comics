@@ -4,26 +4,13 @@
 
 <div class="text-center">
 <br>
-    <h1>{{issue_data['title']}}</h1>
+    <h1>{{title}}</h1>
 <br>
-    <img src="{{issue_data['thumbnail']['path']}}.jpg" style="width: 300px; height: 463px">
+    <img src="{{thumbnail}}" style="width: 300px; height: 463px">
 <br>
 <br>
     <h3>Description</h3>
-    <p>{{issue_data['description']}}</p>
-
-
-{% with messages = get_flashed_messages() %}
-{% if messages %}
-<ul class="flashes list-unstyled">
-    {% for message in messages %}
-    <li>{{ message }}</li>
-    {% endfor %}
-</ul>
-{% endif %}
-{% endwith %}
-
-
+    <p>{{description}}</p>
 
     <div class="m-4">
         <div class="dropdown">
@@ -61,6 +48,18 @@
 {% endfor %}
 </ul>
 
+<hr>
+
+<p>issue_key: {{issue_key}}</p>
+<p>issue_id: {{issue_id}}</p>
+<p>title: {{title}}</p>
+<p>thumbnail: {{thumbnail}}</p>
+<p>description: {{description}}</p>
+<p>characters: {{issue_data['characters']}}</p>
+<p>series: {{series}}</p>
+<p>series_id: {{issue_data['series_id']}}</p>
+
+<hr>
 
 <!-- {{series_data['']}} -->
 <p>{{series_data}}</p>

@@ -290,7 +290,11 @@ def show_characters(character_name):
         user = User.query.get(username)
         lists = user.lists
 
-        return render_template('/content/characters/view_db_character.html', character=character, user=user, lists=lists, username=username)
+        single_character = characters.all(name=f'{character_name}')['data']['results'][0]
+        character_id = single_character['id']
+        comic_series = characters.comics(f'{character_id}')['data']['results']
+
+        return render_template('/content/characters/view_db_character.html', character=character, user=user, lists=lists, username=username, comic_series=comic_series, comics=comics)
 
 
     else:
