@@ -290,7 +290,7 @@ def show_characters(character_name):
         user = User.query.get(username)
         lists = user.lists
 
-        return render_template('/content/characters/view_db_character.html', character=character, user=user, lists=lists)
+        return render_template('/content/characters/view_db_character.html', character=character, user=user, lists=lists, username=username)
 
 
     else:
@@ -316,10 +316,6 @@ def show_characters(character_name):
             db.session.add(save_character)
             db.session.commit()
 
-            # add issues to DB here or in view_issue?
-            # maybe continue to display issues for 'if Character.query.get(character_name):' by pulling them from the api. They would still need to be added to the db - perhaps so that in the 'view issue' page?
-
-
             return render_template('/content/characters/view_character.html', single_character=single_character, character_id=character_id, comics=comics, character_data=character_data, comic_series=comic_series, lists=lists, username=username)
 
         except IndexError:
@@ -338,24 +334,57 @@ def view_single_issue(issue_id):
         flash('must log in or register to view')
         return redirect('/login')
     username = session['username']
-
     comics = marvel.comics
     series = marvel.series
 
-    issue_data = comics.get(f'{issue_id}')['data']['results'][0]
-    creators = issue_data['creators']['items']
-    characters = issue_data['characters']['items']
+    if Issue.query.get(issue_id):
+        issue = Issue.query.get(issue_id)
+        user = User.query.get(username)
+        lists = user.lists
 
-    url = issue_data['series']['resourceURI']
-    series_id = url.removeprefix('http://gateway.marvel.com/v1/public/series/')
+        issue_data = comics.get(f'{issue_id}')['data']['results'][0]
+        creators = issue_data['creators']['items']
+        characters = issue_data['characters']['items']
 
-    series_data = series.get(series_id)['data']['results'][0]
-    comics = series_data['comics']['items']
+        url = issue_data['series']['resourceURI']
+        series_id = url.removeprefix('http://gateway.marvel.com/v1/public/series/')
+        series_data = series.get(series_id)['data']['results'][0]
+        comics = series_data['comics']['items']
 
-    user = User.query.get(username)
-    lists = user.lists
+        issue_key = issue.issue_key
 
-    return render_template('/content/issues/view_single_issue.html', issue_data=issue_data, creators=creators, characters=characters, series_data=series_data, series_id=series_id, comics=comics, user=user, lists=lists, username=username)
+        return render_template('/content/issues/view_db_issue.html', issue=issue, issue_id=issue_id, user=user, lists=lists, issue_key=issue_key, issue_data=issue_data, creators=creators, characters=characters, series_data=series_data, comics=comics)
+
+    else:
+        issue_data = comics.get(f'{issue_id}')['data']['results'][0]
+
+        creators = issue_data['creators']['items']
+        characters = issue_data['characters']['items']
+        url = issue_data['series']['resourceURI']
+        series_id = url.removeprefix('http://gateway.marvel.com/v1/public/series/')
+
+        series_data = series.get(series_id)['data']['results'][0]
+        comics = series_data['comics']['items']
+
+        user = User.query.get(username)
+        lists = user.lists
+
+        issue_key = ''.join(random.choices(string.ascii_uppercase + string.digits, k=20))
+        issue_id = issue_data['id']
+        title = issue_data['title']
+        thumbnail_path = issue_data['thumbnail']['path']
+        thumbnail = f'{thumbnail_path}.jpg'
+        description = issue_data['description']
+        # creators
+        # characters
+        series = series_data['title']
+        # series_id
+
+        save_issue = Issue.commit_issue_to_db(issue_key, issue_id, title, thumbnail, description)
+        db.session.add(save_issue)
+        db.session.commit()
+
+        return render_template('/content/issues/view_single_issue.html', issue_key=issue_key, issue_id=issue_id, title=title, thumbnail=thumbnail, description=description, issue_data=issue_data, creators=creators, characters=characters, series_data=series_data, series_id=series_id, comics=comics, user=user, lists=lists, username=username)
 
 
 @app.route('/series/<int:series_id>', methods=['GET', 'POST'])
@@ -385,22 +414,14 @@ def add_issue_to_list(issue_id, list_id):
         flash('must log in or register to view')
         return redirect('/login')
     username = session['username']
-    comics = marvel.comics
+
+    try:
+        commit_to_list = ListIssue.add_issue_to_list(list_id, issue_id)
+        db.session.add(commit_to_list)
+        db.session.commit()
     
-    issue_data = comics.get(f'{issue_id}')['data']['results'][0]
-
-    issue_key = ''.join(random.choices(string.ascii_uppercase + string.digits, k=20))
-    thumbnail_path = issue_data['thumbnail']['path']
-    thumbnail = f'{thumbnail_path}.jpg'
-    title = issue_data['title']
-
-    save_issue = Issue.commit_issue_to_db(issue_key, issue_id, thumbnail, title)
-    db.session.add(save_issue)
-    db.session.commit()
-
-    commit_to_list = ListIssue.add_issue_to_list(list_id, issue_key)
-    db.session.add(commit_to_list)
-    db.session.commit()
+    except IntegrityError:
+        flash('issue already in this list')
 
     return redirect(f'/view_single_issue/{issue_id}')
 
@@ -417,9 +438,13 @@ def add_character_to_list(character_name, list_id):
     character = Character.query.get(character_name)
     character_key = character.character_key
 
-    commit_to_list = ListCharacter.add_character_to_list(list_id, character_key)
-    db.session.add(commit_to_list)
-    db.session.commit()
+    try:
+        commit_to_list = ListCharacter.add_character_to_list(list_id, character_key)
+        db.session.add(commit_to_list)
+        db.session.commit()
+
+    except IntegrityError:
+        flash('this character is already in this list')
 
     return redirect(f'/view_character/{character_name}')
 
