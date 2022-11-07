@@ -382,7 +382,7 @@ def view_single_issue(issue_id):
 
         issue_key = issue.issue_key
 
-        return render_template('/content/issues/view_db_issue.html', issue=issue, issue_id=issue_id, user=user, lists=lists, issue_key=issue_key, issue_data=issue_data, creators=creators, characters=characters, series_data=series_data, comics=comics)
+        return render_template('/content/issues/view_db_issue.html', issue=issue, issue_id=issue_id, user=user, lists=lists, issue_key=issue_key, issue_data=issue_data, creators=creators, characters=characters, series_data=series_data, comics=comics, username=username)
 
     else:
         issue_data = comics.get(f'{issue_id}')['data']['results'][0]
