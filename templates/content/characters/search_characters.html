@@ -5,16 +5,28 @@
 
 <br>
 <h1>Characters</h1>
-<br>
 <div class="row">
-    <img src="http://i.annihil.us/u/prod/marvel/i/mg/3/50/537ba56d31087.jpg" class="rounded mx-auto d-block" style="width: 300px">
-    <img src="http://i.annihil.us/u/prod/marvel/i/mg/9/c0/527bb7b37ff55.jpg" class="rounded mx-auto d-block" style="width: 300px">
-    <img src="http://i.annihil.us/u/prod/marvel/i/mg/d/d0/5269657a74350.jpg" class="rounded mx-auto d-block" style="width: 300px">
+    <figure class="p-3 m-3 col">
+        <img src="{{show_rand_character1.image}}" style="width: 400px">
+        <a href="{{show_rand_character1.href}}">
+            <figcaption class="text-center">{{show_rand_character1.name}}</figcaption>
+        </a>
+    </figure>
+    <figure class="p-3 m-3 col">
+        <img src="{{show_rand_character2.image}}" style="width: 400px">
+        <a href="{{show_rand_character2.href}}">
+            <figcaption class="text-center">{{show_rand_character2.name}}</figcaption>
+        </a>
+    </figure>
+    <figure class="p-3 m-3 col">
+        <img src="{{show_rand_character3.image}}" style="width: 400px">
+        <a href="{{show_rand_character3.href}}">
+            <figcaption class="text-center">{{show_rand_character3.name}}</figcaption>
+        </a>
+    </figure>
 </div>
 <br>
 <br>
-
-
 
 <h1>Search Characters</h1>
 
@@ -27,16 +39,6 @@
         {{field}}
     </p>
     {% endfor %}
-
-    {% with messages = get_flashed_messages() %}
-    {% if messages %}
-    <ul class=flashes>
-        {% for message in messages %}
-        <li class="list-unstyled">{{ message }}</li>
-        {% endfor %}
-    </ul>
-    {% endif %}
-    {% endwith %}
 
     <button class="btn btn-dark">Submit</button>
 </form>

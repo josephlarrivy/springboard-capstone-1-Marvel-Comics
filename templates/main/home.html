@@ -1,20 +1,7 @@
 {% extends '/main/base.html' %}
 {% block title %}Home{% endblock %}
 {% block content %}
-
-{% with messages = get_flashed_messages() %}
-{% if messages %}
-<ul class=flashes>
-    {% for message in messages %}
-    <li>{{ message }}</li>
-    {% endfor %}
-</ul>
-{% endif %}
-{% endwith %}
-
-
 <br>
-
 <div class="text-center">
     
     <h2>Featured Characters</h2>
@@ -71,7 +58,6 @@
     </div>
 
     <h2>Search for a character</h2>
-    <br>
     <a href="/search/characters"><button type="button" class="btn btn-dark">Search Characters</button></a>
 
 

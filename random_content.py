@@ -38,6 +38,31 @@ rand_issues = [
         'title': 'Hulk (2021) #6',
         'href': '/view_single_issue/97197',
         'image': 'http://i.annihil.us/u/prod/marvel/i/mg/1/90/634d578f25769.jpg'
+    },
+    {
+        'title': 'Avengers Unlimited Infinity Comic (2022) #18',
+        'href': '/view_single_issue/103372',
+        'image': 'http://i.annihil.us/u/prod/marvel/i/mg/4/80/63286d66c78c9.jpg'
+    },
+    {
+        'title': 'T.E.S.T. Kitchen Halloween Special Infinity Comic (2022) #1',
+        'href': '/view_single_issue/106034',
+        'image': 'http://i.annihil.us/u/prod/marvel/i/mg/9/80/6328efd365f0a.jpg'
+    },
+    {
+        'title': 'Who Is...? Ironheart Infinity Comic (2022) #1',
+        'href': '/view_single_issue/101319',
+        'image': 'http://i.annihil.us/u/prod/marvel/i/mg/3/40/632c751e312f7.jpg'
+    },
+    {
+        'title': 'Black Widow (2020) #15',
+        'href': '/view_single_issue/95780',
+        'image': 'http://i.annihil.us/u/prod/marvel/i/mg/3/80/62432e9e0d663.jpg'
+    },
+    {
+        'title': 'Amazing Fantasy (2021) #4',
+        'href': '/view_single_issue/712248',
+        'image': 'http://i.annihil.us/u/prod/marvel/i/mg/7/03/6169ef0892110.jpg'
     }
 ]
 
@@ -78,9 +103,24 @@ rand_characters = [
         'image': 'http://i.annihil.us/u/prod/marvel/i/mg/2/70/50febd8be6b5d.jpg'
     },
     {
-        'name': 'Captain Marvel (Carol Danvers)',
-        'href': '/view_character/Captain%20Marvel%20(Carol%20Danvers)',
-        'image': 'http://i.annihil.us/u/prod/marvel/i/mg/6/80/5269608c1be7a.jpg'
+        'name': 'Odin',
+        'href': '/view_character/Odin',
+        'image': 'http://i.annihil.us/u/prod/marvel/i/mg/3/00/539a06a64b262.jpg'
+    },
+    {
+        'name': 'Loki',
+        'href': '/view_character/Loki',
+        'image': 'http://i.annihil.us/u/prod/marvel/i/mg/d/90/526547f509313.jpg'
+    },
+    {
+        'name': 'Thanos',
+        'href': '/view_character/Thanos',
+        'image': 'http://i.annihil.us/u/prod/marvel/i/mg/6/40/5274137e3e2cd.jpg'
+    },
+    {
+        'name': 'Gamora',
+        'href': '/view_character/Gamora',
+        'image': 'http://i.annihil.us/u/prod/marvel/i/mg/5/90/526032a2cce62.jpg'
     }
 ]
 

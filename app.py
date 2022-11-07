@@ -34,15 +34,15 @@ def redirect_home():
 def show_homepage():
 
     i = len(rand_characters)
-    show_rand_character1 = rand_characters[random.randrange(0, i)]
-    show_rand_character2 = rand_characters[random.randrange(0, i)]
-    show_rand_character3 = rand_characters[random.randrange(0, i)]
+    show_rand_character1 = rand_characters[random.randrange(0, 4)]
+    show_rand_character2 = rand_characters[random.randrange(5, 8)]
+    show_rand_character3 = rand_characters[random.randrange(9, i)]
 
     n = len(rand_issues)
-    show_rand_issue1 = rand_issues[random.randrange(0, n)]
-    show_rand_issue2 = rand_issues[random.randrange(0, n)]
-    show_rand_issue3 = rand_issues[random.randrange(0, n)]
-    show_rand_issue4 = rand_issues[random.randrange(0, n)]
+    show_rand_issue1 = rand_issues[random.randrange(0, 3)]
+    show_rand_issue2 = rand_issues[random.randrange(4, 7)]
+    show_rand_issue3 = rand_issues[random.randrange(8, 10)]
+    show_rand_issue4 = rand_issues[random.randrange(11, n)]
 
     return render_template('/main/home.html',show_rand_issue1=show_rand_issue1, show_rand_issue2=show_rand_issue2, show_rand_issue3=show_rand_issue3,
     show_rand_issue4=show_rand_issue4,
@@ -117,14 +117,17 @@ def register_disposable():
         except IntegrityError:
             flash('username already taken')
         
-        list_name = 'Wish List'
-        list_id = ''.join(random.choices(
-            string.ascii_uppercase + string.digits, k=20))
+        list_name = 'Favorites'
+        list_id = ''.join(random.choices(string.ascii_uppercase + string.digits, k=20))
         username = username
+        default_list1 = List.create_new_list(list_name, list_id, username)
 
-        new_list = List.create_new_list(list_name, list_id, username)
+        list_name = 'Wish List'
+        list_id = ''.join(random.choices(string.ascii_uppercase + string.digits, k=20))
+        username = username
+        default_list2 = List.create_new_list(list_name, list_id, username)
 
-        db.session.add(new_list)
+        db.session.add_all([default_list1, default_list2])
         db.session.commit()
         
         session['username'] = username
@@ -177,10 +180,27 @@ def show_members_home(username):
     if 'username' not in session:
         flash('must log in or register to view')
         return redirect('/register')
+    i = len(rand_characters)
+    show_rand_character1 = rand_characters[random.randrange(0, 4)]
+    show_rand_character2 = rand_characters[random.randrange(5, 8)]
+    show_rand_character3 = rand_characters[random.randrange(9, i)]
+
+    n = len(rand_issues)
+    show_rand_issue1 = rand_issues[random.randrange(0, 3)]
+    show_rand_issue2 = rand_issues[random.randrange(4, 7)]
+    show_rand_issue3 = rand_issues[random.randrange(8, 10)]
+    show_rand_issue4 = rand_issues[random.randrange(11, n)]
         
     curr_user = User.query.get(username)
     if curr_user.username == session['username']:
-        return render_template('/members/members_home.html', user=curr_user, username=username)
+        return render_template('/members/members_home.html', user=curr_user, username=username,show_rand_issue1=show_rand_issue1, show_rand_issue2=show_rand_issue2, show_rand_issue3=show_rand_issue3,
+        show_rand_issue4=show_rand_issue4,
+        show_rand_character1=show_rand_character1,
+        show_rand_character2=show_rand_character2,
+        show_rand_character3=show_rand_character3)
+    
+    else:
+        redirect('/')
 
 
 @app.route('/members/<username>/profile')
@@ -265,13 +285,18 @@ def search_characters():
         return redirect('/login')
     username = session['username']
 
+    i = len(rand_characters)
+    show_rand_character1 = rand_characters[random.randrange(0, 4)]
+    show_rand_character2 = rand_characters[random.randrange(5, 8)]
+    show_rand_character3 = rand_characters[random.randrange(9, i)]
+
     form = CharacterSearch()
 
     if form.validate_on_submit():
         character_search_term = form.character_search_term.data.title()
         return redirect(f'/view_character/{character_search_term}')
 
-    return render_template('/content/characters/search_characters.html', username=username, form=form)
+    return render_template('/content/characters/search_characters.html', username=username, show_rand_character1=show_rand_character1, show_rand_character2=show_rand_character2, show_rand_character3=show_rand_character3, form=form)
 
 
 @app.route('/view_character/<character_name>')
