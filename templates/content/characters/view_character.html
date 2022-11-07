@@ -41,5 +41,21 @@
     {% endfor %}
 </div>
 
+<!-- {{comic_series}} -->
+{{db_character}}
+
+{{db_character.issues}}
+
+<ul>
+{% for issue in issues %}
+    <li>{{issue.issue_id}}</li>
+    <li>{{issue.title}}</li>
+    <li>{{issue.thumbnail}}</li>
+    <li>{{issue.description}}</li>
+
+{% endfor %}
+</ul>
+
+
 </div>
 {% endblock %}

@@ -44,7 +44,6 @@ class List(db.Model):
     list_id = db.Column(db.Text, unique=True, primary_key=True, nullable=False)
     username = db.Column(db.Text, db.ForeignKey('users.username'), nullable=False)
 
-    user = db.relationship('User')
     issues = db.relationship('Issue', secondary='lists_issues', backref='lists')
     characters = db.relationship('Character', secondary='lists_characters', backref='lists')
 
@@ -67,7 +66,6 @@ class ListIssue(db.Model):
 class Issue(db.Model):
     __tablename__ = 'issues'
 
-    issue_key = db.Column(db.Text, unique=True)
     issue_id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.Text)
     thumbnail = db.Column(db.Text)
@@ -75,11 +73,11 @@ class Issue(db.Model):
     # series = db.Column(db.Text)
     # series_id = db.Column(db.String)
 
-    # characters = db.relationship('Character', secondary='characters_issues', backref='issues')
+    characters = db.relationship('Character', secondary='characters_issues', backref='issues')
 
     @classmethod
-    def commit_issue_to_db(cls, issue_key, issue_id, title, thumbnail, description):
-        return cls(issue_key=issue_key, issue_id=issue_id, title=title, thumbnail=thumbnail, description=description)
+    def commit_issue_to_db(cls, issue_id, title, thumbnail, description):
+        return cls(issue_id=issue_id, title=title, thumbnail=thumbnail, description=description)
 
 
 class ListCharacter(db.Model):
@@ -112,11 +110,12 @@ class Character(db.Model):
 class CharacterIssue(db.Model):
     __tablename__ = 'characters_issues'
 
+    relationship_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
     character_key = db.Column(db.Text, db.ForeignKey(
-        'characters.character_key'), primary_key=True)
-    issue_key = db.Column(db.String, db.ForeignKey(
-        'issues.issue_key'), primary_key=True)
+        'characters.character_key'))
+    issue_id = db.Column(db.Integer, db.ForeignKey(
+        'issues.issue_id'))
 
     @classmethod
-    def link_character_to_issue(cls, character_key, issue_key):
-        return cls(character_key=character_key, issue_key=issue_key)
+    def link_character_to_issue(cls, character_key, issue_id):
+        return cls(character_key=character_key, issue_id=issue_id)

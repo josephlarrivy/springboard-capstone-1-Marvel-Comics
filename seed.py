@@ -27,14 +27,13 @@ db.session.commit()
 
 listissue1 = ListIssue(
     list_id='VP0M7SUK9ILL5KV499VV',
-    issue_key='asdf1234'
+    issue_id='asdf1234'
 )
 db.session.add(listissue1)
 db.session.commit()
 
 # need to update Issue to include all data from model
 issue1 = Issue(
-    issue_key = 'asdf1234',
     issue_id = 1,
     title = 'comic1',
     thumbnail = 'test',
@@ -64,5 +63,5 @@ db.session.commit()
 
 characterissue1 = CharacterIssue(
     character_key='qwertyuiop',
-    issue_key='asdf1234'
+    issue_id='asdf1234'
 )

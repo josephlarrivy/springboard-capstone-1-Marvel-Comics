@@ -314,12 +314,13 @@ def show_characters(character_name):
         character = Character.query.get(character_name)
         user = User.query.get(username)
         lists = user.lists
+        issues = character.issues
 
-        single_character = characters.all(name=f'{character_name}')['data']['results'][0]
-        character_id = single_character['id']
-        comic_series = characters.comics(f'{character_id}')['data']['results']
+        # single_character = characters.all(name=f'{character_name}')['data']['results'][0]
+        # character_id = single_character['id']
+        # comic_series = characters.comics(f'{character_id}')['data']['results']
 
-        return render_template('/content/characters/view_db_character.html', character=character, user=user, lists=lists, username=username, comic_series=comic_series, comics=comics)
+        return render_template('/content/characters/view_db_character.html', character=character, issues=issues, user=user, lists=lists, username=username)
 
 
     else:
@@ -327,6 +328,7 @@ def show_characters(character_name):
             single_character = characters.all(name=f'{character_name}')[
                 'data']['results'][0]
             character_id = single_character['id']
+
             character_data = characters.get(f'{character_id}')[
                 'data']['results'][0]
             comic_series = characters.comics(f'{character_id}')['data']['results']
@@ -345,7 +347,37 @@ def show_characters(character_name):
             db.session.add(save_character)
             db.session.commit()
 
-            return render_template('/content/characters/view_character.html', single_character=single_character, character_id=character_id, comics=comics, character_data=character_data, comic_series=comic_series, lists=lists, username=username)
+            for comic in comic_series:
+                series = marvel.series
+                issue_id = comic['id']
+                issue_data = comics.get(f'{issue_id}')['data']['results'][0]
+                url = issue_data['series']['resourceURI']
+                series_id = url.removeprefix('http://gateway.marvel.com/v1/public/series/')
+                series_data = series.get(series_id)['data']['results'][0]
+                series = series_data['title']
+
+                title = issue_data['title']
+                thumbnail_path = issue_data['thumbnail']['path']
+                thumbnail = f'{thumbnail_path}.jpg'
+                description = issue_data['description']
+                series = series_data['title']
+                character = single_character['name']
+                
+                commit_issue = Issue.commit_issue_to_db(issue_id, title, thumbnail, description)
+                db.session.add(commit_issue)
+                db.session.commit()
+
+                connect_character_issue = CharacterIssue.link_character_to_issue(character_key, issue_id)
+                db.session.add(connect_character_issue)
+                db.session.commit()
+                
+            db_character = Character.query.get(character_name)
+            issues = db_character.issues
+
+            return render_template('/content/characters/view_character.html', single_character=single_character, character_id=character_id, comics=comics, character_data=character_data, comic_series=comic_series, character=character, db_character=db_character, issues=issues,
+            
+            
+            lists=lists, username=username)
 
         except IndexError:
             flash('Character not found. Please check your spelling.')
@@ -367,22 +399,21 @@ def view_single_issue(issue_id):
     series = marvel.series
 
     if Issue.query.get(issue_id):
-        issue = Issue.query.get(issue_id)
         user = User.query.get(username)
         lists = user.lists
 
-        issue_data = comics.get(f'{issue_id}')['data']['results'][0]
-        creators = issue_data['creators']['items']
-        characters = issue_data['characters']['items']
+        issue = Issue.query.get(issue_id)
 
-        url = issue_data['series']['resourceURI']
-        series_id = url.removeprefix('http://gateway.marvel.com/v1/public/series/')
-        series_data = series.get(series_id)['data']['results'][0]
-        comics = series_data['comics']['items']
+        # issue_data = comics.get(f'{issue_id}')['data']['results'][0]
+        # creators = issue_data['creators']['items']
+        # characters = issue_data['characters']['items']
 
-        issue_key = issue.issue_key
+        # url = issue_data['series']['resourceURI']
+        # series_id = url.removeprefix('http://gateway.marvel.com/v1/public/series/')
+        # series_data = series.get(series_id)['data']['results'][0]
+        # comics = series_data['comics']['items']
 
-        return render_template('/content/issues/view_db_issue.html', issue=issue, issue_id=issue_id, user=user, lists=lists, issue_key=issue_key, issue_data=issue_data, creators=creators, characters=characters, series_data=series_data, comics=comics, username=username)
+        return render_template('/content/issues/view_db_issue.html', user=user, lists=lists, issue=issue, username=username)
 
     else:
         issue_data = comics.get(f'{issue_id}')['data']['results'][0]
@@ -398,7 +429,6 @@ def view_single_issue(issue_id):
         user = User.query.get(username)
         lists = user.lists
 
-        issue_key = ''.join(random.choices(string.ascii_uppercase + string.digits, k=20))
         issue_id = issue_data['id']
         title = issue_data['title']
         thumbnail_path = issue_data['thumbnail']['path']
@@ -409,11 +439,11 @@ def view_single_issue(issue_id):
         series = series_data['title']
         # series_id
 
-        save_issue = Issue.commit_issue_to_db(issue_key, issue_id, title, thumbnail, description)
+        save_issue = Issue.commit_issue_to_db(issue_id, title, thumbnail, description)
         db.session.add(save_issue)
         db.session.commit()
 
-        return render_template('/content/issues/view_single_issue.html', issue_key=issue_key, issue_id=issue_id, title=title, thumbnail=thumbnail, description=description, issue_data=issue_data, creators=creators, characters=characters, series_data=series_data, series_id=series_id, comics=comics, user=user, lists=lists, username=username)
+        return render_template('/content/issues/view_single_issue.html', issue_id=issue_id, title=title, thumbnail=thumbnail, description=description, issue_data=issue_data, creators=creators, characters=characters, series_data=series_data, series_id=series_id, comics=comics, user=user, lists=lists, username=username)
 
 
 @app.route('/series/<int:series_id>', methods=['GET', 'POST'])
@@ -485,8 +515,6 @@ def show_list_items(username, list_id):
         flash('must log in or register to view')
         return redirect('/login')
     username = session['username']
-
-    comics = marvel.comics
 
     list = List.query.get(list_id)
     issues = list.issues
