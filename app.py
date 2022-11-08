@@ -316,72 +316,89 @@ def show_characters(character_name):
         lists = user.lists
         issues = character.issues
 
-        # single_character = characters.all(name=f'{character_name}')['data']['results'][0]
-        # character_id = single_character['id']
-        # comic_series = characters.comics(f'{character_id}')['data']['results']
-
         return render_template('/content/characters/view_db_character.html', character=character, issues=issues, user=user, lists=lists, username=username)
-
 
     else:
         try:
             single_character = characters.all(name=f'{character_name}')[
                 'data']['results'][0]
-            character_id = single_character['id']
-
-            character_data = characters.get(f'{character_id}')[
-                'data']['results'][0]
-            comic_series = characters.comics(f'{character_id}')['data']['results']
-
-            user = User.query.get(username)
-            lists = user.lists
-
-            character_key = ''.join(random.choices(string.ascii_uppercase + string.digits, k=20))
-            character_id = single_character['id']
-            character_name = single_character['name'].title()
-            biography = single_character['description']
-            thumbnail_path = single_character['thumbnail']['path']
-            thumbnail = f'{thumbnail_path}.jpg'
-
-            save_character = Character.commit_character_to_db(character_key, character_id, character_name, biography, thumbnail)
-            db.session.add(save_character)
-            db.session.commit()
-
-            for comic in comic_series:
-                series = marvel.series
-                issue_id = comic['id']
-                issue_data = comics.get(f'{issue_id}')['data']['results'][0]
-                url = issue_data['series']['resourceURI']
-                series_id = url.removeprefix('http://gateway.marvel.com/v1/public/series/')
-                series_data = series.get(series_id)['data']['results'][0]
-                series = series_data['title']
-
-                title = issue_data['title']
-                thumbnail_path = issue_data['thumbnail']['path']
-                thumbnail = f'{thumbnail_path}.jpg'
-                description = issue_data['description']
-                series = series_data['title']
-                character = single_character['name']
+            
+            print('checkpoint1')
+        
+        except IndexError:
+            flash('Character not found. Please check your spelling.')
+            return redirect('/search/characters')
                 
+        character_id = single_character['id']
+
+        character_data = characters.get(f'{character_id}')[
+            'data']['results'][0]
+
+        comic_series = characters.comics(f'{character_id}')['data']['results']
+
+        user = User.query.get(username)
+        lists = user.lists
+
+        character_key = ''.join(random.choices(string.ascii_uppercase + string.digits, k=20))
+        character_id = single_character['id']
+        character_name = single_character['name'].title()
+        biography = single_character['description']
+        thumbnail_path = single_character['thumbnail']['path']
+        thumbnail = f'{thumbnail_path}.jpg'
+
+        save_character = Character.commit_character_to_db(character_key, character_id, character_name, biography, thumbnail)
+        db.session.add(save_character)
+        db.session.commit()
+
+        for comic in comic_series:
+            series = marvel.series
+            issue_id = comic['id']
+
+            issue_data = comics.get(f'{issue_id}')['data']['results'][0]
+            url = issue_data['series']['resourceURI']
+            series_id = url.removeprefix('http://gateway.marvel.com/v1/public/series/')
+            series_data = series.get(series_id)['data']['results'][0]
+            series = series_data['title']
+
+            title = issue_data['title']
+            thumbnail_path = issue_data['thumbnail']['path']
+            thumbnail = f'{thumbnail_path}.jpg'
+            description = issue_data['description']
+            series_id = series_data['id']
+            character = single_character['name']
+            
+            if Issue.query.get(issue_id):
+                pass
+            else:
                 commit_issue = Issue.commit_issue_to_db(issue_id, title, thumbnail, description)
                 db.session.add(commit_issue)
                 db.session.commit()
 
-                connect_character_issue = CharacterIssue.link_character_to_issue(character_key, issue_id)
-                db.session.add(connect_character_issue)
-                db.session.commit()
-                
-            db_character = Character.query.get(character_name)
-            issues = db_character.issues
+            connect_character_issue = CharacterIssue.link_character_to_issue(character_key, issue_id)
+            db.session.add(connect_character_issue)
+            db.session.commit()
 
-            return render_template('/content/characters/view_character.html', single_character=single_character, character_id=character_id, comics=comics, character_data=character_data, comic_series=comic_series, character=character, db_character=db_character, issues=issues,
+            # if Series.query.get(series_id):
+            #     pass
+            # else:
+            #     commit_series = Series.commit_series_to_db(series_id, series)
+            #     db.session.add(commit_series)
+            #     db.session.commit()
             
-            
-            lists=lists, username=username)
+            # connect_issue_to_series = SeriesIssue.link_issues_to_series(issue_id, series_id)
+            # db.session.add(connect_issue_to_series)
+            # db.session.commit()
 
-        except IndexError:
-            flash('Character not found. Please check your spelling.')
-            return redirect('/search/characters')
+        # db_character = Character.query.get(character_name)
+        # issues = db_character.issues
+
+        return redirect(f'/view_character/{character_name}')
+        # return render_template('/content/characters/view_character.html', single_character=single_character, character_id=character_id, comics=comics, character_data=character_data, comic_series=comic_series, character=character, db_character=db_character, issues=issues,
+        
+        
+        # lists=lists, username=username)
+
+        
 
 
 ##########################
@@ -404,46 +421,46 @@ def view_single_issue(issue_id):
 
         issue = Issue.query.get(issue_id)
 
-        # issue_data = comics.get(f'{issue_id}')['data']['results'][0]
-        # creators = issue_data['creators']['items']
-        # characters = issue_data['characters']['items']
+        issue_data = comics.get(f'{issue_id}')['data']['results'][0]
+        creators = issue_data['creators']['items']
+        characters = issue_data['characters']['items']
 
         # url = issue_data['series']['resourceURI']
         # series_id = url.removeprefix('http://gateway.marvel.com/v1/public/series/')
         # series_data = series.get(series_id)['data']['results'][0]
         # comics = series_data['comics']['items']
 
-        return render_template('/content/issues/view_db_issue.html', user=user, lists=lists, issue=issue, username=username)
+        return render_template('/content/issues/view_db_issue.html', user=user, lists=lists, issue=issue, issue_data=issue_data, creators=creators, characters=characters, username=username)
 
-    else:
-        issue_data = comics.get(f'{issue_id}')['data']['results'][0]
+    # else:
+    #     issue_data = comics.get(f'{issue_id}')['data']['results'][0]
 
-        creators = issue_data['creators']['items']
-        characters = issue_data['characters']['items']
-        url = issue_data['series']['resourceURI']
-        series_id = url.removeprefix('http://gateway.marvel.com/v1/public/series/')
+    #     creators = issue_data['creators']['items']
+    #     characters = issue_data['characters']['items']
+    #     url = issue_data['series']['resourceURI']
+    #     series_id = url.removeprefix('http://gateway.marvel.com/v1/public/series/')
 
-        series_data = series.get(series_id)['data']['results'][0]
-        comics = series_data['comics']['items']
+    #     series_data = series.get(series_id)['data']['results'][0]
+    #     comics = series_data['comics']['items']
 
-        user = User.query.get(username)
-        lists = user.lists
+    #     user = User.query.get(username)
+    #     lists = user.lists
 
-        issue_id = issue_data['id']
-        title = issue_data['title']
-        thumbnail_path = issue_data['thumbnail']['path']
-        thumbnail = f'{thumbnail_path}.jpg'
-        description = issue_data['description']
-        # creators
-        # characters
-        series = series_data['title']
-        # series_id
+    #     issue_id = issue_data['id']
+    #     title = issue_data['title']
+    #     thumbnail_path = issue_data['thumbnail']['path']
+    #     thumbnail = f'{thumbnail_path}.jpg'
+    #     description = issue_data['description']
+    #     # creators
+    #     # characters
+    #     series = series_data['title']
+    #     # series_id
 
-        save_issue = Issue.commit_issue_to_db(issue_id, title, thumbnail, description)
-        db.session.add(save_issue)
-        db.session.commit()
+    #     save_issue = Issue.commit_issue_to_db(issue_id, title, thumbnail, description)
+    #     db.session.add(save_issue)
+    #     db.session.commit()
 
-        return render_template('/content/issues/view_single_issue.html', issue_id=issue_id, title=title, thumbnail=thumbnail, description=description, issue_data=issue_data, creators=creators, characters=characters, series_data=series_data, series_id=series_id, comics=comics, user=user, lists=lists, username=username)
+    #     return render_template('/content/issues/view_single_issue.html', issue_id=issue_id, title=title, thumbnail=thumbnail, description=description, issue_data=issue_data, creators=creators, characters=characters, series_data=series_data, series_id=series_id, comics=comics, user=user, lists=lists, username=username)
 
 
 @app.route('/series/<int:series_id>', methods=['GET', 'POST'])

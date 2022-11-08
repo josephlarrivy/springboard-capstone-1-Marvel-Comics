@@ -11,7 +11,6 @@
     <br>
     <h3>Biography</h3>
     <p>{{character.biography}}</p>
-    <br>
 
 
     <div class="m-4">
@@ -30,31 +29,18 @@
     <h3>Appearances</h3>
     <div class="row text-center">
         {% for issue in issues %}
-        <div class="p-2 m-2">
+
+        <div class="p-2 m-2 col">
             <figure>
                 <img src="{{issue.thumbnail}}"
                     style="width: 300px; height: 463px">
                 <a href="/view_single_issue/{{issue.issue_id}}">
-                    <figcaption style="width: 250px; text-align:center">{{issue.title}}</figcaption>
+                    <figcaption class="text-center">{{issue.title}}</figcaption>
                 </a>
             </figure>
         </div>
         {% endfor %}
     </div>
-
-    
-    <ul>
-        {% for issue in issues %}
-        <li>{{issue.issue_id}}</li>
-        <li>{{issue.title}}</li>
-        <li>{{issue.thumbnail}}</li>
-        <li>{{issue.description}}</li>
-    
-        {% endfor %}
-    </ul>
-
-
-
 
 </div>
 {% endblock %}

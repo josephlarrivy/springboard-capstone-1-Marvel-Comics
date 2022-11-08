@@ -65,3 +65,13 @@ characterissue1 = CharacterIssue(
     character_key='qwertyuiop',
     issue_id='asdf1234'
 )
+
+# series1 = Series(
+#     series_id = 3498,
+#     series_name = 'test_series'
+# )
+
+# seriesissue1 = SeriesIssue(
+#     series_id = 3498,
+#     issue_id = 1
+# )

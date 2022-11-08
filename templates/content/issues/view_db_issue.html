@@ -24,8 +24,26 @@
         </div>
     </div>
 
-    {{issue.characters}}
 
+<h3>Creators</h3>
+<ul class="list-unstyled">
+    {% for creator in creators %}
+    <li>{{creator['name']}}</li>
+    {% endfor %}
+</ul>
+<br>
+<h3>Characters</h3>
+<ul class="list-unstyled">
+    {% for character in characters %}
+    <a href="/view_character/{{character['name']}}">
+        <li>{{character['name']}}</li>
+    </a>
+    {% endfor %}
+</ul>
+<br>
+{{issue_data}}
+<hr>
+{{issue.characters}}
     <br>
     <br>
     <br>

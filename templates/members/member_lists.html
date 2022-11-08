@@ -9,4 +9,23 @@
     {% endfor %}
 </ul>
 
+{% for list in lists %}
+    <div class="m-3 p-3 row"></div>
+        <h3>{{list.list_name}}</h3>
+        {% for character in list.characters %}
+            <p>{{character.character_name}}</p>
+        {% endfor %}
+        {% for issue in list.issues %}
+            <div class="p-2 m-2 col">
+                <figure>
+                    <img src="{{issue.thumbnail}}" style="width: 300px; height: 463px">
+                    <a href="/view_single_issue/{{issue.issue_id}}">
+                        <figcaption class="text-center">{{issue.title}}</figcaption>
+                    </a>
+                </figure>
+            </div>
+        {% endfor %}
+{% endfor %}
+</div>
+
 {% endblock %}
