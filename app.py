@@ -34,15 +34,15 @@ def redirect_home():
 def show_homepage():
 
     i = len(rand_characters)
-    show_rand_character1 = rand_characters[random.randrange(0, 4)]
-    show_rand_character2 = rand_characters[random.randrange(5, 8)]
-    show_rand_character3 = rand_characters[random.randrange(9, i)]
+    show_rand_character1 = rand_characters[random.randrange(0, 5)]
+    show_rand_character2 = rand_characters[random.randrange(6, 10)]
+    show_rand_character3 = rand_characters[random.randrange(11, i)]
 
     n = len(rand_issues)
-    show_rand_issue1 = rand_issues[random.randrange(0, 3)]
-    show_rand_issue2 = rand_issues[random.randrange(4, 7)]
-    show_rand_issue3 = rand_issues[random.randrange(8, 10)]
-    show_rand_issue4 = rand_issues[random.randrange(11, n)]
+    show_rand_issue1 = rand_issues[random.randrange(0, 5)]
+    show_rand_issue2 = rand_issues[random.randrange(6, 10)]
+    show_rand_issue3 = rand_issues[random.randrange(11, 12)]
+    show_rand_issue4 = rand_issues[random.randrange(13, n)]
 
     return render_template('/main/home.html',show_rand_issue1=show_rand_issue1, show_rand_issue2=show_rand_issue2, show_rand_issue3=show_rand_issue3,
     show_rand_issue4=show_rand_issue4,
@@ -181,15 +181,15 @@ def show_members_home(username):
         flash('must log in or register to view')
         return redirect('/register')
     i = len(rand_characters)
-    show_rand_character1 = rand_characters[random.randrange(0, 4)]
-    show_rand_character2 = rand_characters[random.randrange(5, 8)]
-    show_rand_character3 = rand_characters[random.randrange(9, i)]
+    show_rand_character1 = rand_characters[random.randrange(0, 5)]
+    show_rand_character2 = rand_characters[random.randrange(6, 10)]
+    show_rand_character3 = rand_characters[random.randrange(11, i)]
 
     n = len(rand_issues)
-    show_rand_issue1 = rand_issues[random.randrange(0, 3)]
-    show_rand_issue2 = rand_issues[random.randrange(4, 7)]
-    show_rand_issue3 = rand_issues[random.randrange(8, 10)]
-    show_rand_issue4 = rand_issues[random.randrange(11, n)]
+    show_rand_issue1 = rand_issues[random.randrange(0, 5)]
+    show_rand_issue2 = rand_issues[random.randrange(6, 10)]
+    show_rand_issue3 = rand_issues[random.randrange(11, 12)]
+    show_rand_issue4 = rand_issues[random.randrange(13, n)]
         
     curr_user = User.query.get(username)
     if curr_user.username == session['username']:

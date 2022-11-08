@@ -4,43 +4,43 @@
 
 
 <div class="text-center">
-    <br>
+<br>
     <h1>{{character.character_name}}</h1>
-    <br>
+<br>
     <img src="{{character.thumbnail}}" class="rounded mx-auto d-block" style="width: 400px">
-    <br>
+<br>
     <h3>Biography</h3>
     <p>{{character.biography}}</p>
 
 
-    <div class="m-4">
-        <div class="dropdown">
-            <a href="#" class="dropdown-toggle" data-bs-toggle="dropdown">Add this character to a list</a>
-            <div class="dropdown-menu">
-                {% for list in lists %}
-                <a href="/add_character/{{character.character_name}}/to/{{list.list_id}}"
-                    class="dropdown-item">{{list.list_name}}</a>
-                {% endfor %}
-            </div>
+<div class="m-4">
+    <div class="dropdown">
+        <a href="#" class="dropdown-toggle" data-bs-toggle="dropdown">Add this character to a list</a>
+        <div class="dropdown-menu">
+            {% for list in lists %}
+            <a href="/add_character/{{character.character_name}}/to/{{list.list_id}}"
+                class="dropdown-item">{{list.list_name}}</a>
+            {% endfor %}
         </div>
     </div>
+</div>
 
 
-    <h3>Appearances</h3>
-    <div class="row text-center">
-        {% for issue in issues %}
+<h3>Appearances</h3>
+<div class="row text-center">
+    {% for issue in issues %}
 
-        <div class="p-2 m-2 col">
-            <figure>
-                <img src="{{issue.thumbnail}}"
-                    style="width: 300px; height: 463px">
-                <a href="/view_single_issue/{{issue.issue_id}}">
-                    <figcaption class="text-center">{{issue.title}}</figcaption>
-                </a>
-            </figure>
-        </div>
-        {% endfor %}
+    <div class="p-2 m-2 col">
+        <figure>
+            <img src="{{issue.thumbnail}}"
+                style="width: 300px; height: 463px">
+            <a href="/view_single_issue/{{issue.issue_id}}">
+                <figcaption class="text-center">{{issue.title}}</figcaption>
+            </a>
+        </figure>
     </div>
+    {% endfor %}
+</div>
 
 </div>
 {% endblock %}

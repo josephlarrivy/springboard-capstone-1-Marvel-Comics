@@ -15,11 +15,6 @@ rand_issues = [
         'image': 'http://i.annihil.us/u/prod/marvel/i/mg/9/30/5b2c18188ebb3.jpg'
     },
     {
-        'title': 'Death of Doctor Strange (2021) #5',
-        'href': '/view_single_issue/10097',
-        'image': 'http://i.annihil.us/u/prod/marvel/i/mg/5/b0/61cf40567ca00.jpg'
-    },
-    {
         'title': 'Captain Marvel (2019) #38',
         'href': '/view_single_issue/95784',
         'image': 'http://i.annihil.us/u/prod/marvel/i/mg/8/f0/62b9e1cc416a3.jpg'
@@ -60,9 +55,44 @@ rand_issues = [
         'image': 'http://i.annihil.us/u/prod/marvel/i/mg/3/80/62432e9e0d663.jpg'
     },
     {
+        'title': 'X-Men: Emperor Vulcan (2007) #1',
+        'href': '/view_single_issue/16540',
+        'image': 'http://i.annihil.us/u/prod/marvel/i/mg/4/20/596524f19e6b5.jpg'
+    },
+    {
         'title': 'Amazing Fantasy (2021) #4',
         'href': '/view_single_issue/712248',
         'image': 'http://i.annihil.us/u/prod/marvel/i/mg/7/03/6169ef0892110.jpg'
+    },
+    {
+        'title': 'Strange Vol. 1: I Belong To Death (Trade Paperback)',
+        'href': '/view_single_issue/99565',
+        'image': 'http://i.annihil.us/u/prod/marvel/i/mg/d/03/6331b68e91484.jpg'
+    },
+    {
+        'title': 'Marvel-Verse: Jane Foster, The Mighty Thor (Trade Paperback)',
+        'href': '/view_single_issue/97268',
+        'image': 'http://i.annihil.us/u/prod/marvel/i/mg/d/10/627433a556240.jpg'
+    },
+    {
+        'title': 'SQUIRREL GIRL INFINITY COMIC 1 (2022) #1',
+        'href': '/view_single_issue/101481',
+        'image': 'http://i.annihil.us/u/prod/marvel/i/mg/4/50/6233599dd279e.jpg'
+    },
+    {
+        'title': 'The Mighty Valkyries (2021) #3',
+        'href': '/view_single_issue/93339',
+        'image': 'http://i.annihil.us/u/prod/marvel/i/mg/9/00/60cd0f71c71f3.jpg'
+    },
+    {
+        'title': 'Doctor Strange: The Way of the Weird Infinity Comic (2022) #6',
+        'href': '/view_single_issue/712248',
+        'image': 'http://i.annihil.us/u/prod/marvel/i/mg/6/b0/62557fce5e504.jpg'
+    },
+    {
+        'title': 'Death of Doctor Strange (2021) #5 ',
+        'href': '/view_single_issue/93319',
+        'image': 'http://i.annihil.us/u/prod/marvel/i/mg/5/b0/61cf40567ca00.jpg'
     }
 ]
 
@@ -121,6 +151,26 @@ rand_characters = [
         'name': 'Gamora',
         'href': '/view_character/Gamora',
         'image': 'http://i.annihil.us/u/prod/marvel/i/mg/5/90/526032a2cce62.jpg'
+    },
+    {
+        'name': 'Star-Lord (Peter Quill)',
+        'href': '/view_character/GamoraStar-Lord%20(Peter%20Quill)',
+        'image': 'http://i.annihil.us/u/prod/marvel/i/mg/9/a0/537bc55e8b1f5.jpg'
+    },
+    {
+        'name': 'X-Statix',
+        'href': '/view_character/X-Statix',
+        'image': 'http://i.annihil.us/u/prod/marvel/i/mg/5/40/4c003724ba21f.jpg'
+    },
+    {
+        'name': 'Doctor Strange',
+        'href': '/view_character/Doctor%20Strange',
+        'image': 'http://i.annihil.us/u/prod/marvel/i/mg/5/f0/5261a85a501fe.jpg'
+    },
+    {
+        'name': 'Jane Foster',
+        'href': '/view_character/Jane%20Foster',
+        'image': 'http://i.annihil.us/u/prod/marvel/i/mg/b/90/4ce5a22b0d5f1.jpg'
     }
 ]
 
