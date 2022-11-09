@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, TextAreaField
+from wtforms import StringField, PasswordField, TextAreaField, HiddenField
 from wtforms.validators import InputRequired
 
 #############################
@@ -12,6 +12,7 @@ class AddUserForm(FlaskForm):
     first_name = StringField('First Name', validators=[InputRequired()])
     last_name = StringField('Last Name', validators=[InputRequired()])
     email = StringField('email', validators=[InputRequired()])
+    thumbnail = StringField('thumbnail')
 
 class DisposableUserForm(FlaskForm):
     """genreates randomized data for all fields required for registration"""

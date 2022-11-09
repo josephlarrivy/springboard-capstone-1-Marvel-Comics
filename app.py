@@ -67,8 +67,9 @@ def register_new_user():
         first_name = form.first_name.data
         last_name = form.last_name.data
         email = form.email.data
+        thumbnail = 'groot.png'
 
-        new_user = User.register_new_user(username, password, first_name, last_name, email)
+        new_user = User.register_new_user(username, password, first_name, last_name, email, thumbnail)
         db.session.add(new_user)
 
         try:
@@ -103,7 +104,7 @@ def register_disposable():
     form = DisposableUserForm()
 
     if form.validate_on_submit():
-        username = 'guest_user'
+        username = ''.join(random.choices(string.ascii_uppercase + string.digits, k=10))
         password = ''.join(random.choices(string.ascii_uppercase + string.digits, k=20))
         first_name = 'Guest'
         last_name = 'User'
