@@ -44,3 +44,8 @@ class IssueSearch(FlaskForm):
 
 
 
+
+##################################
+class CommentForm(FlaskForm):
+    """Form for commenting"""
+    comment_content = TextAreaField('text', validators=[InputRequired()])

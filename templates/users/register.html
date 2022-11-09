@@ -8,12 +8,11 @@
     {{form.hidden_tag()}}
     
     {% for field in form if field.widget.input_type != 'hidden' %}
-    <p>
-        {{field.label}}
-        {{field}}
-    </p>
+    <h5 style="width:max-content">{{field.label}}</h5>
+    {{field}}
     {% endfor %}
-
+    <br>
+    <br>
     <button class="btn btn-dark">Submit</button>
 </form>
 </div>

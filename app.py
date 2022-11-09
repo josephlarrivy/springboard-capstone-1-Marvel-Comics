@@ -1,7 +1,7 @@
 from flask import Flask, render_template, redirect, session, flash
 from flask_debugtoolbar import DebugToolbarExtension
-from forms import AddUserForm, CharacterSearch, DisposableUserForm, UserForm, IssueSearch, CreateListForm
-from models import connect_db, db, User, List, ListIssue, Issue, ListCharacter, Character, CharacterIssue
+from forms import AddUserForm, CharacterSearch, DisposableUserForm, UserForm, IssueSearch, CreateListForm, CommentForm
+from models import connect_db, db, User, List, ListIssue, Issue, ListCharacter, Character, CharacterIssue, IssueComment
 from sqlalchemy.exc import IntegrityError
 import string
 import random
@@ -41,8 +41,8 @@ def show_homepage():
     n = len(rand_issues)
     show_rand_issue1 = rand_issues[random.randrange(0, 5)]
     show_rand_issue2 = rand_issues[random.randrange(6, 10)]
-    show_rand_issue3 = rand_issues[random.randrange(11, 12)]
-    show_rand_issue4 = rand_issues[random.randrange(13, n)]
+    show_rand_issue3 = rand_issues[random.randrange(11, 17)]
+    show_rand_issue4 = rand_issues[random.randrange(18, n)]
 
     return render_template('/main/home.html',show_rand_issue1=show_rand_issue1, show_rand_issue2=show_rand_issue2, show_rand_issue3=show_rand_issue3,
     show_rand_issue4=show_rand_issue4,
@@ -188,8 +188,8 @@ def show_members_home(username):
     n = len(rand_issues)
     show_rand_issue1 = rand_issues[random.randrange(0, 5)]
     show_rand_issue2 = rand_issues[random.randrange(6, 10)]
-    show_rand_issue3 = rand_issues[random.randrange(11, 12)]
-    show_rand_issue4 = rand_issues[random.randrange(13, n)]
+    show_rand_issue3 = rand_issues[random.randrange(11, 17)]
+    show_rand_issue4 = rand_issues[random.randrange(18, n)]
         
     curr_user = User.query.get(username)
     if curr_user.username == session['username']:
@@ -414,6 +414,7 @@ def view_single_issue(issue_id):
     username = session['username']
     comics = marvel.comics
     series = marvel.series
+    form = CommentForm()
 
     if Issue.query.get(issue_id):
         user = User.query.get(username)
@@ -425,12 +426,32 @@ def view_single_issue(issue_id):
         creators = issue_data['creators']['items']
         characters = issue_data['characters']['items']
 
+        ##################
+        if form.validate_on_submit():
+            comment_content = form.comment_content.data
+            comment_id = ''.join(random.choices(string.ascii_uppercase + string.digits, k=20))
+            username = username
+
+            new_comment = IssueComment.link_comment_to_content(comment_id, comment_content, issue_id, username)
+
+            db.session.add(new_comment)
+            db.session.commit()
+
+            return redirect(f'/view_single_issue/{issue_id}')
+        
+        else:
+            pass
+
         # url = issue_data['series']['resourceURI']
         # series_id = url.removeprefix('http://gateway.marvel.com/v1/public/series/')
         # series_data = series.get(series_id)['data']['results'][0]
         # comics = series_data['comics']['items']
 
-        return render_template('/content/issues/view_db_issue.html', user=user, lists=lists, issue=issue, issue_data=issue_data, creators=creators, characters=characters, username=username)
+        return render_template('/content/issues/view_db_issue.html', user=user, lists=lists, issue=issue, issue_data=issue_data, creators=creators, characters=characters, form=form, username=username)
+    
+    # need to change this redirect
+    else:
+        return redirect('/')
 
     # else:
     #     issue_data = comics.get(f'{issue_id}')['data']['results'][0]

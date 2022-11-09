@@ -1,14 +1,14 @@
 from app import app, db
-from models import db, User, List, ListIssue, Issue, ListCharacter, Character, CharacterIssue
+from models import db, User, List, ListIssue, Issue, ListCharacter, Character, CharacterIssue, IssueComment
 
 db.drop_all()
 db.create_all()
 
 #####################
 
-characters = ['Loki', 'Rocket Raccoon', 'Doctor Strange',  'Thor', 'Star-Lord(Peter Quill)', 'Captain Marvel (Carol Danvers)']
+# characters = ['Loki', 'Rocket Raccoon', 'Doctor Strange',  'Thor', 'Star-Lord(Peter Quill)', 'Captain Marvel (Carol Danvers)']
 
-for character in characters:
+# for character in characters:
 
 #####################
 

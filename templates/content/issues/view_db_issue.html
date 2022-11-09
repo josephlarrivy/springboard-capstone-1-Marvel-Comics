@@ -3,44 +3,80 @@
 {% block content %}
 
 <div class="text-center">
-    <br>
+<br>
     <h1>{{issue.title}}</h1>
+<br>
+<br>
+    <div class="row">
+        <div class="col w-30">
+            <img src="{{issue.thumbnail}}" style="width: 300px; height: 463px">
+            <div class="m-4">
+                <div class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-bs-toggle="dropdown">Add this issue to a list</a>
+                    <div class="dropdown-menu">
+                        {% for list in lists %}
+                        <a href="/add_issue/{{issue.issue_id}}/to/{{list.list_id}}" class="dropdown-item">{{list.list_name}}</a>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col card w-30">
+            <h3>Description</h3>
+                <p>{{issue.description}}</p>
+            <br>
+            <h3>Creators</h3>
+            <ul class="list-unstyled">
+                {% for creator in creators %}
+                <li>{{creator['name']}}</li>
+                {% endfor %}
+            </ul>
+        </div>
+        <div class="col card w-30">
+            <h3>Characters</h3>
+            <ul class="list-unstyled">
+                {% for character in characters %}
+                <a href="/view_character/{{character['name']}}">
+                    <li>{{character['name']}}</li>
+                </a>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
     <br>
-    <img src="{{issue.thumbnail}}" style="width: 300px; height: 463px">
-    <br>
-    <br>
+<br>
+<br>
     <h3>Description</h3>
     <p>{{issue.description}}</p>
 
-    <div class="m-4">
-        <div class="dropdown">
-            <a href="#" class="dropdown-toggle" data-bs-toggle="dropdown">Add this issue to a list</a>
-            <div class="dropdown-menu">
-                {% for list in lists %}
-                <a href="/add_issue/{{issue.issue_id}}/to/{{list.list_id}}"
-                    class="dropdown-item">{{list.list_name}}</a>
-                {% endfor %}
+<h3>Comments</h3>
+<br>
+<ul>
+    {% for comment in issue.comments %}
+        <div class="card mx-auto" style="width: 50rem;">
+            <h5 class="card-header">{{comment.username}}</h5>
+            <div class="card-body">
+                <p class="card-text">{{comment.comment_content}}</p>
+                <a href="/members/{{comment.username}}/profile" class="btn btn-dark">View Profile</a>
             </div>
         </div>
-    </div>
-
-
-<h3>Creators</h3>
-<ul class="list-unstyled">
-    {% for creator in creators %}
-    <li>{{creator['name']}}</li>
+        <br>
     {% endfor %}
 </ul>
-<br>
-<h3>Characters</h3>
-<ul class="list-unstyled">
-    {% for character in characters %}
-    <a href="/view_character/{{character['name']}}">
-        <li>{{character['name']}}</li>
-    </a>
+
+<form method='POST'>
+    {{form.hidden_tag()}}
+
+    {% for field in form if field.widget.input_type != 'hidden' %}
+    <p>
+        {{field.label}}
+        {{field}}
+    </p>
     {% endfor %}
-</ul>
-<br>
+
+    <button class="btn btn-dark">Submit</button>
+</form>
+
 <br>
 <br>
 </div>
