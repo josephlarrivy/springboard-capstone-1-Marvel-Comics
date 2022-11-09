@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField
+from wtforms import StringField, PasswordField, TextAreaField
 from wtforms.validators import InputRequired
 
 #############################
@@ -34,12 +34,13 @@ class CreateListForm(FlaskForm):
     """name and create a list"""
     list_name = StringField('List Name', validators=[InputRequired()])
 
+
 # class UserEditForm(FlaskForm):
-
-
-
 
 ######################
 
 class IssueSearch(FlaskForm):
     issue_search_term = StringField('Search Issues', validators=[InputRequired()])
+
+
+

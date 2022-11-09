@@ -119,3 +119,6 @@ class CharacterIssue(db.Model):
     @classmethod
     def link_character_to_issue(cls, character_key, issue_id):
         return cls(character_key=character_key, issue_id=issue_id)
+
+#################################
+
