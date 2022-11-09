@@ -20,6 +20,7 @@ class DisposableUserForm(FlaskForm):
     first_name = StringField('First Name')
     last_name = StringField('Last Name')
     email = StringField('email')
+    thumbnail = StringField('thumbnail')
 
 class UserForm(FlaskForm):
     """user login"""
@@ -48,4 +49,4 @@ class IssueSearch(FlaskForm):
 ##################################
 class CommentForm(FlaskForm):
     """Form for commenting"""
-    comment_content = TextAreaField('text', validators=[InputRequired()])
+    comment_content = TextAreaField('Comment on this issue', validators=[InputRequired()])

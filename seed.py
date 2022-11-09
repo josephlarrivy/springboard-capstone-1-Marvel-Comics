@@ -1,14 +1,39 @@
-from app import app, db
+from app import app, db, register_disposable, show_characters
+from flask import Flask, redirect, session
 from models import db, User, List, ListIssue, Issue, ListCharacter, Character, CharacterIssue, IssueComment
+from forms import DisposableUserForm, CharacterSearch
+
+import os
+from unittest import TestCase
+
+app.config["SQLALCHEMY_DATABASE_URI"] = "postgresql:///Springboard-Capstone-1"
+app.config["SECRET_KEY"] = "W89#kU*67jL9##fhy@$hdj"
+
+app = Flask(__name__)
 
 db.drop_all()
 db.create_all()
 
 #####################
 
-# characters = ['Loki', 'Rocket Raccoon', 'Doctor Strange',  'Thor', 'Star-Lord(Peter Quill)', 'Captain Marvel (Carol Danvers)']
+# class PopulateUser(TestCase):
 
-# for character in characters:
+#     def setUp(self):
+#         self.client = app.test_client()
+
+#     def run_user_model(self):
+
+#         u = User(
+#             username = 'example_user',
+#             password = 'hash_hash_hash_this',
+#             first_name = 'Example',
+#             last_name = 'User',
+#             email = 'example@test.com',
+#             thumbnail = 'groot.png'
+#         )
+    
+#         db.session.add(u)
+#         db.session.commit()
 
 #####################
 
@@ -21,10 +46,13 @@ db.create_all()
 #     first_name = 'user1_first_name',
 #     last_name = 'user1_last_name',
 #     email = 'user1_email@test.com',
+#     thumbnail = 'groot.png',
 #     lists='VP0M7SUK9ILL5KV499VV'
 # )
 # db.session.add(user1)
 # db.session.commit()
+# print('checkpoint1')
+
 
 # list1 = List(
 #     list_name = 'test_list_1',
@@ -33,6 +61,9 @@ db.create_all()
 # )
 # db.session.add(list1)
 # db.session.commit()
+# print('checkpoint2')
+
+
 
 # listissue1 = ListIssue(
 #     list_id='VP0M7SUK9ILL5KV499VV',
@@ -84,3 +115,34 @@ db.create_all()
 # #     series_id = 3498,
 # #     issue_id = 1
 # # )
+
+
+
+
+
+
+
+
+
+
+########################################
+
+
+# def populate_a_user():
+#     print('registering')
+#     register_disposable()
+#     print('registed')
+
+# populate_a_user()
+
+# session['username'] = username
+# characters = ['Loki', 'Rocket Raccoon']
+
+
+# def populate_starter_data():
+#     for character in characters:
+#         print(character)
+#         show_characters(f'/view_character/{character}')
+
+
+# populate_starter_data()

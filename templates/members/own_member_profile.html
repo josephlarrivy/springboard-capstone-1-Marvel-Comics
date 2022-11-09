@@ -1,25 +1,35 @@
 {% extends '/main/base.html' %}
 {% block title %}Profile{% endblock %}
 {% block content %}
+<div class="row">
+    <div class ="col-3 text-center">
+        <img src="/static/icons/{{user.thumbnail}}" style="height: 250px; width: 250px" class="m-3 p-1">
+        <h2>{{user.username}}</h2>
 
-<h1>Own Profile</h1>
+    <br>
+    <br>
+        <h3>Lists</h3>
+    <hr>
+        {% for list in lists %}
+        <a href="/view_list_contents/{{username}}/{{list.list_id}}">
+            <button class="btn btn-dark m-1">{{list.list_name}}</button>
+        </a>
+    <br>
+        {% endfor %}
+    <br>
+        <a href="/members/create_list_form"><button class="btn btn-secondary">Create New List</button></a>
+        
+        
 
-<h2>username: {{user.username}}</h2>
+    </div>
+    <div class="col-9">
+        <p>username: {{user.username}}</p>
+        <p>first name: {{user.first_name}}</p>
+        <p>last name: {{user.last_name}}</p>
+        <p>email: {{user.email}}</p>
 
-<p>username: {{user.username}}</p>
-<p>first name: {{user.first_name}}</p>
-<p>last name: {{user.last_name}}</p>
-<p>email: {{user.email}}</p>
-
-<h2>Lists</h2>
-<a href="/members/{{user.username}}/lists"><button class="btn btn-dark">My Lists</button></a>
-<a href="/members/create_list_form"><button class="btn btn-dark">Create New List</button></a>
-
-<ul>
-    {% for list in lists %}
-    <li>{{list.list_name}}</li>
-    {% endfor %}
-</ul>
-
+        
+    </div>
+</div>
 
 {% endblock %}

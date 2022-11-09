@@ -20,14 +20,16 @@ class User(db.Model):
     first_name = db.Column(db.Text, nullable=False)
     last_name = db.Column(db.Text, nullable=False)
     email = db.Column(db.String)
+    thumbnail = db.Column(db.Text)
 
     lists = db.relationship('List')
+    comments = db.relationship('IssueComment')
 
     @classmethod
-    def register_new_user(cls, username, password, first_name, last_name,email):
+    def register_new_user(cls, username, password, first_name, last_name, email, thumbnail):
         hashed = bcrypt.generate_password_hash(password)
         hashed_utf8 = hashed.decode('utf8')
-        return cls(username=username, password=hashed_utf8, email=email, first_name=first_name, last_name=last_name)
+        return cls(username=username, password=hashed_utf8, first_name=first_name, last_name=last_name, email=email, thumbnail=thumbnail)
     @classmethod
     def authenticate(cls, username, password):
         u = User.query.filter_by(username=username).first()
@@ -132,16 +134,8 @@ class IssueComment(db.Model):
     
     username = db.Column(db.String, db.ForeignKey('users.username'))
 
-    # issue = db.relationship('Issue', backref='comments')
-
     issue_id = db.Column(db.Integer, db.ForeignKey('issues.issue_id'), nullable=False)
 
     @classmethod
     def link_comment_to_content(cls, comment_id, comment_content, issue_id, username):
         return cls(comment_id=comment_id, comment_content=comment_content, issue_id=issue_id, username=username)
-
-# class CommentContent(db.Model):
-#     __tablename__ = 'comments_content'
-
-#     relationship_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
-#     comment_id = db.Column(db.String db.ForeignKey(''))

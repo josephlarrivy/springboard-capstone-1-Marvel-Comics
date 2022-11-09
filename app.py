@@ -103,13 +103,13 @@ def register_disposable():
     form = DisposableUserForm()
 
     if form.validate_on_submit():
-        username = ''.join(random.choices(string.ascii_uppercase + string.digits, k=20))
+        username = 'guest_user'
         password = ''.join(random.choices(string.ascii_uppercase + string.digits, k=20))
         first_name = 'Guest'
         last_name = 'User'
-        email = ''.join(random.choices(string.ascii_uppercase + string.digits, k=20))
-
-        new_user = User.register_new_user(username, password, first_name, last_name, email)
+        email = ''.join(random.choices(string.ascii_uppercase + string.digits, k=12))
+        thumbnail = 'groot.png'
+        new_user = User.register_new_user(username, password, first_name, last_name, email, thumbnail)
         db.session.add(new_user)
 
         try:
@@ -449,39 +449,36 @@ def view_single_issue(issue_id):
 
         return render_template('/content/issues/view_db_issue.html', user=user, lists=lists, issue=issue, issue_data=issue_data, creators=creators, characters=characters, form=form, username=username)
     
-    # need to change this redirect
+
     else:
-        return redirect('/')
+        issue_data = comics.get(f'{issue_id}')['data']['results'][0]
 
-    # else:
-    #     issue_data = comics.get(f'{issue_id}')['data']['results'][0]
+        creators = issue_data['creators']['items']
+        characters = issue_data['characters']['items']
+        url = issue_data['series']['resourceURI']
+        series_id = url.removeprefix('http://gateway.marvel.com/v1/public/series/')
 
-    #     creators = issue_data['creators']['items']
-    #     characters = issue_data['characters']['items']
-    #     url = issue_data['series']['resourceURI']
-    #     series_id = url.removeprefix('http://gateway.marvel.com/v1/public/series/')
+        series_data = series.get(series_id)['data']['results'][0]
+        comics = series_data['comics']['items']
 
-    #     series_data = series.get(series_id)['data']['results'][0]
-    #     comics = series_data['comics']['items']
+        user = User.query.get(username)
+        lists = user.lists
 
-    #     user = User.query.get(username)
-    #     lists = user.lists
+        issue_id = issue_data['id']
+        title = issue_data['title']
+        thumbnail_path = issue_data['thumbnail']['path']
+        thumbnail = f'{thumbnail_path}.jpg'
+        description = issue_data['description']
+        # creators
+        # characters
+        series = series_data['title']
+        # series_id
 
-    #     issue_id = issue_data['id']
-    #     title = issue_data['title']
-    #     thumbnail_path = issue_data['thumbnail']['path']
-    #     thumbnail = f'{thumbnail_path}.jpg'
-    #     description = issue_data['description']
-    #     # creators
-    #     # characters
-    #     series = series_data['title']
-    #     # series_id
+        save_issue = Issue.commit_issue_to_db(issue_id, title, thumbnail, description)
+        db.session.add(save_issue)
+        db.session.commit()
 
-    #     save_issue = Issue.commit_issue_to_db(issue_id, title, thumbnail, description)
-    #     db.session.add(save_issue)
-    #     db.session.commit()
-
-    #     return render_template('/content/issues/view_single_issue.html', issue_id=issue_id, title=title, thumbnail=thumbnail, description=description, issue_data=issue_data, creators=creators, characters=characters, series_data=series_data, series_id=series_id, comics=comics, user=user, lists=lists, username=username)
+        return render_template('/content/issues/view_single_issue.html', issue_id=issue_id, title=title, thumbnail=thumbnail, description=description, issue_data=issue_data, creators=creators, characters=characters, series_data=series_data, series_id=series_id, comics=comics, user=user, lists=lists, username=username)
 
 
 @app.route('/series/<int:series_id>', methods=['GET', 'POST'])
