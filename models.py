@@ -72,16 +72,16 @@ class Issue(db.Model):
     title = db.Column(db.Text)
     thumbnail = db.Column(db.Text)
     description = db.Column(db.Text)
-    # series = db.Column(db.Text)
-    # series_id = db.Column(db.String)
+    series = db.Column(db.Text)
+    series_id = db.Column(db.String)
 
     comments = db.relationship('IssueComment')
 
     characters = db.relationship('Character', secondary='characters_issues', backref='issues')
 
     @classmethod
-    def commit_issue_to_db(cls, issue_id, title, thumbnail, description):
-        return cls(issue_id=issue_id, title=title, thumbnail=thumbnail, description=description)
+    def commit_issue_to_db(cls, issue_id, title, thumbnail, description, series, series_id):
+        return cls(issue_id=issue_id, title=title, thumbnail=thumbnail, description=description, series=series, series_id=series_id)
 
 
 class ListCharacter(db.Model):

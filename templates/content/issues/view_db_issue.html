@@ -4,7 +4,9 @@
 
 <div class="text-center">
 <br>
+<br>
     <h1>{{issue.title}}</h1>
+<br>
 <br>
 <br>
     <div class="row" style="width:90%">
@@ -40,6 +42,9 @@
                 </a>
                 {% endfor %}
             </ul>
+            <br>
+            <h3>This issue is a part of:</h3>
+                <a href="/series/{{series_id}}"><p>{{series_name}}</p></a>
         </div>
     </div>
     <br>
@@ -48,33 +53,28 @@
 <br>
 <h3>Comments</h3>
 <br>
-<ul>
+<div class="row">
     {% for comment in issue.comments %}
-        <div class="card mx-auto" style="width: 50rem;">
-            <h5 class="card-header">{{comment.username}}</h5>
-            <div class="card-body">
-                <p class="card-text">{{comment.comment_content}}</p>
-                <a href="/members/{{comment.username}}/profile" class="btn btn-dark">View Profile</a>
+        <div class="col-7 m-3">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">User <b>{{comment.username}}</b> says:</h5>
+                    <p class="card-text">{{comment.comment_content}}</p>
+                    <a href="/members/{{comment.username}}/profile" class="btn btn-dark">View Profile</a>
+                </div>
             </div>
         </div>
-        <br>
     {% endfor %}
-</ul>
-
-
-<form method='POST'>
-    {{form.hidden_tag()}}
-
-    {% for field in form if field.widget.input_type != 'hidden' %}
-    <h5>{{field.label}}</h5>
-    <p>
-        {{field}}
-    </p>
-    {% endfor %}
-
-    <button class="btn btn-dark">Submit</button>
-</form>
-
+    <div class="col-4">
+        <form method='POST'>
+            {{form.hidden_tag()}}
+            {% for field in form if field.widget.input_type != 'hidden' %}
+                <h5>{{field.label}}</h5>
+                <p>{{field}}</p>
+            {% endfor %}
+            <button class="btn btn-dark">Submit</button>
+        </form>
+    </div>
 <br>
 <br>
 </div>

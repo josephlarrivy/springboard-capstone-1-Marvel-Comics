@@ -109,7 +109,7 @@ def register_disposable():
         first_name = 'Guest'
         last_name = 'User'
         email = ''.join(random.choices(string.ascii_uppercase + string.digits, k=12))
-        thumbnail = 'groot.png'
+        thumbnail = 'captain.png'
         new_user = User.register_new_user(username, password, first_name, last_name, email, thumbnail)
         db.session.add(new_user)
 
@@ -365,13 +365,13 @@ def show_characters(character_name):
             thumbnail_path = issue_data['thumbnail']['path']
             thumbnail = f'{thumbnail_path}.jpg'
             description = issue_data['description']
-            series_id = series_data['id']
+            # series_id = series_data['id']
             character = single_character['name']
             
             if Issue.query.get(issue_id):
                 pass
             else:
-                commit_issue = Issue.commit_issue_to_db(issue_id, title, thumbnail, description)
+                commit_issue = Issue.commit_issue_to_db(issue_id, title, thumbnail, description, series, series_id)
                 db.session.add(commit_issue)
                 db.session.commit()
 
@@ -422,6 +422,9 @@ def view_single_issue(issue_id):
         lists = user.lists
 
         issue = Issue.query.get(issue_id)
+        series_name = issue.series
+        series_id = issue.series_id
+
 
         issue_data = comics.get(f'{issue_id}')['data']['results'][0]
         creators = issue_data['creators']['items']
@@ -448,7 +451,7 @@ def view_single_issue(issue_id):
         # series_data = series.get(series_id)['data']['results'][0]
         # comics = series_data['comics']['items']
 
-        return render_template('/content/issues/view_db_issue.html', user=user, lists=lists, issue=issue, issue_data=issue_data, creators=creators, characters=characters, form=form, username=username)
+        return render_template('/content/issues/view_db_issue.html', user=user, lists=lists, issue=issue, issue_data=issue_data, creators=creators, characters=characters, series_name=series_name, series_id=series_id, form=form, username=username)
     
 
     else:
@@ -473,13 +476,14 @@ def view_single_issue(issue_id):
         # creators
         # characters
         series = series_data['title']
-        # series_id
 
-        save_issue = Issue.commit_issue_to_db(issue_id, title, thumbnail, description)
+        save_issue = Issue.commit_issue_to_db(issue_id, title, thumbnail, description, series, series_id)
         db.session.add(save_issue)
         db.session.commit()
 
-        return render_template('/content/issues/view_single_issue.html', issue_id=issue_id, title=title, thumbnail=thumbnail, description=description, issue_data=issue_data, creators=creators, characters=characters, series_data=series_data, series_id=series_id, comics=comics, user=user, lists=lists, username=username)
+        return redirect(f'/view_single_issue/{issue_id}')
+
+        # return render_template('/content/issues/view_single_issue.html', issue_id=issue_id, title=title, thumbnail=thumbnail, description=description, issue_data=issue_data, creators=creators, characters=characters, series_data=series_data, series_id=series_id, comics=comics, user=user, lists=lists, username=username)
 
 
 @app.route('/series/<int:series_id>', methods=['GET', 'POST'])
