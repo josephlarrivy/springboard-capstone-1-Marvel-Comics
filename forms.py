@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, TextAreaField, HiddenField
+from wtforms import StringField, PasswordField, TextAreaField, HiddenField, SelectField
 from wtforms.validators import InputRequired, DataRequired, Length, Email
 
 #############################
@@ -12,7 +12,14 @@ class AddUserForm(FlaskForm):
     first_name = StringField('First Name', validators=[InputRequired()])
     last_name = StringField('Last Name', validators=[InputRequired()])
     email = StringField('email', validators=[InputRequired(), Email()])
-    # thumbnail = StringField('thumbnail')
+    thumbnail = SelectField('thumbnail', choices=[
+        ('groot.png', 'Groot'),
+        ('captain.png', 'Captain America'),
+        ('iron-man.png', 'Iron Man'),
+        ('marvel.png', 'Marvel'),
+        ('mjolnir.png', 'Mjolnir'),
+        ('spiderman.png', 'Spiderman')])
+
 
 class DisposableUserForm(FlaskForm):
     """genreates randomized data for all fields required for registration"""
@@ -40,15 +47,19 @@ class CommentForm(FlaskForm):
     """Form for commenting"""
     comment_content = TextAreaField('Comment on this issue', validators=[InputRequired()])
 
-
 class UserEditForm(FlaskForm):
     """Form for editing users."""
     first_name = StringField('First Name', validators=[DataRequired()])
     last_name = StringField('Last Name', validators=[DataRequired()])
     email = StringField('email', validators=[DataRequired(), Email()])
-
+    thumbnail = SelectField('thumbnail', choices=[
+        ('groot.png', 'Groot'),
+        ('captain.png', 'Captain America'),
+        ('iron-man.png', 'Iron Man'),
+        ('marvel.png', 'Marvel'),
+        ('mjolnir.png', 'Mjolnir'),
+        ('spiderman.png', 'Spiderman')])
     password = PasswordField('Password', validators=[Length(min=6)])
-
 
 
 

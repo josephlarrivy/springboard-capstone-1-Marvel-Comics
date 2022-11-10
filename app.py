@@ -67,7 +67,7 @@ def register_new_user():
         first_name = form.first_name.data
         last_name = form.last_name.data
         email = form.email.data
-        thumbnail = 'groot.png'
+        thumbnail = form.thumbnail.data
 
         print('checkpoint1')
 
@@ -82,7 +82,7 @@ def register_new_user():
             flash('username already taken')
             return redirect('/register')
         
-        list_name = 'Favorites'
+        list_name = 'Favorite Characters'
         list_id = ''.join(random.choices(string.ascii_uppercase + string.digits, k=20))
         username = username
         default_list1 = List.create_new_list(list_name, list_id, username)
@@ -123,7 +123,7 @@ def register_disposable():
         except IntegrityError:
             flash('username already taken')
         
-        list_name = 'Favorites'
+        list_name = 'Favorite Characters'
         list_id = ''.join(random.choices(string.ascii_uppercase + string.digits, k=20))
         username = username
         default_list1 = List.create_new_list(list_name, list_id, username)
@@ -174,40 +174,6 @@ def logout():
         return redirect('/home')
 
 
-@app.route('/member/<username>/edit', methods=['GET', 'POST'])
-def edit_user(username):
-    if 'username' not in session:
-        flash('must log in or register to view')
-        return redirect('/register')
-    elif username == session['username']:
-        user = User.query.get(username)
-        form = UserEditForm(obj=user)
-        if form.validate_on_submit():
-            if User.authenticate(user.username, form.password.data):
-                user.first_name = form.first_name.data
-                user.last_name = form.last_name.data 
-                user.email = form.email.data
-
-                db.session.commit()
-                return redirect(f'/members/{username}/profile')
-
-            flash("Wrong password, please try again.", 'danger')
-        return render_template('/members/edit_profile.html', form=form, username=username)
-
-    else:
-        return redirect(f'/members/{{username}}/profile')
-
-
-
-
-
-
-
-
-
-
-
-
 ################################
 
 # member routes
@@ -253,7 +219,31 @@ def show_own_profile(username):
         lists = user.lists
         return render_template('/members/own_member_profile.html', user=user, username=username, lists=lists)
     else:
-        return redirect(f'/members/{{user.username}}/view')
+        return redirect(f'/members/{username}/view')
+
+
+@app.route('/member/<username>/edit', methods=['GET', 'POST'])
+def edit_user(username):
+    if 'username' not in session:
+        flash('must log in or register to view')
+        return redirect('/register')
+    elif username == session['username']:
+        user = User.query.get(username)
+        form = UserEditForm(obj=user)
+        if form.validate_on_submit():
+            if User.authenticate(user.username, form.password.data):
+                user.first_name = form.first_name.data
+                user.last_name = form.last_name.data
+                user.email = form.email.data
+                user.thumbnail = form.thumbnail.data
+
+                db.session.commit()
+                return redirect(f'/members/{username}/profile')
+
+            flash("Wrong password, please try again.", 'danger')
+        return render_template('/members/edit_profile.html', form=form, username=username)
+    else:
+        return redirect(f'/members/{{username}}/profile')
 
 
 @app.route('/members/<view_user>/view')
@@ -266,6 +256,38 @@ def show_other_profile(view_user):
         view_user = User.query.get(view_user)
         username = session['username']
         return render_template('/members/other_member_profile.html', view_user=view_user, username=username)
+
+
+# @app.route('/edit_avatar/<username>', methods=['GET', 'POST'])
+# def edit_avatar(username):
+#     if 'username' not in session:
+#         flash('must log in or register to view')
+#         return redirect('/register')
+#     elif username == session['username']:
+#         return render_template('/members/edit_avatar.html', username=username)
+#     else:
+#         return redirect(f'/members/{username}/view')
+    
+
+# @app.route('/change/<username>/avatar_to/<image>', methods=['GET', 'POST'])
+# def commit_new_avatar(username, image):
+#     if 'username' not in session:
+#         flash('must log in or register to view')
+#         return redirect('/register')
+#     elif username == session['username']:
+#         user = User.query.get(username)
+
+#         change = User.change_thumbnail(username, image)
+#         db.session.add(change)
+#         db.session.commit()
+
+#         return redirect(f'/members/{username}/profile')
+
+#     else:
+#         return redirect(f'/members/{username}/view')
+
+
+
 
 
 #######################
@@ -599,19 +621,6 @@ def show_list_items(username, list_id):
     characters = list.characters
 
     return render_template('/members/view_list_contents.html', list=list, issues=issues, characters=characters, username=username)
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

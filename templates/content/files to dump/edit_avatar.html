@@ -1,0 +1,26 @@
+{% extends '/main/base.html' %}
+{% block title %}Change Avatar{% endblock %}
+{% block content %}
+<br>
+<div class="text-center">
+<h1>Choose a new avatar</h1>
+<br>
+    <div class="row">
+        <div class="col-3">
+            <a href="/change/{{username}}/avatar_to/captain.png"><img src="/static/icons/captain.png" style="width:300px; height:300px" class=" m-4 p-4"></a>
+            <img src="/static/icons/groot.png" style="width:300px; height:300px" class=" m-4 p-4">
+            <br>
+        </div>
+        <div class="col-3">
+            <img src="/static/icons/iron-man.png" style="width:300px; height:300px" class=" m-4 p-4">
+            <img src="/static/icons/marvel.png" style="width:300px; height:300px" class=" m-4 p-4">
+            <br>
+        </div>
+        <div class="col-3">
+            <img src="/static/icons/mjolnir.png" style="width:300px; height:300px" class=" m-4 p-4">
+            <img src="/static/icons/spiderman.png" style="width:300px; height:300px" class=" m-4 p-4">
+            <br>
+        </div>
+    </div>
+</div>
+{% endblock %}
