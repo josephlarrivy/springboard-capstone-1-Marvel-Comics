@@ -1,20 +1,30 @@
 {% extends '/main/base.html' %}
-{% block title %}Home{% endblock %}
+{% block title %}Register{% endblock %}
 {% block content %}
 
-<div class="p-4 m-4">
-<h1>Register</h1>
-<form method='POST'>
-    {{form.hidden_tag()}}
-    
-    {% for field in form if field.widget.input_type != 'hidden' %}
-    <h5 style="width:max-content">{{field.label}}</h5>
-    {{field}}
-    {% endfor %}
-    <br>
-    <br>
-    <button class="btn btn-dark">Submit</button>
-</form>
-</div>
+<br>
+<div class="row justify-content-md-center">
+    <div class="col-md-4">
+        <h2>Register</h2>
+        <br>
+        <form method="POST">
+            {{ form.hidden_tag() }}
 
+            {% for field in form if field.widget.input_type != 'hidden' %}
+
+                <p>{{field.label.text}}
+
+                {{ field (class="form-control") }}</p>
+
+                {% for error in field.errors %}
+                    <span class="text-danger">{{ error }}</span>
+                {% endfor %}
+            
+            
+            {% endfor %}
+
+        <button>Submit</button>
+        </form>
+    </div>
+</div>
 {% endblock %}

@@ -1,6 +1,6 @@
 from flask import Flask, render_template, redirect, session, flash
 from flask_debugtoolbar import DebugToolbarExtension
-from forms import AddUserForm, CharacterSearch, DisposableUserForm, UserForm, IssueSearch, CreateListForm, CommentForm
+from forms import AddUserForm, CharacterSearch, DisposableUserForm, UserForm, IssueSearch, CreateListForm, CommentForm, UserEditForm
 from models import connect_db, db, User, List, ListIssue, Issue, ListCharacter, Character, CharacterIssue, IssueComment
 from sqlalchemy.exc import IntegrityError
 import string
@@ -69,8 +69,12 @@ def register_new_user():
         email = form.email.data
         thumbnail = 'groot.png'
 
+        print('checkpoint1')
+
         new_user = User.register_new_user(username, password, first_name, last_name, email, thumbnail)
         db.session.add(new_user)
+
+        print('checkpoint2')
 
         try:
             db.session.commit()
@@ -110,6 +114,7 @@ def register_disposable():
         last_name = 'User'
         email = ''.join(random.choices(string.ascii_uppercase + string.digits, k=12))
         thumbnail = 'captain.png'
+
         new_user = User.register_new_user(username, password, first_name, last_name, email, thumbnail)
         db.session.add(new_user)
 
@@ -167,6 +172,39 @@ def logout():
         session.pop('username')
         flash('logged out')
         return redirect('/home')
+
+
+@app.route('/member/<username>/edit', methods=['GET', 'POST'])
+def edit_user(username):
+    if 'username' not in session:
+        flash('must log in or register to view')
+        return redirect('/register')
+    elif username == session['username']:
+        user = User.query.get(username)
+        form = UserEditForm(obj=user)
+        if form.validate_on_submit():
+            if User.authenticate(user.username, form.password.data):
+                user.first_name = form.first_name.data
+                user.last_name = form.last_name.data 
+                user.email = form.email.data
+
+                db.session.commit()
+                return redirect(f'/members/{username}/profile')
+
+            flash("Wrong password, please try again.", 'danger')
+        return render_template('/members/edit_profile.html', form=form, username=username)
+
+    else:
+        return redirect(f'/members/{{username}}/profile')
+
+
+
+
+
+
+
+
+
 
 
 

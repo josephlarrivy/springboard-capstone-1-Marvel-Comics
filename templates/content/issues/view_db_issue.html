@@ -54,27 +54,40 @@
 <h3>Comments</h3>
 <br>
 <div class="row">
-    {% for comment in issue.comments %}
-        <div class="col-7 m-3">
-            <div class="card">
-                <div class="card-body">
-                    <h5 class="card-title">User <b>{{comment.username}}</b> says:</h5>
-                    <p class="card-text">{{comment.comment_content}}</p>
-                    <a href="/members/{{comment.username}}/profile" class="btn btn-dark">View Profile</a>
+    {% if issue.comments %}
+        {% for comment in issue.comments %}
+            <div class="col-7 m-3">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">User <b>{{comment.username}}</b> says:</h5>
+                        <p class="card-text">{{comment.comment_content}}</p>
+                        <a href="/members/{{comment.username}}/profile" class="btn btn-dark">View Profile</a>
+                    </div>
                 </div>
             </div>
+        {% endfor %}
+        <div class="col-4">
+            <form method='POST'>
+                {{form.hidden_tag()}}
+                {% for field in form if field.widget.input_type != 'hidden' %}
+                    <h5>{{field.label}}</h5>
+                    <p>{{field}}</p>
+                {% endfor %}
+                <button class="btn btn-dark">Submit</button>
+            </form>
         </div>
-    {% endfor %}
-    <div class="col-4">
-        <form method='POST'>
-            {{form.hidden_tag()}}
-            {% for field in form if field.widget.input_type != 'hidden' %}
+    {% else %}
+        <div class="col-12">
+            <form method='POST'>
+                {{form.hidden_tag()}}
+                {% for field in form if field.widget.input_type != 'hidden' %}
                 <h5>{{field.label}}</h5>
                 <p>{{field}}</p>
-            {% endfor %}
-            <button class="btn btn-dark">Submit</button>
-        </form>
-    </div>
+                {% endfor %}
+                <button class="btn btn-dark">Submit</button>
+            </form>
+        </div>
+    {% endif %}
 <br>
 <br>
 </div>

@@ -12,7 +12,7 @@ class AddUserForm(FlaskForm):
     first_name = StringField('First Name', validators=[InputRequired()])
     last_name = StringField('Last Name', validators=[InputRequired()])
     email = StringField('email', validators=[InputRequired(), Email()])
-    thumbnail = StringField('thumbnail')
+    # thumbnail = StringField('thumbnail')
 
 class DisposableUserForm(FlaskForm):
     """genreates randomized data for all fields required for registration"""
@@ -21,7 +21,7 @@ class DisposableUserForm(FlaskForm):
     first_name = StringField('First Name')
     last_name = StringField('Last Name')
     email = StringField('email')
-    thumbnail = StringField('thumbnail')
+    thumbnail = HiddenField('thumbnail')
 
 class UserForm(FlaskForm):
     """user login"""
@@ -43,12 +43,9 @@ class CommentForm(FlaskForm):
 
 class UserEditForm(FlaskForm):
     """Form for editing users."""
-    username = StringField('Username', validators=[DataRequired()])
-    email = StringField('E-mail', validators=[DataRequired(), Email()])
-    location = StringField('(Optional) Location')
-    image_url = StringField('(Optional) Image URL')
-    header_image_url = StringField('(Optional) Header Image URL')
-    bio = StringField('(Optional) Bio')
+    first_name = StringField('First Name', validators=[DataRequired()])
+    last_name = StringField('Last Name', validators=[DataRequired()])
+    email = StringField('email', validators=[DataRequired(), Email()])
 
     password = PasswordField('Password', validators=[Length(min=6)])
 
