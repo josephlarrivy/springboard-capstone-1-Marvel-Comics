@@ -24,7 +24,7 @@ marvel = Marvel(PUBLIC_KEY=PUBLIC_KEY, PRIVATE_KEY=PRIVATE_KEY)
 
 #################################
 
-seed_characters = ['odin']
+seed_characters = ['rocket raccoon', 'thanos', 'iron man']
 
 #################################
 
@@ -37,12 +37,18 @@ def redirect_home():
 @app.route('/home')
 def show_homepage():
 
-    featured_character = Character.query.get('Odin')
+    # change this to a random seed character
+    first_seed_character = seed_characters[0]
+    featured_character1 = Character.query.get(first_seed_character.title())
+    issues1 = featured_character1.issues
 
+    second_seed_character = seed_characters[1]
+    featured_character2 = Character.query.get(second_seed_character.title())
+    issues2 = featured_character2.issues
 
-
-
-
+    third_seed_character = seed_characters[2]
+    featured_character3 = Character.query.get(third_seed_character.title())
+    issues3 = featured_character3.issues
 
     i = len(rand_characters)
     show_rand_character1 = rand_characters[random.randrange(0, 5)]
@@ -60,7 +66,9 @@ def show_homepage():
     show_rand_character1=show_rand_character1,
     show_rand_character2=show_rand_character2,
     show_rand_character3=show_rand_character3,
-    featured_character=featured_character)
+    featured_character1=featured_character1, 
+    featured_character2=featured_character2, 
+    featured_character3=featured_character3, issues1=issues1, issues2=issues2, issues3=issues3)
 
 
 ##########################
@@ -197,6 +205,19 @@ def show_members_home(username):
     if 'username' not in session:
         flash('must log in or register to view')
         return redirect('/register')
+
+    first_seed_character = seed_characters[0]
+    featured_character1 = Character.query.get(first_seed_character.title())
+    issues1 = featured_character1.issues
+
+    second_seed_character = seed_characters[1]
+    featured_character2 = Character.query.get(second_seed_character.title())
+    issues2 = featured_character2.issues
+
+    third_seed_character = seed_characters[2]
+    featured_character3 = Character.query.get(third_seed_character.title())
+    issues3 = featured_character3.issues
+
     i = len(rand_characters)
     show_rand_character1 = rand_characters[random.randrange(0, 5)]
     show_rand_character2 = rand_characters[random.randrange(6, 10)]
@@ -214,7 +235,10 @@ def show_members_home(username):
         show_rand_issue4=show_rand_issue4,
         show_rand_character1=show_rand_character1,
         show_rand_character2=show_rand_character2,
-        show_rand_character3=show_rand_character3)
+        show_rand_character3=show_rand_character3,
+        featured_character1=featured_character1, 
+        featured_character2=featured_character2, 
+        featured_character3=featured_character3, issues1=issues1, issues2=issues2, issues3=issues3)
     
     else:
         redirect('/')
