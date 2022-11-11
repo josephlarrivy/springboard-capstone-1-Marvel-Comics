@@ -83,7 +83,7 @@ def show_characters(character_name):
 
 
 for character in seed_characters:
-    print('checkpoint1')
+    print('checkpoint1 - timeout activated')
     time.sleep(5)
     show_characters(character)
     print('checkpoint2')

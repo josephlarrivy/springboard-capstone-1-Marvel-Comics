@@ -75,7 +75,7 @@ class Issue(db.Model):
     series = db.Column(db.Text)
     series_id = db.Column(db.String)
 
-    comments = db.relationship('IssueComment')
+    comments = db.relationship('IssueComment', backref='issue')
 
     characters = db.relationship('Character', secondary='characters_issues', backref='issues')
 
@@ -124,7 +124,6 @@ class CharacterIssue(db.Model):
     def link_character_to_issue(cls, character_key, issue_id):
         return cls(character_key=character_key, issue_id=issue_id)
 
-#################################
 
 class IssueComment(db.Model):
     __tablename__ = 'comments'

@@ -5,7 +5,8 @@ from models import connect_db, db, User, List, ListIssue, Issue, ListCharacter, 
 from sqlalchemy.exc import IntegrityError
 import string
 import random
-import requests
+import datetime
+# import requests
 from marvel import Marvel
 from keys import PUBLIC_KEY, PRIVATE_KEY
 from random_content import rand_issues, rand_characters
@@ -50,22 +51,18 @@ def show_homepage():
     featured_character3 = Character.query.get(third_seed_character.title())
     issues3 = featured_character3.issues
 
-    i = len(rand_characters)
-    show_rand_character1 = rand_characters[random.randrange(0, 5)]
-    show_rand_character2 = rand_characters[random.randrange(6, 10)]
-    show_rand_character3 = rand_characters[random.randrange(11, i)]
+    # i = len(rand_characters)
+    # show_rand_character1 = rand_characters[random.randrange(0, 5)]
+    # show_rand_character2 = rand_characters[random.randrange(6, 10)]
+    # show_rand_character3 = rand_characters[random.randrange(11, i)]
 
-    n = len(rand_issues)
-    show_rand_issue1 = rand_issues[random.randrange(0, 5)]
-    show_rand_issue2 = rand_issues[random.randrange(6, 10)]
-    show_rand_issue3 = rand_issues[random.randrange(11, 17)]
-    show_rand_issue4 = rand_issues[random.randrange(18, n)]
+    # n = len(rand_issues)
+    # show_rand_issue1 = rand_issues[random.randrange(0, 5)]
+    # show_rand_issue2 = rand_issues[random.randrange(6, 10)]
+    # show_rand_issue3 = rand_issues[random.randrange(11, 17)]
+    # show_rand_issue4 = rand_issues[random.randrange(18, n)]
 
-    return render_template('/main/home.html',show_rand_issue1=show_rand_issue1, show_rand_issue2=show_rand_issue2, show_rand_issue3=show_rand_issue3,
-    show_rand_issue4=show_rand_issue4,
-    show_rand_character1=show_rand_character1,
-    show_rand_character2=show_rand_character2,
-    show_rand_character3=show_rand_character3,
+    return render_template('/main/home.html',
     featured_character1=featured_character1, 
     featured_character2=featured_character2, 
     featured_character3=featured_character3, issues1=issues1, issues2=issues2, issues3=issues3)
@@ -218,27 +215,25 @@ def show_members_home(username):
     featured_character3 = Character.query.get(third_seed_character.title())
     issues3 = featured_character3.issues
 
-    i = len(rand_characters)
-    show_rand_character1 = rand_characters[random.randrange(0, 5)]
-    show_rand_character2 = rand_characters[random.randrange(6, 10)]
-    show_rand_character3 = rand_characters[random.randrange(11, i)]
+    comments = IssueComment.query.all()
 
-    n = len(rand_issues)
-    show_rand_issue1 = rand_issues[random.randrange(0, 5)]
-    show_rand_issue2 = rand_issues[random.randrange(6, 10)]
-    show_rand_issue3 = rand_issues[random.randrange(11, 17)]
-    show_rand_issue4 = rand_issues[random.randrange(18, n)]
+    # i = len(rand_characters)
+    # show_rand_character1 = rand_characters[random.randrange(0, 5)]
+    # show_rand_character2 = rand_characters[random.randrange(6, 10)]
+    # show_rand_character3 = rand_characters[random.randrange(11, i)]
+
+    # n = len(rand_issues)
+    # show_rand_issue1 = rand_issues[random.randrange(0, 5)]
+    # show_rand_issue2 = rand_issues[random.randrange(6, 10)]
+    # show_rand_issue3 = rand_issues[random.randrange(11, 17)]
+    # show_rand_issue4 = rand_issues[random.randrange(18, n)]
         
     curr_user = User.query.get(username)
     if curr_user.username == session['username']:
-        return render_template('/members/members_home.html', user=curr_user, username=username,show_rand_issue1=show_rand_issue1, show_rand_issue2=show_rand_issue2, show_rand_issue3=show_rand_issue3,
-        show_rand_issue4=show_rand_issue4,
-        show_rand_character1=show_rand_character1,
-        show_rand_character2=show_rand_character2,
-        show_rand_character3=show_rand_character3,
+        return render_template('/members/members_home.html', user=curr_user, username=username,
         featured_character1=featured_character1, 
         featured_character2=featured_character2, 
-        featured_character3=featured_character3, issues1=issues1, issues2=issues2, issues3=issues3)
+        featured_character3=featured_character3, issues1=issues1, issues2=issues2, issues3=issues3, comments=comments)
     
     else:
         redirect('/')

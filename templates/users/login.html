@@ -2,20 +2,31 @@
 {% block title %}Home{% endblock %}
 {% block content %}
 
-<h1>Log In</h1>
 
-<form method='POST'>
-    {{form.hidden_tag()}}
+<br>
+<div class="row justify-content-md-center">
+    <div class="col-md-4">
+        <h2>Log In</h2>
+        <br>
+        <form method="POST">
+            {{ form.hidden_tag() }}
 
-    {% for field in form if field.widget.input_type != 'hidden' %}
-    <p>
-        {{field.label}}
-        {{field}}
-    </p>
-    {% endfor %}
+            {% for field in form if field.widget.input_type != 'hidden' %}
 
-    <button>Submit</button>
-</form>
+            <p>{{field.label.text}}
 
+                {{ field (class="form-control") }}</p>
+
+            {% for error in field.errors %}
+            <span class="text-danger">{{ error }}</span>
+            {% endfor %}
+
+
+            {% endfor %}
+
+            <button class="btn btn-dark">Submit</button>
+        </form>
+    </div>
+</div>
 
 {% endblock %}

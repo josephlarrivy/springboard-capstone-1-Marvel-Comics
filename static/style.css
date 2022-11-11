@@ -1,0 +1,40 @@
+#page-container {
+    position: relative;
+    min-height: 100vh;
+}
+
+#content-wrap {
+    padding-bottom: 0px;
+    /* padding-bottom: 2.5rem; */
+    /* Footer height */
+}
+
+#footer {
+    position: absolute;
+    bottom: 0;
+    padding: 5px;
+    width: 100%;
+    height: 0px;
+    /* height: 2.5rem; */
+    /* Footer height */
+}
+
+
+/* trying to get scrolling to work */
+.scrolling-wrapper {
+    overflow-x: auto;
+}
+/* 
+.subtitle {
+    font-size: 1.25em;
+    opacity: 0.65;
+} */
+
+.card-block {
+    height: 400px;
+    overflow-y: scroll;
+}
+/* 
+#issue_comment_homepage_card {
+    overflow-y: scroll;
+} */
