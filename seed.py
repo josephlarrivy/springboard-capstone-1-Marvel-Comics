@@ -1,44 +1,94 @@
-from app import app, db, register_disposable, show_characters
-from flask import Flask, redirect, session
-from models import db, User, List, ListIssue, Issue, ListCharacter, Character, CharacterIssue, IssueComment
-from forms import DisposableUserForm, CharacterSearch
+from keys import PUBLIC_KEY, PRIVATE_KEY
+import random
+import string
+import time
 
-import os
-from unittest import TestCase
+from marvel import Marvel
+marvel = Marvel(PUBLIC_KEY=PUBLIC_KEY, PRIVATE_KEY=PRIVATE_KEY)
+
+from app import app, db, show_characters, seed_characters
+
+# from flask import redirect
+from models import db, Issue, Character, CharacterIssue
+
+# import os
 
 app.config["SQLALCHEMY_DATABASE_URI"] = "postgresql:///Springboard-Capstone-1"
 app.config["SECRET_KEY"] = "W89#kU*67jL9##fhy@$hdj"
 
-app = Flask(__name__)
+
+###########################################################
+
+# os.environ['DATABASE_URL'] = "postgresql:///Springboard-Capstone-1"
 
 db.drop_all()
 db.create_all()
 
-#####################
-
-# class PopulateUser(TestCase):
-
-#     def setUp(self):
-#         self.client = app.test_client()
-
-#     def run_user_model(self):
-
-#         u = User(
-#             username = 'example_user',
-#             password = 'hash_hash_hash_this',
-#             first_name = 'Example',
-#             last_name = 'User',
-#             email = 'example@test.com',
-#             thumbnail = 'groot.png'
-#         )
+def show_characters(character_name):
     
-#         db.session.add(u)
-#         db.session.commit()
+    characters = marvel.characters
+    comics = marvel.comics
 
-#####################
+    single_character = characters.all(name=f'{character_name}')[
+            'data']['results'][0]
+
+    character_id = single_character['id']
+
+    character_data = characters.get(f'{character_id}')['data']['results'][0]
+
+    comic_series = characters.comics(f'{character_id}')['data']['results']
+
+    character_key = ''.join(random.choices(
+        string.ascii_uppercase + string.digits, k=20))
+    character_id = single_character['id']
+    character_name = single_character['name'].title()
+    biography = single_character['description']
+    thumbnail_path = single_character['thumbnail']['path']
+    thumbnail = f'{thumbnail_path}.jpg'
+
+    save_character = Character.commit_character_to_db(
+        character_key, character_id, character_name, biography, thumbnail)
+    db.session.add(save_character)
+    db.session.commit()
+
+    for comic in comic_series:
+        series = marvel.series
+        issue_id = comic['id']
+
+        issue_data = comics.get(f'{issue_id}')['data']['results'][0]
+        url = issue_data['series']['resourceURI']
+        series_id = url.removeprefix(
+            'http://gateway.marvel.com/v1/public/series/')
+        series_data = series.get(series_id)['data']['results'][0]
+        series = series_data['title']
+
+        title = issue_data['title']
+        thumbnail_path = issue_data['thumbnail']['path']
+        thumbnail = f'{thumbnail_path}.jpg'
+        description = issue_data['description']
+        character = single_character['name']
+
+        if Issue.query.get(issue_id):
+            pass
+        else:
+            commit_issue = Issue.commit_issue_to_db(
+                issue_id, title, thumbnail, description, series, series_id)
+            db.session.add(commit_issue)
+            db.session.commit()
+
+        connect_character_issue = CharacterIssue.link_character_to_issue(
+            character_key, issue_id)
+        db.session.add(connect_character_issue)
+        db.session.commit()
 
 
+for character in seed_characters:
+    print('checkpoint1')
+    time.sleep(5)
+    show_characters(character)
+    print('checkpoint2')
 
+#############################################################
 
 # user1 = User(
 #     username = 'user1',

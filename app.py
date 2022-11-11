@@ -24,6 +24,10 @@ marvel = Marvel(PUBLIC_KEY=PUBLIC_KEY, PRIVATE_KEY=PRIVATE_KEY)
 
 #################################
 
+seed_characters = ['odin']
+
+#################################
+
 # home routes
 
 @app.route('/')
@@ -32,6 +36,13 @@ def redirect_home():
 
 @app.route('/home')
 def show_homepage():
+
+    featured_character = Character.query.get('Odin')
+
+
+
+
+
 
     i = len(rand_characters)
     show_rand_character1 = rand_characters[random.randrange(0, 5)]
@@ -48,7 +59,8 @@ def show_homepage():
     show_rand_issue4=show_rand_issue4,
     show_rand_character1=show_rand_character1,
     show_rand_character2=show_rand_character2,
-    show_rand_character3=show_rand_character3)
+    show_rand_character3=show_rand_character3,
+    featured_character=featured_character)
 
 
 ##########################

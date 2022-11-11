@@ -18,7 +18,11 @@ class AddUserForm(FlaskForm):
         ('iron-man.png', 'Iron Man'),
         ('marvel.png', 'Marvel'),
         ('mjolnir.png', 'Mjolnir'),
-        ('spiderman.png', 'Spiderman')])
+        ('avengers.png', 'Avengers'),
+        ('deadpool.png', 'Deadpool'),
+        ('thanos.png', 'Thanos'),
+        ('venom.png', 'Venom'),
+        ('wolverine.png', 'Wolverine')])
 
 
 class DisposableUserForm(FlaskForm):
@@ -58,7 +62,11 @@ class UserEditForm(FlaskForm):
         ('iron-man.png', 'Iron Man'),
         ('marvel.png', 'Marvel'),
         ('mjolnir.png', 'Mjolnir'),
-        ('spiderman.png', 'Spiderman')])
+        ('avengers.png', 'Avengers'),
+        ('deadpool.png', 'Deadpool'),
+        ('thanos.png', 'Thanos'),
+        ('venom.png', 'Venom'),
+        ('wolverine.png', 'Wolverine')])
     password = PasswordField('Password', validators=[Length(min=6)])
 
 
