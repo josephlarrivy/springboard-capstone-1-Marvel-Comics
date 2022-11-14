@@ -59,9 +59,9 @@
             <div class="col-7 m-3">
                 <div class="card">
                     <div class="card-body">
-                        <h5 class="card-title">User <b>{{comment.username}}</b> says:</h5>
-                        <p class="card-text">{{comment.comment_content}}</p>
-                        <a href="/members/{{comment.username}}/profile" class="btn btn-dark">View Profile</a>
+                        <h5 class="card-title"><b>{{comment.comment_content}}</b></h5>
+                        <p>{{comment.timestamp.strftime('%d %B %Y')}}</p>
+                        <a href="/members/{{comment.username}}/profile"><p>{{comment.username}}</p></a>
                     </div>
                 </div>
             </div>

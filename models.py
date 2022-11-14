@@ -1,5 +1,6 @@
 from flask_sqlalchemy import SQLAlchemy
 from flask_bcrypt import Bcrypt
+from datetime import datetime
 
 bcrypt = Bcrypt()
 db = SQLAlchemy()
@@ -130,11 +131,12 @@ class IssueComment(db.Model):
 
     comment_id = db.Column(db.String, primary_key=True)
     comment_content = db.Column(db.Text, nullable=False)
+    timestamp = db.Column(db.DateTime, nullable=False, default=datetime.utcnow())
     
     username = db.Column(db.String, db.ForeignKey('users.username'))
 
     issue_id = db.Column(db.Integer, db.ForeignKey('issues.issue_id'), nullable=False)
 
     @classmethod
-    def link_comment_to_content(cls, comment_id, comment_content, issue_id, username):
-        return cls(comment_id=comment_id, comment_content=comment_content, issue_id=issue_id, username=username)
+    def link_comment_to_content(cls, comment_id, comment_content, timestamp, issue_id, username):
+        return cls(comment_id=comment_id, comment_content=comment_content, timestamp=timestamp, issue_id=issue_id, username=username)

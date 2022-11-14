@@ -1,6 +1,7 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, TextAreaField, HiddenField, SelectField
+from wtforms import StringField, PasswordField, TextAreaField, HiddenField, SelectField, DateTimeField
 from wtforms.validators import InputRequired, DataRequired, Length, Email
+import datetime
 
 #############################
 
@@ -50,6 +51,7 @@ class CreateListForm(FlaskForm):
 class CommentForm(FlaskForm):
     """Form for commenting"""
     comment_content = TextAreaField('Comment on this issue', validators=[InputRequired()])
+    # timestamp = DateTimeField(datetime.datetime)
 
 class UserEditForm(FlaskForm):
     """Form for editing users."""

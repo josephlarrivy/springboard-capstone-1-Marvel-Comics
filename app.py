@@ -2,10 +2,12 @@ from flask import Flask, render_template, redirect, session, flash
 from flask_debugtoolbar import DebugToolbarExtension
 from forms import AddUserForm, CharacterSearch, DisposableUserForm, UserForm, IssueSearch, CreateListForm, CommentForm, UserEditForm
 from models import connect_db, db, User, List, ListIssue, Issue, ListCharacter, Character, CharacterIssue, IssueComment
+from sqlalchemy import desc
 from sqlalchemy.exc import IntegrityError
 import string
 import random
 import datetime
+from datetime import datetime
 # import requests
 from marvel import Marvel
 from keys import PUBLIC_KEY, PRIVATE_KEY
@@ -215,7 +217,7 @@ def show_members_home(username):
     featured_character3 = Character.query.get(third_seed_character.title())
     issues3 = featured_character3.issues
 
-    comments = IssueComment.query.all()
+    comments = IssueComment.query.order_by(desc(IssueComment.timestamp)).limit(50)
 
     # i = len(rand_characters)
     # show_rand_character1 = rand_characters[random.randrange(0, 5)]
@@ -525,9 +527,10 @@ def view_single_issue(issue_id):
         if form.validate_on_submit():
             comment_content = form.comment_content.data
             comment_id = ''.join(random.choices(string.ascii_uppercase + string.digits, k=20))
+            timestamp = datetime.now()
             username = username
 
-            new_comment = IssueComment.link_comment_to_content(comment_id, comment_content, issue_id, username)
+            new_comment = IssueComment.link_comment_to_content(comment_id, comment_content, timestamp, issue_id, username)
 
             db.session.add(new_comment)
             db.session.commit()
