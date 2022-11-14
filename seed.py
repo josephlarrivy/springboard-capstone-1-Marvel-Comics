@@ -71,8 +71,7 @@ def show_characters(character_name):
         if Issue.query.get(issue_id):
             pass
         else:
-            commit_issue = Issue.commit_issue_to_db(
-                issue_id, title, thumbnail, description, series, series_id)
+            commit_issue = Issue.commit_issue_to_db(issue_id, title, thumbnail, description, series, series_id)
             db.session.add(commit_issue)
             db.session.commit()
 
@@ -82,11 +81,14 @@ def show_characters(character_name):
         db.session.commit()
 
 
+print('checkpoint - seed start ###########')
+
 for character in seed_characters:
-    print('checkpoint1 - timeout activated')
-    time.sleep(5)
+    time.sleep(3)
     show_characters(character)
-    print('checkpoint2')
+    print('checkpoint - timeout activated')
+
+print('checkpoint seed complete ##############')
 
 #############################################################
 
