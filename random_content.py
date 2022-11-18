@@ -154,7 +154,7 @@ rand_characters = [
     },
     {
         'name': 'Star-Lord (Peter Quill)',
-        'href': '/view_character/GamoraStar-Lord%20(Peter%20Quill)',
+        'href': '/view_character/Star-Lord%20(Peter%20Quill)',
         'image': 'http://i.annihil.us/u/prod/marvel/i/mg/9/a0/537bc55e8b1f5.jpg'
     },
     {

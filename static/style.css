@@ -22,7 +22,7 @@
 .card-block {
     /* height: 500px; */
     /* overflow-y: scroll; */
-    width: 385px;
+    width: 285px;
     height: 600px;
     overflow: hidden;
 }
@@ -33,9 +33,77 @@
 
 
 #issue_comment_homepage_card {
-    overflow-y: scroll;
-    width: 200px;
-    padding: 10px;
-    margin: 10px;
+    /* overflow-y: scroll; */
+    width: 250px;
+    height: 200px;
+    padding: 2px;
+    /* margin: 2px; */
     overflow: hidden;
 }
+
+
+
+
+
+
+
+
+
+
+/* ##### scrolling banner ##### */
+/* 
+article {
+  max-width: 600px;
+  width: 99%;
+  margin: 5px;
+  padding: 5px;
+  overflow: hidden;
+  position: relative;
+  height: 40px;
+  min-height: 4em;
+} */
+
+.marquee-image {
+    height: 220px;
+    margin: 10px 3px 6px;
+    /* width: auto; */
+}
+
+/* 
+.example-left {
+  white-space: nowrap;
+  position: absolute;
+  text-transform: uppercase;
+}
+
+.example-left {
+  -webkit-animation: mymove 8s linear infinite;
+  white-space: nowrap;
+  animation: mymove 8s linear infinite alternate;
+}
+
+.example-right {
+  white-space: nowrap;
+  position: absolute;
+  top:2em;
+  opacity: .4;
+  text-transform: uppercase;
+}
+
+.example-right {
+  -webkit-animation: urmove 8s linear infinite;
+  white-space: nowrap;
+  animation: urmove 8s linear infinite alternate;
+} */
+/* 
+@keyframes early 
+{ from { opacity:1; } to { opacity:0; } }
+
+.early {
+    animation:fadeIn ease-in 1; /* call our keyframe named fadeIn, use animation ease-in and repeat it only 1 time */
+
+    /* animation-fill-mode:forwards;  this makes sure that after animation is done we remain at the last keyframe value (opacity: 1) */
+
+    /* animation-duration:5s; */
+    /* animation-delay: 1.5s */
+/* }  */

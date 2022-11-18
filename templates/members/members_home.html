@@ -3,12 +3,21 @@
 {% block content %}
 
 <br>
+
+
+
+
+
+
+
+<!-- <br>
 <br>
 <div class="text-center">
     <h1>Featured Characters</h1>
-</div>
+</div> -->
 <br>
 <br>
+
 <div class="row">
     <div class="text-center col-4">
         <a href="/view_character/{{featured_character1.character_name}}">
@@ -17,7 +26,7 @@
         <br>
         <img src="{{featured_character1.thumbnail}}" class="rounded mx-auto d-block" style="width: 400px">
         <br>
-        <p>{{featured_character1.biography}}</p>
+        <p class="p-4">{{featured_character1.biography}}</p>
     </div>
     <div class="col-8">
         <br>
@@ -51,7 +60,7 @@
         <br>
         <img src="{{featured_character3.thumbnail}}" class="rounded mx-auto d-block" style="width: 400px">
         <br>
-        <p>{{featured_character3.biography}}</p>
+        <p class="p-4">{{featured_character3.biography}}</p>
     </div>
     <div class="col-8">
         <br>
@@ -85,7 +94,7 @@
         <br>
         <img src="{{featured_character2.thumbnail}}" class="rounded mx-auto d-block" style="width: 400px">
         <br>
-        <p>{{featured_character2.biography}}</p>
+        <p class="p-4">{{featured_character2.biography}}</p>
     </div>
     <div class="col-8">
         <br>
@@ -119,15 +128,12 @@
 
         <div class="col">
             <div class="card-block">
-                <img src="{{comment.issue.thumbnail}}" class="card-img-top" style="width: 250px; height: 385px">
+                <a href="/view_single_issue/{{comment.issue.issue_id}}"><img src="{{comment.issue.thumbnail}}" class="card-img-top" style="width: 250px; height: 385px"></a>
                 <div  id="issue_comment_homepage_card">
-                    <a href="/view_single_issue/{{comment.issue.issue_id}}">
-                        <p class="card-title">View issue</p>
-                    </a>
-                    <a href="/members/{{comment.username}}/view">
+                    <p>{{comment.timestamp.strftime('%d %B %Y')}}</p>
+                    <a href="/members/{{comment.username}}/profile">
                         <p>{{comment.username}}</p>
                     </a>
-                    <p>{{comment.timestamp.strftime('%d %B %Y')}}</p>
                     <p>{{comment.comment_content}}</p>
                 </div>
             </div>

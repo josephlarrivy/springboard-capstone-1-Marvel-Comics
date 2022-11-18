@@ -18,7 +18,7 @@ app.config["SQLALCHEMY_DATABASE_URI"] = "postgresql:///Springboard-Capstone-1"
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 app.config["SQLALCHEMY_ECHO"] = True
 app.config["SECRET_KEY"] = "W89#kU*67jL9##fhy@$hdj"
-app.config['DEBUG_TB_INTERCEPT_REDIRECTS'] = False
+app.config['DEBUG_TB_INTERCEPT_REDIRECTS'] = True
 
 connect_db(app)
 
@@ -403,6 +403,33 @@ def show_characters(character_name):
 
     characters = marvel.characters
     comics = marvel.comics
+
+################
+
+    # search_term = 'odind'
+    # search = "%{}%".format(search_term)
+    # character = Character.query.filter(Character.character_name.match(search)).first()
+    # print('$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$')
+    # print(character)
+    # print('$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$')
+
+
+    
+
+    # if Character.query.filter(Character.character_name.like(f'%{character_name_search}%')).first():
+    #     character = Character.query.filter(
+    #         Character.character_name.like(f'%{character_name_search}%')).first()
+    #     print('#####################')
+    #     print(character_name_search)
+    #     print(character)
+    #     print('#####################')
+    #     user = User.query.get(username)
+    #     lists = user.lists
+    #     issues = character.issues
+
+    #     return render_template('/content/characters/view_db_character.html', character=character, issues=issues, user=user, lists=lists, username=username)
+
+################
 
     if Character.query.get(character_name):
         character = Character.query.get(character_name)

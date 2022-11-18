@@ -1,6 +1,6 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, TextAreaField, HiddenField, SelectField, DateTimeField
-from wtforms.validators import InputRequired, DataRequired, Length, Email
+from wtforms.validators import InputRequired, DataRequired, Length, Email, ValidationError
 import datetime
 
 #############################
@@ -48,9 +48,14 @@ class CreateListForm(FlaskForm):
     """name and create a list"""
     list_name = StringField('List Name', validators=[InputRequired()])
 
+
+def limit_characters(form, field):
+    if len(field.data) > 170:
+        raise ValidationError('Limit 170 characters')
+
 class CommentForm(FlaskForm):
     """Form for commenting"""
-    comment_content = TextAreaField('Comment on this issue', validators=[InputRequired()])
+    comment_content = TextAreaField('Comment on this issue', validators=[InputRequired(), limit_characters])
     # timestamp = DateTimeField(datetime.datetime)
 
 class UserEditForm(FlaskForm):
