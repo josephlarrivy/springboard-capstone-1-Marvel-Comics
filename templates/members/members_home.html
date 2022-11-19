@@ -10,11 +10,11 @@
 
 
 
-<!-- <br>
+<br>
 <br>
 <div class="text-center">
     <h1>Featured Characters</h1>
-</div> -->
+</div>
 <br>
 <br>
 
@@ -34,9 +34,9 @@
         <br>
         <h3>Appearances</h3>
         <div class="row text-center">
-            {% for issue in issues1[0:4] %}
+            {% for issue in issues1[0:5] %}
             <div class="p-2 m-2 col">
-                <div class="card" style="width: 200px;">
+                <div class="card" style="width: 200px">
                     <img src="{{issue.thumbnail}}" class="card-img-top" style="width: 200px; height: 308px">
                     <div class="card-body" style="width: 200px">
                         <a href="/view_single_issue/{{issue.issue_id}}" class="card-link">
@@ -68,7 +68,7 @@
         <br>
         <h3>Appearances</h3>
         <div class="row text-center">
-            {% for issue in issues3[0:4] %}
+            {% for issue in issues3[0:5] %}
             <div class="p-2 m-2 col">
                 <div class="card" style="width: 200px;">
                     <img src="{{issue.thumbnail}}" class="card-img-top" style="width: 200px; height: 308px">
@@ -102,7 +102,7 @@
         <br>
         <h3>Appearances</h3>
         <div class="row text-center">
-            {% for issue in issues2[0:4] %}
+            {% for issue in issues2[0:5] %}
             <div class="p-2 m-2 col">
                 <div class="card" style="width: 200px;">
                     <img src="{{issue.thumbnail}}" class="card-img-top" style="width: 200px; height: 308px">
@@ -120,7 +120,7 @@
 
 <br><br><br><br>
 <div class="text-center">
-    <h1>Comments by users</h1>
+    <h1>Recent Comments</h1>
 </div>
 <div class="row m-5">
     <div class="scrolling-wrapper row flex-row flex-nowrap">
@@ -129,12 +129,12 @@
         <div class="col">
             <div class="card-block">
                 <a href="/view_single_issue/{{comment.issue.issue_id}}"><img src="{{comment.issue.thumbnail}}" class="card-img-top" style="width: 250px; height: 385px"></a>
-                <div  id="issue_comment_homepage_card">
+                <div id="issue_comment_homepage_card">
+                    <p>{{comment.comment_content}}</p>
                     <p>{{comment.timestamp.strftime('%d %B %Y')}}</p>
                     <a href="/members/{{comment.username}}/profile">
                         <p>{{comment.username}}</p>
                     </a>
-                    <p>{{comment.comment_content}}</p>
                 </div>
             </div>
         </div>

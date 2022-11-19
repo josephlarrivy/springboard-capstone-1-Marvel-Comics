@@ -2,17 +2,20 @@ from keys import PUBLIC_KEY, PRIVATE_KEY
 import random
 import string
 import time
-
+import datetime
+from datetime import datetime
+from essential_generators import DocumentGenerator
 from marvel import Marvel
 marvel = Marvel(PUBLIC_KEY=PUBLIC_KEY, PRIVATE_KEY=PRIVATE_KEY)
 
-from app import app, db, show_characters, seed_characters
+
+from app import app, db, show_characters, seed_characters, register_disposable
+from models import db, Issue, Character, CharacterIssue, IssueComment,User
+from forms import DisposableUserForm
+
 
 # from flask import redirect
-from models import db, Issue, Character, CharacterIssue
-
 # import os
-
 app.config["SQLALCHEMY_DATABASE_URI"] = "postgresql:///Springboard-Capstone-1"
 app.config["SECRET_KEY"] = "W89#kU*67jL9##fhy@$hdj"
 
@@ -29,12 +32,11 @@ def show_characters(character_name):
     characters = marvel.characters
     comics = marvel.comics
 
-    single_character = characters.all(name=f'{character_name}')[
-            'data']['results'][0]
+    single_character = characters.all(name=f'{character_name}')['data']['results'][0]
 
     character_id = single_character['id']
 
-    character_data = characters.get(f'{character_id}')['data']['results'][0]
+    # character_data = characters.get(f'{character_id}')['data']['results'][0]
 
     comic_series = characters.comics(f'{character_id}')['data']['results']
 
@@ -66,7 +68,7 @@ def show_characters(character_name):
         thumbnail_path = issue_data['thumbnail']['path']
         thumbnail = f'{thumbnail_path}.jpg'
         description = issue_data['description']
-        character = single_character['name']
+        # character = single_character['name']
 
         if Issue.query.get(issue_id):
             pass
@@ -84,9 +86,59 @@ def show_characters(character_name):
 print('checkpoint - seed start ###########')
 
 for character in seed_characters:
-    time.sleep(3)
+    time.sleep(2)
     show_characters(character)
     print('checkpoint - timeout activated')
+
+print('checkpoint - done seeding characters')
+print('checkpoint - seed a user')
+
+username = 'seed_user'
+password = ''.join(random.choices(
+    string.ascii_uppercase + string.digits, k=20))
+first_name = 'Seed'
+last_name = 'User'
+email = ''.join(random.choices(
+    string.ascii_uppercase + string.digits, k=12))
+thumbnail = 'captain.png'
+
+new_user = User.register_new_user(
+    username, password, first_name, last_name, email, thumbnail)
+db.session.add(new_user)
+
+print('checkpoint - user seeded')
+
+
+
+
+
+
+
+
+print('checkpoint - start seeding comments')
+issues = [61670, 95814, 73526, 95815, 85571, 71436, 62208, 94755, 103363, 90122, 78490]
+
+for issue in issues:
+    gen = DocumentGenerator()
+
+    comment_content = (gen.sentence())
+    comment_id = ''.join(random.choices(string.ascii_uppercase + string.digits, k=20))
+    timestamp = datetime.now()
+    issue_id = issue
+    username = 'seed_user'
+
+    new_comment = IssueComment.link_comment_to_content(comment_id, comment_content, timestamp, issue_id, username)
+
+    db.session.add(new_comment)
+    db.session.commit()
+    print('checkpoint - comment seeded')
+
+
+
+
+
+
+
 
 print('checkpoint seed complete ##############')
 

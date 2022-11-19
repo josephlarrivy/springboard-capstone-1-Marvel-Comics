@@ -8,6 +8,7 @@ import string
 import random
 import datetime
 from datetime import datetime
+from essential_generators import DocumentGenerator
 # import requests
 from marvel import Marvel
 from keys import PUBLIC_KEY, PRIVATE_KEY
@@ -27,7 +28,7 @@ marvel = Marvel(PUBLIC_KEY=PUBLIC_KEY, PRIVATE_KEY=PRIVATE_KEY)
 
 #################################
 
-seed_characters = ['rocket raccoon', 'thanos', 'iron man']
+seed_characters = ['rocket raccoon', 'iron man', 'thanos']
 
 #################################
 
@@ -718,7 +719,7 @@ def show_searched_issues(issue_search_term):
     return render_template('/content/issues/issue_search_results.html', username=username, issues=issues, issue_search_term=issue_search_term)
 
 
-
+    
 
 
 
