@@ -83,6 +83,12 @@ def show_characters(character_name):
         db.session.commit()
 
 
+
+
+
+
+
+
 print('checkpoint - seed start ###########')
 
 for character in seed_characters:
@@ -91,6 +97,9 @@ for character in seed_characters:
     print('checkpoint - timeout activated')
 
 print('checkpoint - done seeding characters')
+
+
+
 print('checkpoint - seed a user')
 
 username = 'seed_user'
@@ -108,17 +117,20 @@ db.session.add(new_user)
 
 print('checkpoint - user seeded')
 
-
-
-
-
-
-
+##############################
 
 print('checkpoint - start seeding comments')
-issues = [61670, 95814, 73526, 95815, 85571, 71436, 62208, 94755, 103363, 90122, 78490]
 
-for issue in issues:
+issues_for_seed_comments = []
+
+first_seed_character = seed_characters[0]
+featured_character1 = Character.query.get(first_seed_character.title())
+issues1 = featured_character1.issues
+
+for issue in issues1:
+    issues_for_seed_comments.append(issue.issue_id)
+
+for issue in issues_for_seed_comments:
     gen = DocumentGenerator()
 
     comment_content = (gen.sentence())
