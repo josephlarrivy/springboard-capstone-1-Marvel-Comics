@@ -26,16 +26,22 @@
 }
 
 .card-block {
-    /* height: 500px; */
-    /* overflow-y: scroll; */
+    overflow: hidden;
     width: 285px;
-    height: 600px;
+    height: 300px;
     overflow: hidden;
 }
 
-/* .card-body {
-    margin: 20px
-} */
+.card-body {
+  height: 145px;
+  overflow: hidden;
+}
+
+.card:hover {
+    transform: translateY(-12px);
+    transition: 300ms;
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+}
 
 #issue_comment_homepage_card {
     /* overflow-y: scroll; */
