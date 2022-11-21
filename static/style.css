@@ -1,115 +1,122 @@
+
+/* main */
 #page-container {
-    position: relative;
-    min-height: 100vh;
-    padding: 5px;
+  position: relative;
+  min-height: 100vh;
+  padding: 5px;
 }
-
-#content-wrap {
-    padding-bottom: 0px;
-}
-
-.navigation {
-    
-}
-
-
 #footer {
-    position: absolute;
-    bottom: 0;
-    padding: 5px;
-    width: 100%;
-    height: 0px;
+  position: absolute;
+  bottom: 0;
+  padding: 5px;
+  width: 100%;
+  height: 0px;
 }
 
-.scrolling-wrapper {
-    overflow-x: auto;
+
+
+
+
+
+/* marquee */
+/* marquee {
+  background: #dbdbdb;
+} */
+
+.marquee-image {
+  height: 220px;
+  margin: 20px 3px 6px;
+  /* width: auto; */
 }
 
-.card-block {
-    overflow: hidden;
-    width: 285px;
-    height: 300px;
-    overflow: hidden;
+.marquee-image:hover {
+  transform: translateY(-12px);
+  transition: 300ms;
+  box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
+  /* box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px; */
 }
 
+
+
+
+
+
+
+/* navbar formatting */
+.navigation-container {
+  width: 100%;
+}
+
+.navbar {
+  padding: 5px;
+  background: #dbdbdb;
+  font-family: Arial, sans serif;
+  font-size: 20px;
+  /* margin: auto; */
+}
+
+.nav-item {
+  display: inline-block;
+  padding: 10px;
+  color: white;
+  text-decoration: none;
+}
+
+
+
+
+
+
+
+/* homepage featured characters */
 .card-body {
   height: 145px;
   overflow: hidden;
 }
 
 .card:hover {
-    transform: translateY(-12px);
-    transition: 300ms;
-    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
-}
-
-#issue_comment_homepage_card {
-    /* overflow-y: scroll; */
-    width: 250px;
-    height: 200px;
-    padding: 2px;
-    /* margin: 2px; */
-    overflow: hidden;
+  transform: translateY(-12px);
+  transition: 300ms;
+  /* box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px; */
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
 }
 
 
 
 
 
-/* ##### scrolling banner ##### */
-/* 
-article {
-  max-width: 600px;
-  width: 99%;
-  margin: 5px;
-  padding: 5px;
+
+
+
+
+/* homepage comments */
+.scrolling-wrapper {
+  margin: 50px;
+  overflow-x: auto;
+  height: auto;
+}
+
+.homepage-issue-comment-container {
+  width: 280px;
+  height: 595px;
   overflow: hidden;
-  position: relative;
-  height: 40px;
-  min-height: 4em;
-} */
-
-.marquee-image {
-    height: 220px;
-    margin: 10px 3px 6px;
-    /* width: auto; */
 }
 
-/* 
-.example-left {
-  white-space: nowrap;
-  position: absolute;
-  text-transform: uppercase;
+.homepage-issue-comment-image {
+  width: 250px;
+  height: 385px;
 }
 
-.example-left {
-  -webkit-animation: mymove 8s linear infinite;
-  white-space: nowrap;
-  animation: mymove 8s linear infinite alternate;
+.homepage-issue-comment-text {
+  padding: 20px;
+  width: 250px;
+  height: 210px;
+  overflow: hidden;
 }
 
-.example-right {
-  white-space: nowrap;
-  position: absolute;
-  top:2em;
-  opacity: .4;
-  text-transform: uppercase;
-}
 
-.example-right {
-  -webkit-animation: urmove 8s linear infinite;
-  white-space: nowrap;
-  animation: urmove 8s linear infinite alternate;
-} */
-/* 
-@keyframes early 
-{ from { opacity:1; } to { opacity:0; } }
 
-.early {
-    animation:fadeIn ease-in 1; /* call our keyframe named fadeIn, use animation ease-in and repeat it only 1 time */
 
-    /* animation-fill-mode:forwards;  this makes sure that after animation is done we remain at the last keyframe value (opacity: 1) */
 
-    /* animation-duration:5s; */
-    /* animation-delay: 1.5s */
-/* }  */
+
+

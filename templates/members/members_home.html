@@ -125,19 +125,18 @@
 <div class="text-center">
     <h1>Recent Comments</h1>
 </div>
-<div class="row m-5">
+<div class="row">
     <div class="scrolling-wrapper row flex-row flex-nowrap">
         {% for comment in comments %}
-
         <div class="col">
-            <div class="card-block">
-                <a href="/view_single_issue/{{comment.issue.issue_id}}"><img src="{{comment.issue.thumbnail}}" class="card-img-top" style="width: 250px; height: 385px"></a>
-                <div id="issue_comment_homepage_card">
-                    <p>{{comment.comment_content}}</p>
+            <div class="homepage-issue-comment-container">
+                <a href="/view_single_issue/{{comment.issue.issue_id}}"><img src="{{comment.issue.thumbnail}}" class="homepage-issue-comment-image"></a>
+                <div class="homepage-issue-comment-text">
                     <p>{{comment.timestamp.strftime('%d %B %Y')}}</p>
                     <a href="/members/{{comment.username}}/profile">
                         <p>{{comment.username}}</p>
                     </a>
+                    <p>{{comment.comment_content}}</p>
                 </div>
             </div>
         </div>
