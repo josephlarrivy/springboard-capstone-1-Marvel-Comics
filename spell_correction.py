@@ -26,13 +26,7 @@ def correct_misspelling(character_search):
         # if the term will not return a match from the API, return an INDEXERROR
         return IndexError
     
-
-
-
-
-
-
-
+    
 # def correct_misspelling(character_search):
 #     # check if the spelling that the user gives matches correctly with an entry in the database
 #     if Character.query.get(character_search):
