@@ -389,7 +389,17 @@ def search_characters():
 
     if form.validate_on_submit():
         character_search_term = form.character_search_term.data.title()
-        return redirect(f'/view_character/{character_search_term}')
+
+        ################
+
+        from spell_correction import correct_misspelling
+
+        corrected_character_spelling = correct_misspelling(character_search_term)
+        print(corrected_character_spelling)
+
+        ################
+
+        return redirect(f'/view_character/{corrected_character_spelling}')
 
     return render_template('/content/characters/search_characters.html', username=username, show_rand_character1=show_rand_character1, show_rand_character2=show_rand_character2, show_rand_character3=show_rand_character3, form=form)
 
@@ -404,33 +414,6 @@ def show_characters(character_name):
 
     characters = marvel.characters
     comics = marvel.comics
-
-################
-
-    # search_term = 'odind'
-    # search = "%{}%".format(search_term)
-    # character = Character.query.filter(Character.character_name.match(search)).first()
-    # print('$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$')
-    # print(character)
-    # print('$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$')
-
-
-    
-
-    # if Character.query.filter(Character.character_name.like(f'%{character_name_search}%')).first():
-    #     character = Character.query.filter(
-    #         Character.character_name.like(f'%{character_name_search}%')).first()
-    #     print('#####################')
-    #     print(character_name_search)
-    #     print(character)
-    #     print('#####################')
-    #     user = User.query.get(username)
-    #     lists = user.lists
-    #     issues = character.issues
-
-    #     return render_template('/content/characters/view_db_character.html', character=character, issues=issues, user=user, lists=lists, username=username)
-
-################
 
     if Character.query.get(character_name):
         character = Character.query.get(character_name)
