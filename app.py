@@ -6,6 +6,7 @@ from sqlalchemy import desc
 from sqlalchemy.exc import IntegrityError
 import string
 import random
+import time
 import datetime
 from datetime import datetime
 from essential_generators import DocumentGenerator
@@ -541,6 +542,38 @@ def view_single_issue(issue_id):
         characters = issue_data['characters']['items']
 
         ##################
+
+        for character in characters:
+            string_character_name = character['name']
+            print('################################')
+            # print(string_character_name)
+            with open('character_misspellings/correct_spellings.txt', 'r') as f:
+                content = f.read()
+                # lines = content.splitlines()
+
+                if string_character_name in content:
+                    pass
+                else:
+                    with open('character_misspellings/correct_spellings.txt', 'a') as f:
+                        f.write(f'{string_character_name}\n')
+                        f.close()
+
+
+                # for line in lines:
+                #     print(f'line: {line}')
+                #     if string_character_name == line:
+                #         print('MATCH')
+                #     else:
+                #         with open('character_misspellings/correct_spellings.txt', 'a') as f:
+                #             f.write(f'{string_character_name}\n')
+                #             print(string_character_name)
+
+
+                #             # f.write('\n')
+                        # f.close()
+
+        ##################
+
         if form.validate_on_submit():
             comment_content = form.comment_content.data
             comment_id = ''.join(random.choices(string.ascii_uppercase + string.digits, k=20))
