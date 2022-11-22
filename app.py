@@ -14,6 +14,7 @@ from marvel import Marvel
 from keys import PUBLIC_KEY, PRIVATE_KEY
 from random_content import rand_issues, rand_characters
 
+
 app = Flask(__name__)
 app.config["SQLALCHEMY_DATABASE_URI"] = "postgresql:///Springboard-Capstone-1"
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
@@ -392,10 +393,15 @@ def search_characters():
 
         ################
 
-        from spell_correction import correct_misspelling
+        # from spell_correction import correct_misspelling
 
-        corrected_character_spelling = correct_misspelling(character_search_term)
-        print(corrected_character_spelling)
+        # corrected_character_spelling = correct_misspelling(character_search_term)
+        # print(corrected_character_spelling)
+
+        ################
+
+
+
 
         ################
 
