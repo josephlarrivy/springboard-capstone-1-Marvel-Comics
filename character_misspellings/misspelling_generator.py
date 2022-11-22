@@ -6,13 +6,13 @@ def GerneateMisspellings():
         string = values[0]
         final_to_mix = string.replace('-', ' ')
 
-        print('$$$$$$$$$$$$$$')
-        print(f'correct_spelling: {correct_spelling}')
-        print(f'values: {values}')
-        print(f'string: {string}')
-        print(f'final_to_mix: {final_to_mix}')
-        print('$$$$$$$$$$$$$$')
-        print(' ')
+        # print('$$$$$$$$$$$$$$')
+        # print(f'correct_spelling: {correct_spelling}')
+        # print(f'values: {values}')
+        # print(f'string: {string}')
+        # print(f'final_to_mix: {final_to_mix}')
+        # print('$$$$$$$$$$$$$$')
+        # print(' ')
 
         with open(f'./misspelling_files/{values[0]}.txt', 'w') as f:
             f.write(correct_spelling)
@@ -46,7 +46,7 @@ def GerneateMisspellings():
 ########
         
             words = final_to_mix.split()
-            print(f'words: {words}')
+            # print(f'words: {words}')
 
 ########
         if len(words) >= 2:
@@ -54,7 +54,7 @@ def GerneateMisspellings():
 
                 recombine1 = f'{words[0]} {words[1]}'
                 recombine4 = recombine1.replace('(', '').replace(')', '')
-                print(recombine4)
+                # print(recombine4)
                 f.write(recombine4)
                 f.write('\n')
 
@@ -89,8 +89,8 @@ def GerneateMisspellings():
 
                 recombine2 = f'{words[2]} {words[3]}'
                 recombine3 = recombine2.replace('(', '').replace(')', '')
-                print(f'recombine3: {recombine3}')
-                print('###############')
+                # print(f'recombine3: {recombine3}')
+                # print('###############')
                 f.write(recombine3)
                 f.write('\n')
 
