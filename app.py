@@ -389,7 +389,7 @@ def search_characters():
     form = CharacterSearch()
 
     if form.validate_on_submit():
-        character_search_term = form.character_search_term.data.title()
+        character_search_term = form.character_search_term.data.strip()
 
         ################
 
@@ -400,9 +400,9 @@ def search_characters():
 
         ################
 
-
-
-
+        from character_misspellings import spell_correct_character_names as spell_correct
+        corrected_character_spelling = spell_correct.search_for_misspelling(character_search_term)
+        
         ################
 
         return redirect(f'/view_character/{corrected_character_spelling}')
