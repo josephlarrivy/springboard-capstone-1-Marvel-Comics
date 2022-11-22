@@ -1,37 +1,20 @@
 import os
-
 directory = 'misspelling_files'
-
 
 def search_for_misspelling(search_value):
     for filename in os.listdir(directory):
-        print(f'filename: {filename}')
+        # print(f'filename: {filename}')
 
         f = open(f'{directory}/{filename}', 'r')
         content = f.read()
+        lines = content.splitlines()
+        for line in lines:
+            # print(f'content: {line}')
+            if search_value == line:
+                corrected_name = filename.removesuffix('.txt')
+                print(corrected_name)
+        # print("#####################")
 
-        # todo: need to add a line that splits the file on each new line so the file can be iterated?
-
-        print(f'      content: {content}')
-        if search_value in f.read():
-            print("#####################")
         f. close()
 
-
-
-
-        # with open(filename, 'r', encoding='utf-8') as f:
-        #     print(filename)
-        #     if search_value in f.read():
-        #         return filename
-        #     else:
-        #         pass
-
-################
-
-        # obj = os.scandir(filename)
-        # for entry in obj:
-        #     print(entry)
-
-
-search_for_misspelling('captainamerica')
+search_for_misspelling('doctor strange')
