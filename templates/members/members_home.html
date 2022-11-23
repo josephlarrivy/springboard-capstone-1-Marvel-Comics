@@ -6,7 +6,10 @@
 
 
 
-
+<div class="text-center">
+    <h1>Search your favorite characters</h1>
+    <a href="/search/characters"><button type="button" class="button">Search Characters</button></a>
+</div>
 
 
 
@@ -145,23 +148,14 @@
     </div>
 </div>
 
-<br><br><br>
-
-<div class="text-center">
-    <h2>Search for a character</h2>
-    <a href="/search/characters"><button type="button" class="btn btn-dark">Search Characters</button></a>
-</div>
-
-
-
 
 <br><br><br><br><br>
 
 <div class="text-center">
 
     <h1>Lists</h1>
-    <a href="/members/{{user.username}}/lists"><button type="button" class="btn btn-dark">My Lists</button></a>
-    <a href="/members/create_list_form"><button type="button" class="btn btn-dark">Create New List</button></a>
+    <a href="/members/{{user.username}}/lists"><button type="button" class="button">My Lists</button></a>
+    <a href="/members/create_list_form"><button type="button" class="button">Create New List</button></a>
 
     <ul>
         {% for list in lists %}
@@ -174,6 +168,6 @@
 
     <h1>Other Members</h1>
 
-    <a href="/members/ExampleUser/view"><button type="button" class="btn btn-dark">Example User</button></a>
+    <a href="/members/ExampleUser/view"><button type="button" class="button">Example User</button></a>
 
 {% endblock %}

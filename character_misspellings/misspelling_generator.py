@@ -1,4 +1,4 @@
-def GerneateMisspellings():
+def gerneate_misspellings():
     correct_spellings = open('correct_spellings.txt', 'r')
 
     for correct_spelling in correct_spellings:
@@ -230,4 +230,4 @@ def GerneateMisspellings():
         else:
             pass
 
-GerneateMisspellings()
+gerneate_misspellings()

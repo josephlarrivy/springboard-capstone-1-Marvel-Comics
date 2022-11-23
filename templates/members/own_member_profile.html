@@ -9,17 +9,17 @@
         <br>
             <p>{{user.first_name}} {{user.last_name}}</p>
             <p>{{user.email}}</p>
-            <a href="/member/{{username}}/edit"><button class="btn btn-dark m-1">Edit Info</button></a>
+            <a href="/member/{{username}}/edit"><button class="button">Edit Info</button></a>
         <br>
         <br>
         <hr>
             <h3>Lists</h3>
             {% for list in lists %}
-                <a href="/view_list_contents/{{username}}/{{list.list_id}}"><button class="btn btn-dark m-1">{{list.list_name}}</button></a>
+                <a href="/view_list_contents/{{username}}/{{list.list_id}}"><button class="button">{{list.list_name}}</button></a>
             <br>
             {% endfor %}
         <br>
-            <a href="/members/create_list_form"><button class="btn btn-secondary">Create New List</button></a>
+            <a href="/members/create_list_form"><button class="button">Create New List</button></a>
     </div>
     <div class="col-9">
         {% for list in lists %}

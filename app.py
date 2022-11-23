@@ -15,6 +15,7 @@ from essential_generators import DocumentGenerator
 from marvel import Marvel
 from keys import PUBLIC_KEY, PRIVATE_KEY
 from random_content import rand_issues, rand_characters
+import schedule
 
 
 app = Flask(__name__)
@@ -32,6 +33,9 @@ marvel = Marvel(PUBLIC_KEY=PUBLIC_KEY, PRIVATE_KEY=PRIVATE_KEY)
 #################################
 
 seed_characters = ['rocket raccoon', 'iron man', 'thanos']
+
+
+
 
 #################################
 
@@ -235,11 +239,12 @@ def show_members_home(username):
     # show_rand_issue4 = rand_issues[random.randrange(18, n)]
         
     curr_user = User.query.get(username)
+    image_src = "/static/images/marvel-logo.webp"
     if curr_user.username == session['username']:
         return render_template('/members/members_home.html', user=curr_user, username=username,
         featured_character1=featured_character1, 
         featured_character2=featured_character2, 
-        featured_character3=featured_character3, issues1=issues1, issues2=issues2, issues3=issues3, comments=comments)
+        featured_character3=featured_character3, issues1=issues1, issues2=issues2, issues3=issues3, comments=comments, image_src=image_src)
     
     else:
         redirect('/')
@@ -468,8 +473,7 @@ def show_characters(character_name):
                 
         character_id = single_character['id']
 
-        character_data = characters.get(f'{character_id}')[
-            'data']['results'][0]
+        # character_data = characters.get(f'{character_id}')['data']['results'][0]
 
         comic_series = characters.comics(f'{character_id}')['data']['results']
 
@@ -785,3 +789,4 @@ def view_issues():
     get_comics = comics.all()['data']['results']
 
     return render_template('/content/issues/view_issues.html', username=username, get_comics=get_comics, comics=comics)
+
