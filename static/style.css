@@ -9,7 +9,7 @@
   position: absolute;
   bottom: 0;
   /* padding: 3px; */
-  width: 100%;
+  width: 98%;
   height: 25px;
   background-color: rgb(80, 0, 7);
   text-align: center;
@@ -31,7 +31,11 @@ marquee {
 .marquee-image:hover {
   transform: translateY(-12px);
   transition: 300ms;
-  box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
+  box-shadow: rgba(0, 0, 0, 0.30) 0px 54px 55px,
+  rgba(0, 0, 0, 0.25) 0px -12px 30px,
+  rgba(0, 0, 0, 0.25) 0px 4px 6px,
+  rgba(0, 0, 0, 0.28) 0px 12px 13px,
+  rgba(0, 0, 0, 0.15) 0px -3px 5px;
   /* box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px; */
 }
 
@@ -83,7 +87,7 @@ nav a::before {
   content: "";
   display: block;
   height: 5px;
-  width: 100%;
+  width: 98%;
   background-color: white;
   position: absolute;
   bottom: 0;
@@ -94,7 +98,7 @@ nav a::before {
 }
 
 nav a:hover::before {
-  width: 100%;
+  width: 98%;
 
 }
 

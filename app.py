@@ -239,12 +239,12 @@ def show_members_home(username):
     # show_rand_issue4 = rand_issues[random.randrange(18, n)]
         
     curr_user = User.query.get(username)
-    image_src = "/static/images/marvel-logo.webp"
+    nav_image_src = "/static/images/marvel-logo.webp"
     if curr_user.username == session['username']:
         return render_template('/members/members_home.html', user=curr_user, username=username,
         featured_character1=featured_character1, 
         featured_character2=featured_character2, 
-        featured_character3=featured_character3, issues1=issues1, issues2=issues2, issues3=issues3, comments=comments, image_src=image_src)
+        featured_character3=featured_character3, issues1=issues1, issues2=issues2, issues3=issues3, comments=comments, nav_image_src=nav_image_src)
     
     else:
         redirect('/')
@@ -259,7 +259,8 @@ def show_own_profile(username):
         return redirect('/register')
     elif username == session['username']:
         lists = user.lists
-        return render_template('/members/own_member_profile.html', user=user, username=username, lists=lists)
+        nav_image_src = "/static/images/marvel-logo.webp"
+        return render_template('/members/own_member_profile.html', user=user, username=username, lists=lists, nav_image_src=nav_image_src)
     else:
         return redirect(f'/members/{username}/view')
 
@@ -283,7 +284,9 @@ def edit_user(username):
                 return redirect(f'/members/{username}/profile')
 
             flash("Wrong password, please try again.", 'danger')
-        return render_template('/members/edit_profile.html', form=form, username=username)
+            nav_image_src = "/static/images/marvel-logo.webp"
+
+        return render_template('/members/edit_profile.html', form=form, username=username, nav_image_src=nav_image_src)
     else:
         return redirect(f'/members/{{username}}/profile')
 
@@ -297,7 +300,8 @@ def show_other_profile(view_user):
     else:
         view_user = User.query.get(view_user)
         username = session['username']
-        return render_template('/members/other_member_profile.html', view_user=view_user, username=username)
+        nav_image_src = "/static/images/marvel-logo.webp"
+        return render_template('/members/other_member_profile.html', view_user=view_user, username=username, nav_image_src=nav_image_src)
 
 
 # @app.route('/edit_avatar/<username>', methods=['GET', 'POST'])
@@ -359,7 +363,8 @@ def create_list_form():
         return redirect(f'/members/{username}/profile')
 
     else:
-        return render_template('/members/create_list_form.html', form=form, username=username)
+        nav_image_src = "/static/images/marvel-logo.webp"
+        return render_template('/members/create_list_form.html', form=form, username=username, nav_image_src=nav_image_src)
 
 
 @app.route('/members/<username>/lists', methods=['GET', 'POST'])
@@ -372,8 +377,9 @@ def show_member_lists(username):
 
     curr_user = User.query.get(username)
     lists = curr_user.lists
+    nav_image_src = "/static/images/marvel-logo.webp"
 
-    return render_template('/members/member_lists.html', username=username, lists=lists)
+    return render_template('/members/member_lists.html', username=username, lists=lists, nav_image_src=nav_image_src)
 
 
 ##########################
@@ -435,10 +441,11 @@ def search_characters():
         elif len(search_results) == 1:
             return redirect(f'/view_character/{search_results[0]}')
 
+        nav_image_src = "/static/images/marvel-logo.webp"
+        return render_template('/content/characters/display_name_search_matches.html', search_results=search_results, nav_image_src=nav_image_src)
 
-        return render_template('/content/characters/display_name_search_matches.html', search_results=search_results)
-
-    return render_template('/content/characters/search_characters.html', username=username, show_rand_character1=show_rand_character1, show_rand_character2=show_rand_character2, show_rand_character3=show_rand_character3, form=form)
+    nav_image_src = "/static/images/marvel-logo.webp"
+    return render_template('/content/characters/search_characters.html', username=username, show_rand_character1=show_rand_character1, show_rand_character2=show_rand_character2, show_rand_character3=show_rand_character3, form=form, nav_image_src=nav_image_src)
 
 
 @app.route('/view_character/<character_name>')
@@ -457,8 +464,9 @@ def show_characters(character_name):
         user = User.query.get(username)
         lists = user.lists
         issues = character.issues
+        nav_image_src = "/static/images/marvel-logo.webp"
 
-        return render_template('/content/characters/view_db_character.html', character=character, issues=issues, user=user, lists=lists, username=username)
+        return render_template('/content/characters/view_db_character.html', character=character, issues=issues, user=user, lists=lists, username=username, nav_image_src=nav_image_src)
 
     else:
         try:
@@ -623,8 +631,9 @@ def view_single_issue(issue_id):
         # series_id = url.removeprefix('http://gateway.marvel.com/v1/public/series/')
         # series_data = series.get(series_id)['data']['results'][0]
         # comics = series_data['comics']['items']
+        nav_image_src = "/static/images/marvel-logo.webp"
 
-        return render_template('/content/issues/view_db_issue.html', user=user, lists=lists, issue=issue, issue_data=issue_data, creators=creators, characters=characters, series_name=series_name, series_id=series_id, form=form, username=username)
+        return render_template('/content/issues/view_db_issue.html', user=user, lists=lists, issue=issue, issue_data=issue_data, creators=creators, characters=characters, series_name=series_name, series_id=series_id, form=form, username=username, nav_image_src=nav_image_src)
     
 
     else:
@@ -670,8 +679,10 @@ def view_series(series_id):
     series = marvel.series
     series_data = series.get(series_id)['data']['results'][0]
     series_comics = series_data['comics']['items']
+    nav_image_src = "/static/images/marvel-logo.webp"
 
-    return render_template('/content/issues/view_series.html', series_data=series_data, series_comics=series_comics, comics=comics, username=username)
+
+    return render_template('/content/issues/view_series.html', series_data=series_data, series_comics=series_comics, comics=comics, username=username, nav_image_src=nav_image_src)
 
 
 
@@ -732,8 +743,10 @@ def show_list_items(username, list_id):
     list = List.query.get(list_id)
     issues = list.issues
     characters = list.characters
+    nav_image_src = "/static/images/marvel-logo.webp"
 
-    return render_template('/members/view_list_contents.html', list=list, issues=issues, characters=characters, username=username)
+
+    return render_template('/members/view_list_contents.html', list=list, issues=issues, characters=characters, username=username, nav_image_src=nav_image_src)
 
 
 
@@ -749,8 +762,11 @@ def search_issues():
     if form.validate_on_submit():
         issue_search_term = form.issue_search_term.data
         return redirect(f'/view_issues/{issue_search_term}')
+    
+    nav_image_src = "/static/images/marvel-logo.webp"
 
-    return render_template('/content/issues/search_issues.html', form=form, username=username)
+
+    return render_template('/content/issues/search_issues.html', form=form, username=username, nav_image_src=nav_image_src)
 
 
 @app.route('/view_issues/<issue_search_term>')
@@ -764,10 +780,9 @@ def show_searched_issues(issue_search_term):
     issues = comics.get(issue_search_term)
 
 
+    nav_image_src = "/static/images/marvel-logo.webp"
 
-
-
-    return render_template('/content/issues/issue_search_results.html', username=username, issues=issues, issue_search_term=issue_search_term)
+    return render_template('/content/issues/issue_search_results.html', username=username, issues=issues, issue_search_term=issue_search_term, nav_image_src=nav_image_src)
 
 
     
