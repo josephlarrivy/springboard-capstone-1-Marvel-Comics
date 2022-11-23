@@ -1,8 +1,6 @@
 Rictor
 
 Rictor
+
 rictor
-rictor
-Rictor
-rictor
-Rictor
+

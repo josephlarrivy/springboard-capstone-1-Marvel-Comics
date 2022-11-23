@@ -6,6 +6,7 @@ from sqlalchemy import desc
 from sqlalchemy.exc import IntegrityError
 import string
 import random
+import os
 import time
 import datetime
 from datetime import datetime
@@ -401,12 +402,36 @@ def search_characters():
 
         ################
 
-        from character_misspellings import spell_correct_character_names as spell_correct
-        corrected_character_spelling = spell_correct.search_for_misspelling(character_search_term)
-        
-        ################
+        # from character_misspellings import spell_correct_character_names as spell_correct
+        # corrected_character_spelling = spell_correct.search_for_misspelling(character_search_term)
 
-        return redirect(f'/view_character/{corrected_character_spelling}')
+        # return redirect(f'/view_character/{corrected_character_spelling}')
+        directory = 'character_misspellings/misspelling_files'
+        search_results = []
+
+        for filename in os.listdir(directory):
+        # print(f'filename: {filename}')
+            f = open(f'{directory}/{filename}', 'r')
+            content = f.read()
+            lines = content.splitlines()
+            for line in lines:
+                # print(f'content: {line}')
+                if character_search_term in line:
+                    corrected_name = filename.removesuffix('.txt')
+                    # print('##############')
+                    # print(corrected_name)
+                    if corrected_name not in search_results:
+                        search_results.append(corrected_name)
+                    # print(search_results)
+        if len(search_results) == 0:
+            flash("Cannot find a character with that name")
+            return redirect('/search/characters')
+
+        elif len(search_results) == 1:
+            return redirect(f'/view_character/{search_results[0]}')
+
+
+        return render_template('/content/characters/display_name_search_matches.html', search_results=search_results)
 
     return render_template('/content/characters/search_characters.html', username=username, show_rand_character1=show_rand_character1, show_rand_character2=show_rand_character2, show_rand_character3=show_rand_character3, form=form)
 

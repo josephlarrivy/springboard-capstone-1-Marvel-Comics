@@ -1,8 +1,6 @@
 Echo
 
 Echo
+
 echo
-echo
-Echo
-echo
-Echo
+

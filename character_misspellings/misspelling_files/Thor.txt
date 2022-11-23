@@ -1,8 +1,6 @@
 Thor
 
 Thor
+
 thor
-thor
-Thor
-thor
-Thor
+
