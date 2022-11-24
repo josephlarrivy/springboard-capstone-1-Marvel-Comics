@@ -5,32 +5,36 @@
 <br>
 <div class="text-center">
     <h1>Featured Characters</h1>
+    <br>
+    <hr>
 </div>
-<br>
-<br>
+
+<br><br>
+
 <div class="row">
     <div class="text-center col-4">
-        <a href="/view_character/{{featured_character1.character_name}}"><h2>{{featured_character1.character_name}}</h2></a>
-        <br>
-        <img src="{{featured_character1.thumbnail}}" class="rounded mx-auto d-block" style="width: 400px">
-        <br>
-        <p>{{featured_character1.biography}}</p>
+        <div class="homepage-character-container">
+            
+            <img src="{{featured_character1.thumbnail}}" class="homepage-character-image">
+            <br>
+            <br>
+            <a href="/view_character/{{featured_character1.character_name}}">
+                <h2>{{featured_character1.character_name}}</h2>
+            </a>
+            <p class="m-4">{{featured_character1.biography}}</p>
+        </div>
     </div>
     <div class="col-8">
-        <br>
-        <br>
-        <br>
         <h3>Appearances</h3>
+        <hr>
         <div class="row text-center">
             {% for issue in issues1[0:5] %}
-            <div class="p-2 m-2 col">
-                <div class="card" style="width: 200px;">
-                    <img src="{{issue.thumbnail}}" class="card-img-top" style="width: 200px; height: 308px">
-                    <div class="card-body" style="width: 200px">
-                        <a href="/view_single_issue/{{issue.issue_id}}" class="card-link">
-                            <h5 class="card-title">{{issue.title}}</h5>
-                        </a>
-                    </div>
+            <div class="homepage-issue-container">
+                <img src="{{issue.thumbnail}}" class="homepage-issue-image">
+                <div class="homepage-issue-caption">
+                    <a href="/view_single_issue/{{issue.issue_id}}">
+                        <p class="homepage-issue-caption-text"><b>{{issue.title}}</b></p>
+                    </a>
                 </div>
             </div>
             {% endfor %}
@@ -46,67 +50,28 @@
 
 <div class="row">
     <div class="text-center col-4">
-        <a href="/view_character/{{featured_character3.character_name}}">
-            <h2>{{featured_character3.character_name}}</h2>
-        </a>
-        <br>
-        <img src="{{featured_character3.thumbnail}}" class="rounded mx-auto d-block" style="width: 400px">
-        <br>
-        <p>{{featured_character3.biography}}</p>
-    </div>
-    <div class="col-8">
-        <br>
-        <br>
-        <br>
-        <h3>Appearances</h3>
-        <div class="row text-center">
-            {% for issue in issues3[0:5] %}
-            <div class="p-2 m-2 col">
-                <div class="card" style="width: 200px;">
-                    <img src="{{issue.thumbnail}}" class="card-img-top" style="width: 200px; height: 308px">
-                    <div class="card-body" style="width: 200px">
-                        <a href="/view_single_issue/{{issue.issue_id}}" class="card-link">
-                            <h5 class="card-title">{{issue.title}}</h5>
-                        </a>
-                    </div>
-                </div>
-            </div>
-            {% endfor %}
+        <div class="homepage-character-container">
+
+            <img src="{{featured_character2.thumbnail}}" class="homepage-character-image">
+            <br>
+            <br>
+            <a href="/view_character/{{featured_character2.character_name}}">
+                <h2>{{featured_character2.character_name}}</h2>
+            </a>
+            <p class="m-4">{{featured_character2.biography}}</p>
         </div>
     </div>
-</div>
-
-<br>
-<br>
-<br>
-<br>
-<br>
-
-<div class="row">
-    <div class="text-center col-4">
-        <a href="/view_character/{{featured_character2.character_name}}">
-            <h2>{{featured_character2.character_name}}</h2>
-        </a>
-        <br>
-        <img src="{{featured_character2.thumbnail}}" class="rounded mx-auto d-block" style="width: 400px">
-        <br>
-        <p>{{featured_character2.biography}}</p>
-    </div>
     <div class="col-8">
-        <br>
-        <br>
-        <br>
         <h3>Appearances</h3>
+        <hr>
         <div class="row text-center">
             {% for issue in issues2[0:5] %}
-            <div class="p-2 m-2 col">
-                <div class="card" style="width: 200px;">
-                    <img src="{{issue.thumbnail}}" class="card-img-top" style="width: 200px; height: 308px">
-                    <div class="card-body" style="width: 200px">
-                        <a href="/view_single_issue/{{issue.issue_id}}" class="card-link">
-                            <h5 class="card-title">{{issue.title}}</h5>
-                        </a>
-                    </div>
+            <div class="homepage-issue-container">
+                <img src="{{issue.thumbnail}}" class="homepage-issue-image">
+                <div class="homepage-issue-caption">
+                    <a href="/view_single_issue/{{issue.issue_id}}">
+                        <p class="homepage-issue-caption-text"><b>{{issue.title}}</b></p>
+                    </a>
                 </div>
             </div>
             {% endfor %}
@@ -119,6 +84,43 @@
 <br>
 <br>
 <br>
+<div class="row">
+    <div class="text-center col-4">
+        <div class="homepage-character-container">
+
+            <img src="{{featured_character3.thumbnail}}" class="homepage-character-image">
+            <br>
+            <br>
+            <a href="/view_character/{{featured_character3.character_name}}">
+                <h2>{{featured_character3.character_name}}</h2>
+            </a>
+            <p class="m-4">{{featured_character3.biography}}</p>
+        </div>
+    </div>
+    <div class="col-8">
+        <h3>Appearances</h3>
+        <hr>
+        <div class="row text-center">
+            {% for issue in issues3[0:5] %}
+            <div class="homepage-issue-container">
+                <img src="{{issue.thumbnail}}" class="homepage-issue-image">
+                <div class="homepage-issue-caption">
+                    <a href="/view_single_issue/{{issue.issue_id}}">
+                        <p class="homepage-issue-caption-text"><b>{{issue.title}}</b></p>
+                    </a>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+<br>
+<br>
+<br>
+<br>
+<br>
+
 
 <div class="text-center">
     <p>click <a href="/register_disposable">here</a> if you're a developer</p>

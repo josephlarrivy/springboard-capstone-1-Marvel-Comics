@@ -23,7 +23,7 @@ app.config["SQLALCHEMY_DATABASE_URI"] = "postgresql:///Springboard-Capstone-1"
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 app.config["SQLALCHEMY_ECHO"] = True
 app.config["SECRET_KEY"] = "W89#kU*67jL9##fhy@$hdj"
-app.config['DEBUG_TB_INTERCEPT_REDIRECTS'] = True
+app.config['DEBUG_TB_INTERCEPT_REDIRECTS'] = False
 
 connect_db(app)
 
@@ -205,13 +205,14 @@ def logout():
 
 # member routes
 
-@app.route('/members/members_home/<username>')
+@app.route('/members/members_home/<username>', methods=['GET', 'POST'])
 def show_members_home(username):
     """show user with login data the homepage"""
 
     if 'username' not in session:
         flash('must log in or register to view')
         return redirect('/register')
+    username = session['username']
 
     first_seed_character = seed_characters[0]
     featured_character1 = Character.query.get(first_seed_character.title())
@@ -225,6 +226,10 @@ def show_members_home(username):
     featured_character3 = Character.query.get(third_seed_character.title())
     issues3 = featured_character3.issues
 
+    i = len(rand_characters)
+    show_rand_character1 = rand_characters[random.randrange(0, 7)]
+    show_rand_character3 = rand_characters[random.randrange(10, i)]
+
     comments = IssueComment.query.order_by(desc(IssueComment.timestamp)).limit(50)
 
     # i = len(rand_characters)
@@ -237,14 +242,60 @@ def show_members_home(username):
     # show_rand_issue2 = rand_issues[random.randrange(6, 10)]
     # show_rand_issue3 = rand_issues[random.randrange(11, 17)]
     # show_rand_issue4 = rand_issues[random.randrange(18, n)]
+
+    form = CharacterSearch()
+
+    if form.validate_on_submit():
+        character_search_term = form.character_search_term.data.strip()
+
+        ################
+
+        # from spell_correction import correct_misspelling
+
+        # corrected_character_spelling = correct_misspelling(character_search_term)
+        # print(corrected_character_spelling)
+
+        ################
+
+        # from character_misspellings import spell_correct_character_names as spell_correct
+        # corrected_character_spelling = spell_correct.search_for_misspelling(character_search_term)
+
+        # return redirect(f'/view_character/{corrected_character_spelling}')
+        directory = 'character_misspellings/misspelling_files'
+        search_results = []
+
+        for filename in os.listdir(directory):
+            # print(f'filename: {filename}')
+            f = open(f'{directory}/{filename}', 'r')
+            content = f.read()
+            lines = content.splitlines()
+            for line in lines:
+                # print(f'content: {line}')
+                if character_search_term in line:
+                    corrected_name = filename.removesuffix('.txt')
+                    # print('##############')
+                    # print(corrected_name)
+                    if corrected_name not in search_results:
+                        search_results.append(corrected_name)
+                    # print(search_results)
+        if len(search_results) == 0:
+            flash("Cannot find a character with that name")
+            return redirect('/search/characters')
+
+        elif len(search_results) == 1:
+            return redirect(f'/view_character/{search_results[0]}')
+
+        nav_image_src = "/static/images/marvel-logo.webp"
+        return render_template('/content/characters/display_name_search_matches.html', search_results=search_results, nav_image_src=nav_image_src, username=username)
         
     curr_user = User.query.get(username)
     nav_image_src = "/static/images/marvel-logo.webp"
+
     if curr_user.username == session['username']:
         return render_template('/members/members_home.html', user=curr_user, username=username,
         featured_character1=featured_character1, 
         featured_character2=featured_character2, 
-        featured_character3=featured_character3, issues1=issues1, issues2=issues2, issues3=issues3, comments=comments, nav_image_src=nav_image_src)
+        featured_character3=featured_character3, issues1=issues1, issues2=issues2, issues3=issues3, comments=comments, nav_image_src=nav_image_src, form=form, show_rand_character1=show_rand_character1, show_rand_character3=show_rand_character3)
     
     else:
         redirect('/')
@@ -267,9 +318,12 @@ def show_own_profile(username):
 
 @app.route('/member/<username>/edit', methods=['GET', 'POST'])
 def edit_user(username):
+    nav_image_src = "/static/images/marvel-logo.webp"
+
     if 'username' not in session:
         flash('must log in or register to view')
         return redirect('/register')
+        
     elif username == session['username']:
         user = User.query.get(username)
         form = UserEditForm(obj=user)
@@ -284,7 +338,6 @@ def edit_user(username):
                 return redirect(f'/members/{username}/profile')
 
             flash("Wrong password, please try again.", 'danger')
-            nav_image_src = "/static/images/marvel-logo.webp"
 
         return render_template('/members/edit_profile.html', form=form, username=username, nav_image_src=nav_image_src)
     else:

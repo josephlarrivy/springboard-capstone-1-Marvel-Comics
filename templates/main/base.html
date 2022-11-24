@@ -13,7 +13,7 @@
 <body>
     <div id="page-container">
     
-    <!-- banner formattting -->
+        <!-- banner formattting -->
         <span>
             <marquee behavior="alternate" direction="left" scrollamount="5">
                 <a href="/view_single_issue/85566"><img class="marquee-image" src="http://i.annihil.us/u/prod/marvel/i/mg/c/a0/6169eeacc4e45.jpg"></a>
@@ -47,52 +47,52 @@
         </span>
 
 
-    <!-- start navbar formatting -->
-    <div class="navigation-container">
-        {% if 'username' not in session %}
-            <nav>
-                <ul>
-                    <li>
-                        <img id="nav-logo" src="static/images/marvel-logo.webp">
-                    </li>
-                    <li class="nav-item">
-                        <a href="/">Home</a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="/register">Register</a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="/login">Login</a>
-                    </li>
-                </ul>
-            </nav>
-        {% else %}
-            <nav>
-                <ul>
-                    <li>
-                        <img id="nav-logo2" src="{{nav_image_src}}">
-                    </li>
-                    <li class="nav-item">
-                        <a href="/members/members_home/{{username}}">Home</a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="/members/{{username}}/profile">Profile</a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="/search/characters">Characters</a>
-                    </li>
-                    <li>
-                        <a class="nav-item" href="/logout">Log Out</a>
-                    </li>
-                </ul>
-            </nav>
-        {% endif %}
-    </div>
+        <!-- start navbar formatting -->
+        <span class="navigation-container">
+            {% if 'username' not in session %}
+                <nav>
+                    <ul>
+                        <li>
+                            <a href="/"><img id="nav-logo" src="static/images/marvel-logo.webp"></a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="/">Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="/register">Register</a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="/login">Login</a>
+                        </li>
+                    </ul>
+                </nav>
+            {% else %}
+                <nav>
+                    <ul>
+                        <li>
+                            <a href="/"><img id="nav-logo2" src="{{nav_image_src}}"></a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="/members/members_home/{{username}}">Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="/members/{{username}}/profile">Profile</a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="/search/characters">Characters</a>
+                        </li>
+                        <li>
+                            <a class="nav-item" href="/logout">Log Out</a>
+                        </li>
+                    </ul>
+                </nav>
+            {% endif %}
+        </span>
 
 
     
-    <!-- end navbar formatting -->
-    <!-- flash messages -->
+        <!-- end navbar formatting -->
+        <!-- flash messages -->
         <div class="text-center">
             {% with messages = get_flashed_messages() %}
             {% if messages %}
@@ -104,7 +104,7 @@
             {% endif %}
             {% endwith %}
         </div>
-    <!-- end flash messages -->
+        <!-- end flash messages -->
 
         {% block content %}
         {% endblock %}
@@ -113,9 +113,11 @@
         <br>
         <br>
         <br>
+        
         <footer id="footer">
-                <p>Data provided by Marvel. © 2014 Marvel</p>
+            <p>Data provided by Marvel. © 2014 Marvel</p>
         </footer>
     </div>
+    
 </body>
 </html>

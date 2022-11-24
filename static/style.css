@@ -3,27 +3,35 @@
 #page-container {
   position: relative;
   min-height: 100vh;
+  max-width: 100vw;
+  overflow-y: hidden;
+  scrollbar-gutter: stable;
   /* padding: 5px; */
 }
 #footer {
   position: absolute;
   bottom: 0;
+  margin: 0;
   /* padding: 3px; */
-  width: 98%;
+  width: 100vw;
   height: 25px;
-  background-color: rgb(80, 0, 7);
+  background-color: rgb(118, 0, 3);
+  /* background-size: cover; */
   text-align: center;
   color: white;
+  overflow-y: hidden;
 }
 
 
 /* marquee */
 marquee {
-  background-image: linear-gradient(rgb(80, 0, 7), white);
+  background-image: linear-gradient(rgb(118, 0, 3), white);
+  width: 100vw;
+  height: 30vh
 }
 
 .marquee-image {
-  height: 220px;
+  height: 28vh;
   margin: 20px 3px 6px;
   /* width: auto; */
 }
@@ -41,41 +49,68 @@ marquee {
 
 
 
+
+
+
+
+
+
+
+
+
 /* navbar formatting */
 
 .navigation-container {
   text-align: center;
+  /* max-width: 110vw; */
 }
 
 nav {
-  font-size: 30px;
+  font-size: 3vh;
   list-style: none;
-  background-color:rgb(80, 0, 7);
-  padding: 0px;
-  margin: 0px;
+  background-color:rgb(118, 0, 3);
+  /* padding: 0px;
+  margin: 0px; */
   color: white;
+  height: 7vh;
+  width: 100vw;
+  /* vertical-align: middle; */
+}
+
+nav ul {
+  /* vertical-align: middle; */
+  height: 5vh;
 }
 
 #nav-logo {
-  height: 52px;
-  box-shadow: inset 30px 30px 30px 30px rgb(80, 0, 7);
+  height: 3vh;
+  width: auto;
+  /* box-shadow: inset 30px 30px 30px 30px rgb(118, 0, 3); */
   border-radius: 10px;
-  margin: 5px;
+  vertical-align: middle;
+
 }
 
 #nav-logo2 {
-  height: 52px;
-  box-shadow: inset 30px 30px 30px 30px rgb(80, 0, 7);
+  height: 3vh;
+  width: auto;
+  /* box-shadow: inset 30px 30px 30px 30px rgb(118, 0, 3); */
   border-radius: 10px;
-  margin: 5px;
+  /* margin: 5px; */
+  vertical-align: middle;
 }
 
 nav li {
   display: inline-block;
-  margin: 12px;
-  padding-top: 8px;
+  /* margin: 12px; */
+  /* padding-top: 8px; */
   position: relative;
   text-decoration: none;
+  vertical-align: middle;
+  margin-left: 1vw;
+  margin-right: 1vw;
+  margin-top: 1vh;
+  /* size: 5vh; */
 }
 
 nav a:hover {
@@ -86,7 +121,7 @@ nav a:hover {
 nav a::before {
   content: "";
   display: block;
-  height: 5px;
+  height: 0.2vh;
   width: 98%;
   background-color: white;
   position: absolute;
@@ -104,6 +139,65 @@ nav a:hover::before {
 
 nav a {
   color: white;
+  display: inline-block;
+  vertical-align: middle
+}
+
+
+
+
+
+/* homepage */
+
+.homepage-issue-container {
+  width: 12vw;
+  /* border: 1px solid gray; */
+  /* border-radius: 2px; */
+  margin: 0.5vw;
+}
+
+.homepage-issue-image {
+  width: 12vw;
+  height: 18.48vw;
+}
+
+.homepage-issue-caption {
+  align-items: center;
+}
+
+.homepage-issue-caption-text {
+  /* size: 6vh; */
+  padding-top: 1vh;
+  padding-left: 1vh;
+  padding-right: 1vh;
+  color: black;
+  /* background-color: gray; */
+  /* color: gray !important; */
+}
+
+.homepage-issue-container:hover .homepage-issue-image{
+  transform: translateY(-12px);
+  transition: 300ms;
+  /* box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px; */
+  box-shadow: rgba(0, 0, 0, 1) 0px 6px 10px;
+}
+
+/* .homepage-issue-container:hover .homepage-issue-caption-text {
+  color: rgb(118, 0, 3);
+  transition: 300ms;
+} */
+
+
+
+.homepage-character-container h2 {
+  color: black;
+  text-decoration: underline;
+}
+
+
+.homepage-character-container:hover h2 {
+  color: black;
+  text-decoration: underline;
 }
 
 
@@ -113,8 +207,31 @@ nav a {
 
 
 
+
+
+
+
+
+
+
+.homepage-character-image {
+    width: 22vw;
+    height: 22vw;
+    border-radius: 0.8vw;
+}
+
+.homepage-character-container:hover .homepage-character-image {
+  /* width: 24vw;
+  transition: 500ms; */
+}
+
+
+
+
+
+
 .button {
-  background-color: rgb(80, 0, 7);
+  background-color: rgb(118, 0, 3);
   color: white;
   border: 0;
   border-radius: 10px;
@@ -140,8 +257,11 @@ nav a {
 
 
 
-
-
+/* 
+.card{
+  width:10vh !important;
+  height: auto !important;
+} */
 
 
 
@@ -172,6 +292,7 @@ nav a {
   margin: 50px;
   overflow-x: auto;
   height: auto;
+  width: 96vw;
 }
 
 .homepage-issue-comment-container {

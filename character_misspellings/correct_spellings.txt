@@ -303,3 +303,6 @@ Wrecker
 Baron Strucker
 Cannonball
 Corsair
+Genis-Vell
+Batroc the Leaper
+Radioactive Man
