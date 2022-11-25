@@ -42,12 +42,11 @@ class UserForm(FlaskForm):
 
 class SearchForm(FlaskForm):
     """search for a character"""
-    character_search_term = StringField('Search Characters', validators=[InputRequired()])
+    search_term = StringField('Search Characters', validators=[InputRequired()])
 
 class CreateListForm(FlaskForm):
     """name and create a list"""
     list_name = StringField('List Name', validators=[InputRequired()])
-
 
 def limit_characters(form, field):
     if len(field.data) > 170:

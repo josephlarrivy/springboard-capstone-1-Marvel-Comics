@@ -10,28 +10,13 @@
         <a href="{{show_rand_character1.href}}">
             <figcaption class="text-center"><b>{{show_rand_character1.name}}</b></figcaption>
         </a>
+    <figure class="p-3 m-3 col text-center">
+        <img src="{{show_rand_character2.image}}" class="homepage-character-image">
+        <br><br>
+        <a href="{{show_rand_character2.href}}">
+            <figcaption class="text-center"><b>{{show_rand_character2.name}}</b></figcaption>
+        </a>
     </figure>
-    <br><br><br><br>
-    <div class="p-3 m-3 col">
-        <br><br><br>
-        <div class="text-center">
-            <h3>Search your favorite characters</h3>
-            <br>
-            <form method='POST'>
-                {{form.hidden_tag()}}
-        
-                {% for field in form if field.widget.input_type != 'hidden' %}
-                <p>
-                    {{field.label}}
-                    {{field}}
-                </p>
-                {% endfor %}
-        
-                <button class="button">Submit</button>
-            </form>
-        </div>
-    </div>
-
     <figure class="p-3 m-3 col">
         <img src="{{show_rand_character3.image}}"class="homepage-character-image">
         <br><br>

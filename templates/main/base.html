@@ -67,7 +67,7 @@
                     </ul>
                 </nav>
             {% else %}
-                <nav>
+                <nav class="signed-in-nav">
                     <ul>
                         <li>
                             <a href="/members/members_home/{{username}}"><img id="nav-logo2" src="{{nav_image_src}}"></a>
@@ -78,12 +78,21 @@
                         <li class="nav-item">
                             <a href="/members/{{username}}/profile">Profile</a>
                         </li>
-                        <li class="nav-item">
-                            <a href="/search/characters">Search</a>
-                        </li>
                         <li>
                             <a class="nav-item" href="/logout">Log Out</a>
                         </li>
+                        
+                        <form method='POST' class="nav-form">
+                            {{searchform.hidden_tag()}}
+                        
+                            {% for field in searchform if field.widget.input_type != 'hidden' %}
+                            <p>
+                            <button class="navbar-button">Submit</button>   
+                                {{field (placeholder='Search')}}
+                            {% endfor %}
+                            </p>
+
+                        </form>
                     </ul>
                 </nav>
             {% endif %}

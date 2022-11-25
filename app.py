@@ -97,12 +97,8 @@ def register_new_user():
         email = form.email.data
         thumbnail = form.thumbnail.data
 
-        print('checkpoint1')
-
         new_user = User.register_new_user(username, password, first_name, last_name, email, thumbnail)
         db.session.add(new_user)
-
-        print('checkpoint2')
 
         try:
             db.session.commit()
@@ -136,7 +132,8 @@ def register_disposable():
     form = DisposableUserForm()
 
     if form.validate_on_submit():
-        username = ''.join(random.choices(string.ascii_uppercase + string.digits, k=10))
+        guest_user_extension = ''.join(random.choices(string.ascii_uppercase + string.digits, k=5))
+        username = f'Guest User {guest_user_extension}'
         password = ''.join(random.choices(string.ascii_uppercase + string.digits, k=20))
         first_name = 'Guest'
         last_name = 'User'
@@ -227,41 +224,39 @@ def show_members_home(username):
     featured_character3 = Character.query.get(third_seed_character.title())
     issues3 = featured_character3.issues
 
-    i = len(rand_characters)
-    j = math.floor(len(rand_characters)/2)
-    k = math.floor(len(rand_characters)/2 + 1)
-    show_rand_character1 = rand_characters[random.randrange(0, j)]
-    show_rand_character3 = rand_characters[random.randrange(k, i)]
+    # i = len(rand_characters)
+    # j = math.floor(len(rand_characters)/2)
+    # k = math.floor(len(rand_characters)/2 + 1)
+    # show_rand_character1 = rand_characters[random.randrange(0, j)]
+    # show_rand_character3 = rand_characters[random.randrange(k, i)]
 
     comments = IssueComment.query.order_by(desc(IssueComment.timestamp)).limit(50)
 
-    # i = len(rand_characters)
-    # show_rand_character1 = rand_characters[random.randrange(0, 5)]
-    # show_rand_character2 = rand_characters[random.randrange(6, 10)]
-    # show_rand_character3 = rand_characters[random.randrange(11, i)]
+    i = len(rand_characters)
+    j = math.floor(len(rand_characters)/6)
+    k = math.floor(len(rand_characters)/6 + 1)
+    l = math.floor(len(rand_characters)/3)
+    m = math.floor(len(rand_characters)/3 + 1)
+    show_rand_character1 = rand_characters[random.randrange(0, j)]
+    show_rand_character2 = rand_characters[random.randrange(k, l)]
+    show_rand_character3 = rand_characters[random.randrange(m, i)]
 
-    # n = len(rand_issues)
-    # show_rand_issue1 = rand_issues[random.randrange(0, 5)]
-    # show_rand_issue2 = rand_issues[random.randrange(6, 10)]
-    # show_rand_issue3 = rand_issues[random.randrange(11, 17)]
-    # show_rand_issue4 = rand_issues[random.randrange(18, n)]
-
-    form = SearchForm()
+    searchform = SearchForm()
 
     if form.validate_on_submit():
-        character_search_term = form.character_search_term.data.strip()
+        search_term = form.search_term.data.strip()
 
         ################
 
         # from spell_correction import correct_misspelling
 
-        # corrected_character_spelling = correct_misspelling(character_search_term)
+        # corrected_character_spelling = correct_misspelling(search_term)
         # print(corrected_character_spelling)
 
         ################
 
         # from character_misspellings import spell_correct_character_names as spell_correct
-        # corrected_character_spelling = spell_correct.search_for_misspelling(character_search_term)
+        # corrected_character_spelling = spell_correct.search_for_misspelling(search_term)
 
         # return redirect(f'/view_character/{corrected_character_spelling}')
         directory = 'character_misspellings/misspelling_files'
@@ -274,7 +269,7 @@ def show_members_home(username):
             lines = content.splitlines()
             for line in lines:
                 # print(f'content: {line}')
-                if character_search_term in line:
+                if search_term in line:
                     corrected_name = filename.removesuffix('.txt')
                     # print('##############')
                     # print(corrected_name)
@@ -289,7 +284,7 @@ def show_members_home(username):
             return redirect(f'/view_character/{search_results[0]}')
 
         nav_image_src = "/static/images/marvel-logo.webp"
-        return render_template('/content/characters/display_name_search_matches.html', search_results=search_results, nav_image_src=nav_image_src, username=username)
+        return render_template('/content/characters/display_name_search_matches.html', search_results=search_results, nav_image_src=nav_image_src, username=username, searchform=searchform)
         
     curr_user = User.query.get(username)
     nav_image_src = "/static/images/marvel-logo.webp"
@@ -298,23 +293,24 @@ def show_members_home(username):
         return render_template('/members/members_home.html', user=curr_user, username=username,
         featured_character1=featured_character1, 
         featured_character2=featured_character2, 
-        featured_character3=featured_character3, issues1=issues1, issues2=issues2, issues3=issues3, comments=comments, nav_image_src=nav_image_src, form=form, show_rand_character1=show_rand_character1, show_rand_character3=show_rand_character3)
+        featured_character3=featured_character3, issues1=issues1, issues2=issues2, issues3=issues3, comments=comments, nav_image_src=nav_image_src, searchform=searchform, show_rand_character1=show_rand_character1, show_rand_character3=show_rand_character3)
     
     else:
         redirect('/')
 
 
-@app.route('/members/<username>/profile')
+@app.route('/members/<username>/profile', methods=['GET', 'POST'])
 def show_own_profile(username):
     """show a user their own profile"""
     user = User.query.get(username)
+    searchform = SearchForm()
     if 'username' not in session:
         flash('must log in or register to view')
         return redirect('/register')
     elif username == session['username']:
         lists = user.lists
         nav_image_src = "/static/images/marvel-logo.webp"
-        return render_template('/members/own_member_profile.html', user=user, username=username, lists=lists, nav_image_src=nav_image_src)
+        return render_template('/members/own_member_profile.html', user=user, username=username, lists=lists, nav_image_src=nav_image_src, searchform=searchform)
     else:
         return redirect(f'/members/{username}/view')
 
@@ -326,9 +322,11 @@ def edit_user(username):
     if 'username' not in session:
         flash('must log in or register to view')
         return redirect('/register')
-        
+
     elif username == session['username']:
         user = User.query.get(username)
+        searchform = SearchForm()
+
         form = UserEditForm(obj=user)
         if form.validate_on_submit():
             if User.authenticate(user.username, form.password.data):
@@ -342,7 +340,7 @@ def edit_user(username):
 
             flash("Wrong password, please try again.", 'danger')
 
-        return render_template('/members/edit_profile.html', form=form, username=username, nav_image_src=nav_image_src)
+        return render_template('/members/edit_profile.html', form=form, username=username, nav_image_src=nav_image_src, searchform=searchform)
     else:
         return redirect(f'/members/{{username}}/profile')
 
@@ -355,9 +353,10 @@ def show_other_profile(view_user):
         return redirect('/register')
     else:
         view_user = User.query.get(view_user)
+        searchform = SearchForm()
         username = session['username']
         nav_image_src = "/static/images/marvel-logo.webp"
-        return render_template('/members/other_member_profile.html', view_user=view_user, username=username, nav_image_src=nav_image_src)
+        return render_template('/members/other_member_profile.html', view_user=view_user, username=username, nav_image_src=nav_image_src, searchform=searchform)
 
 
 # @app.route('/edit_avatar/<username>', methods=['GET', 'POST'])
@@ -405,6 +404,8 @@ def create_list_form():
 
     username = session['username']
     form = CreateListForm()
+    searchform = SearchForm()
+
 
     if form.validate_on_submit():
         list_name = form.list_name.data
@@ -420,7 +421,7 @@ def create_list_form():
 
     else:
         nav_image_src = "/static/images/marvel-logo.webp"
-        return render_template('/members/create_list_form.html', form=form, username=username, nav_image_src=nav_image_src)
+        return render_template('/members/create_list_form.html', form=form, username=username, nav_image_src=nav_image_src, searchform=searchform)
 
 
 @app.route('/members/<username>/lists', methods=['GET', 'POST'])
@@ -432,10 +433,12 @@ def show_member_lists(username):
     username = session['username']
 
     curr_user = User.query.get(username)
+    searchform = SearchForm()
+
     lists = curr_user.lists
     nav_image_src = "/static/images/marvel-logo.webp"
 
-    return render_template('/members/member_lists.html', username=username, lists=lists, nav_image_src=nav_image_src)
+    return render_template('/members/member_lists.html', username=username, lists=lists, nav_image_src=nav_image_src, searchform=searchform)
 
 
 ##########################
@@ -462,20 +465,20 @@ def search_characters():
     form = SearchForm()
 
     if form.validate_on_submit():
-        title_search_term = form.character_search_term.data.title()
-        character_search_term = title_search_term.strip()
+        title_search_term = form.search_term.data.title()
+        search_term = title_search_term.strip()
 
         ################
 
         # from spell_correction import correct_misspelling
 
-        # corrected_character_spelling = correct_misspelling(character_search_term)
+        # corrected_character_spelling = correct_misspelling(search_term)
         # print(corrected_character_spelling)
 
         ################
 
         # from character_misspellings import spell_correct_character_names as spell_correct
-        # corrected_character_spelling = spell_correct.search_for_misspelling(character_search_term)
+        # corrected_character_spelling = spell_correct.search_for_misspelling(search_term)
 
         # return redirect(f'/view_character/{corrected_character_spelling}')
         directory = 'character_misspellings/misspelling_files'
@@ -488,7 +491,7 @@ def search_characters():
             lines = content.splitlines()
             for line in lines:
                 # print(f'content: {line}')
-                if character_search_term in line:
+                if search_term in line:
                     corrected_name = filename.removesuffix('.txt')
                     # print('##############')
                     # print(corrected_name)
@@ -525,7 +528,7 @@ def search_characters():
             print('  ')
             # time.sleep(0.1)
 
-            split_terms = character_search_term.split()
+            split_terms = search_term.split()
             print(split_terms)
 
             for term in split_terms:
@@ -555,7 +558,7 @@ def search_characters():
             # for word in words:
                 
             #     # print(f'content: {line}')
-            #     if character_search_term == word:
+            #     if search_term == word:
             #         # string_series_id = str(series_id)
             #         # print(' ')
             #         # print(string_series_id)
@@ -625,7 +628,7 @@ def search_characters():
         # print(series_search_results)
         series_search_results_length = len(series_search_results)
         nav_image_src = "/static/images/marvel-logo.webp"
-        return render_template('/content/characters/display_name_search_matches.html', search_results=search_results, series_search_results=series_search_results, series_search_results_length=series_search_results_length, nav_image_src=nav_image_src)
+        return render_template('/content/characters/display_name_search_matches.html', search_results=search_results, series_search_results=series_search_results, series_search_results_length=series_search_results_length, nav_image_src=nav_image_src, username=username)
 
     nav_image_src = "/static/images/marvel-logo.webp"
     return render_template('/content/characters/search_characters.html', username=username, show_rand_character1=show_rand_character1, show_rand_character2=show_rand_character2, show_rand_character3=show_rand_character3, form=form, nav_image_src=nav_image_src)

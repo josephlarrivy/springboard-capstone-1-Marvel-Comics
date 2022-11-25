@@ -61,7 +61,7 @@ marquee {
 /* navbar formatting */
 
 .navigation-container {
-  text-align: center;
+  /* text-align: center; */
   /* max-width: 110vw; */
 }
 
@@ -74,6 +74,7 @@ nav {
   color: white;
   height: 7vh;
   width: 100vw;
+  padding-top: 5px;
   /* vertical-align: middle; */
 }
 
@@ -109,7 +110,7 @@ nav li {
   vertical-align: middle;
   margin-left: 1vw;
   margin-right: 1vw;
-  margin-top: 1vh;
+  /* margin-top: 1vh; */
   /* size: 5vh; */
 }
 
@@ -144,6 +145,34 @@ nav a {
 }
 
 
+
+
+.signed_in_nav {
+  float: left;
+}
+
+
+.nav-form {
+  float: right;
+  padding: 6px;
+  border: none;
+  vertical-align: middle;
+  /* margin-top: 8px; */
+  margin-right: 10vh;
+  font-size: 17px;
+  color: gray
+}
+
+.navbar-button {
+  vertical-align: middle;
+  background-color: white;
+  color: rgb(118, 0, 3);
+  border: 0;
+  border-radius: 5px;
+  font-size: 17px;
+  padding: 3px, 4px, 4px, 3px;
+  /* margin: 2px; */
+}
 
 
 
