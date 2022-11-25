@@ -7,6 +7,7 @@ from sqlalchemy.exc import IntegrityError
 import string
 import random
 import os
+import math
 import time
 import datetime
 from datetime import datetime
@@ -227,8 +228,10 @@ def show_members_home(username):
     issues3 = featured_character3.issues
 
     i = len(rand_characters)
-    show_rand_character1 = rand_characters[random.randrange(0, 7)]
-    show_rand_character3 = rand_characters[random.randrange(10, i)]
+    j = math.floor(len(rand_characters)/2)
+    k = math.floor(len(rand_characters)/2 + 1)
+    show_rand_character1 = rand_characters[random.randrange(0, j)]
+    show_rand_character3 = rand_characters[random.randrange(k, i)]
 
     comments = IssueComment.query.order_by(desc(IssueComment.timestamp)).limit(50)
 
@@ -448,9 +451,13 @@ def search_characters():
     username = session['username']
 
     i = len(rand_characters)
-    show_rand_character1 = rand_characters[random.randrange(0, 4)]
-    show_rand_character2 = rand_characters[random.randrange(5, 8)]
-    show_rand_character3 = rand_characters[random.randrange(9, i)]
+    j = math.floor(len(rand_characters)/6)
+    k = math.floor(len(rand_characters)/6 + 1)
+    l = math.floor(len(rand_characters)/3)
+    m = math.floor(len(rand_characters)/3 + 1)
+    show_rand_character1 = rand_characters[random.randrange(0, j)]
+    show_rand_character2 = rand_characters[random.randrange(k, l)]
+    show_rand_character3 = rand_characters[random.randrange(m, i)]
 
     form = CharacterSearch()
 

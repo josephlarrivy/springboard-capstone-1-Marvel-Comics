@@ -13,7 +13,7 @@ def connect_db(app):
 
 """ Models """
 
-class User(db.Model):
+class User(db.Model): 
     __tablename__ = 'users'
 
     username = db.Column(db.Text, primary_key=True, nullable=False, unique=True)
@@ -104,7 +104,7 @@ class Character(db.Model):
     character_key = db.Column(db.Text, unique=True)
     character_id = db.Column(db.Integer)
     character_name = db.Column(db.Text, primary_key=True, unique=True)
-    biography = db.Column(db.Text)
+    biography = db.Column(db.Text, default='Not available')
     thumbnail = db.Column(db.Text)
 
     @classmethod

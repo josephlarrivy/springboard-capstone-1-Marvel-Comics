@@ -129,7 +129,7 @@ rand_characters = [
     },
     {
         'name': 'Guardians of the Galaxy',
-        'href': '/view_character/Guardians%20of%20the%20Galaxy',
+        'href': '/view_character/Guardians of the Galaxy',
         'image': 'http://i.annihil.us/u/prod/marvel/i/mg/2/70/50febd8be6b5d.jpg'
     },
     {
@@ -168,9 +168,134 @@ rand_characters = [
         'image': 'http://i.annihil.us/u/prod/marvel/i/mg/5/f0/5261a85a501fe.jpg'
     },
     {
-        'name': 'Jane Foster',
-        'href': '/view_character/Jane%20Foster',
-        'image': 'http://i.annihil.us/u/prod/marvel/i/mg/b/90/4ce5a22b0d5f1.jpg'
+        'name': 'Moondragon',
+        'href': '/view_character/Moondragon',
+        'image': 'http://i.annihil.us/u/prod/marvel/i/mg/b/a0/4c003d2ebd6c5.jpg'
+    },
+    {
+        'name': 'Quasar (Phyla-Vell)',
+        'href': '/view_character/Quasar (Phyla-Vell)',
+        'image': 'http://i.annihil.us/u/prod/marvel/i/mg/6/03/52741171e681e.jpg'
+    },
+    {
+        'name': 'Blade',
+        'href': '/view_character/Blade',
+        'image': 'http://i.annihil.us/u/prod/marvel/i/mg/8/a0/523ca6f2b11e4.jpg'
+    },
+    {
+        'name': 'Spectrum',
+        'href': '/view_character/Spectrum',
+        'image': 'http://i.annihil.us/u/prod/marvel/i/mg/9/00/4c0030bee8c86.jpg'
+    },
+    {
+        'name': 'Captain Britain (Ultimate)',
+        'href': '/view_character/Captain Britain (Ultimate)',
+        'image': 'http://i.annihil.us/u/prod/marvel/i/mg/6/a0/4c003574e99fb.jpg'
+    },
+    {
+        'name': 'Fantastic Four',
+        'href': '/view_character/Fantastic Four',
+        'image': 'http://i.annihil.us/u/prod/marvel/i/mg/9/60/50febc4f55525.jpg'
+    },
+    {
+        'name': 'Frog Thor',
+        'href': '/view_character/',
+        'image': 'http://i.annihil.us/u/prod/marvel/i/mg/8/b0/4ce5a72d1a081.jpg'
+    },
+    {
+        'name': 'Amadeus Cho',
+        'href': '/view_character/Amadeus Cho',
+        'image': 'http://i.annihil.us/u/prod/marvel/i/mg/3/80/520288b9cb581.jpg'
+    },
+    {
+        'name': 'Venom (Flash Thompson)',
+        'href': '/view_character/Venom (Flash Thompson)',
+        'image': 'http://i.annihil.us/u/prod/marvel/i/mg/7/80/5269668c7d5df.jpg'
+    },
+    {
+        'name': 'Valeria Richards',
+        'href': '/view_character/Valeria Richards',
+        'image': 'http://i.annihil.us/u/prod/marvel/i/mg/3/60/4d541255f088a.jpg'
+    },
+    {
+        'name': 'Attuma',
+        'href': '/view_character/Attuma',
+        'image': 'http://i.annihil.us/u/prod/marvel/i/mg/9/90/4ce5a862a6c48.jpg'
+    },
+    {
+        'name': 'Beast',
+        'href': '/view_character/Beast',
+        'image': 'http://i.annihil.us/u/prod/marvel/i/mg/2/80/511a79a0451a3.jpg'
+    },
+    {
+        'name': 'Cyclops',
+        'href': '/view_character/Cyclops',
+        'image': 'http://i.annihil.us/u/prod/marvel/i/mg/6/70/526547e2d90ad.jpg'
+    },
+    {
+        'name': 'Dragon Man',
+        'href': '/view_character/Dragon Man',
+        'image': 'http://i.annihil.us/u/prod/marvel/i/mg/a/f0/4c003f1aa3a1f.jpg'
+    },
+    {
+        'name': 'Spider-Girl (May Parker)',
+        'href': '/view_character/Spider-Girl (May Parker)',
+        'image': 'http://i.annihil.us/u/prod/marvel/i/mg/1/70/4c003adccbe4f.jpg'
+    },
+    {
+        'name': 'Vision',
+        'href': '/view_character/Vision',
+        'image': 'http://i.annihil.us/u/prod/marvel/i/mg/9/d0/5111527040594.jpg'
+    },
+    {
+        'name': 'Human Torch',
+        'href': '/view_character/Human Torch',
+        'image': 'http://i.annihil.us/u/prod/marvel/i/mg/3/70/5261a7f7b0917.jpg'
+    },
+    {
+        'name': 'Jessica Jones',
+        'href': '/view_character/Jessica Jones',
+        'image': 'http://i.annihil.us/u/prod/marvel/i/mg/d/00/5390e41260345.jpg'
+    },
+    {
+        'name': 'Nova (Sam Alexander)',
+        'href': '/view_character/Nova (Sam Alexander)',
+        'image': 'http://i.annihil.us/u/prod/marvel/i/mg/e/20/5269615681f91.jpg'
+    },
+    {
+        'name': 'Shang-Chi',
+        'href': '/view_character/Shang-Chi',
+        'image': 'http://i.annihil.us/u/prod/marvel/i/mg/3/20/535ff3b116209.jpg'
+    },
+    {
+        'name': 'Wasp',
+        'href': '/view_character/Wasp',
+        'image': 'http://i.annihil.us/u/prod/marvel/i/mg/9/c0/5390dfd5ef165.jpg'
+    },
+    {
+        'name': 'Moon Knight',
+        'href': '/view_character/Moon Knight',
+        'image': 'http://i.annihil.us/u/prod/marvel/i/mg/3/30/52028af90e516.jpg'
+    },
+    {
+        'name': 'Yellowjacket (Hank Pym)',
+        'href': '/view_character/Yellowjacket (Hank Pym)',
+        'image': 'http://i.annihil.us/u/prod/marvel/i/mg/b/a0/4c002df3dd41f.jpg'
+    },
+    {
+        'name': 'Iron Patriot (James Rhodes)',
+        'href': '/view_character/Iron Patriot (James Rhodes)',
+        'image': 'http://i.annihil.us/u/prod/marvel/i/mg/6/70/526035f38cd5d.jpg'
+    },
+    {
+        'name': 'Purple Man',
+        'href': '/view_character/Purple Man',
+        'image': 'http://i.annihil.us/u/prod/marvel/i/mg/2/60/4c003c7030b39.jpg'
+    },
+    {
+        'name': 'Hydra',
+        'href': '/view_character/Hydra',
+        'image': 'http://i.annihil.us/u/prod/marvel/i/mg/8/40/4c003ec4331bd.jpg'
     }
 ]
 
