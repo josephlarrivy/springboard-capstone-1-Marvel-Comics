@@ -40,7 +40,7 @@ class UserForm(FlaskForm):
     username = StringField('Username', validators=[InputRequired()])
     password = PasswordField('Password', validators=[InputRequired()])
 
-class CharacterSearch(FlaskForm):
+class SearchForm(FlaskForm):
     """search for a character"""
     character_search_term = StringField('Search Characters', validators=[InputRequired()])
 

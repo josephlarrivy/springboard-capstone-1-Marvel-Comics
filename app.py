@@ -1,6 +1,6 @@
 from flask import Flask, render_template, redirect, session, flash
 from flask_debugtoolbar import DebugToolbarExtension
-from forms import AddUserForm, CharacterSearch, DisposableUserForm, UserForm, IssueSearch, CreateListForm, CommentForm, UserEditForm
+from forms import AddUserForm, SearchForm, DisposableUserForm, UserForm, IssueSearch, CreateListForm, CommentForm, UserEditForm
 from models import connect_db, db, User, List, ListIssue, Issue, ListCharacter, Character, CharacterIssue, IssueComment
 from sqlalchemy import desc
 from sqlalchemy.exc import IntegrityError
@@ -246,7 +246,7 @@ def show_members_home(username):
     # show_rand_issue3 = rand_issues[random.randrange(11, 17)]
     # show_rand_issue4 = rand_issues[random.randrange(18, n)]
 
-    form = CharacterSearch()
+    form = SearchForm()
 
     if form.validate_on_submit():
         character_search_term = form.character_search_term.data.strip()
@@ -459,10 +459,11 @@ def search_characters():
     show_rand_character2 = rand_characters[random.randrange(k, l)]
     show_rand_character3 = rand_characters[random.randrange(m, i)]
 
-    form = CharacterSearch()
+    form = SearchForm()
 
     if form.validate_on_submit():
-        character_search_term = form.character_search_term.data.strip()
+        title_search_term = form.character_search_term.data.title()
+        character_search_term = title_search_term.strip()
 
         ################
 
@@ -494,15 +495,38 @@ def search_characters():
                     if corrected_name not in search_results:
                         search_results.append(corrected_name)
                     # print(search_results)
-        if len(search_results) == 0:
-            flash("Cannot find a character with that name")
-            return redirect('/search/characters')
+        # if len(search_results) == 0:
+        #     flash("Cannot find a character with that name")
+        #     return redirect('/search/characters')
 
-        elif len(search_results) == 1:
-            return redirect(f'/view_character/{search_results[0]}')
+        # elif len(search_results) == 1:
+        #     return redirect(f'/view_character/{search_results[0]}')
+        directory = 'series_names/series_names_files'
+        series_search_results = []
 
+        for filename in os.listdir(directory):
+            # print(f'filename: {filename}')
+            f = open(f'{directory}/{filename}', 'r')
+            content = f.read()
+            print(content)
+            print('########')
+            words = content.split(' ')
+            for line in words:
+                # print(f'content: {line}')
+                if character_search_term in line:
+                    series_id = filename.removesuffix('.txt')
+                    # print('##############')
+                    # print(corrected_name)
+                    if series_id not in series_search_results:
+                        # series_search_results.append(series_id)
+                        series_name = content.removesuffix('\n')
+                        # series_search_results.append(str(series_name))
+                        series_search_results.append([series_id, series_name])
+        
+            print(series_search_results)
+            series_search_results_length = len(series_search_results)
         nav_image_src = "/static/images/marvel-logo.webp"
-        return render_template('/content/characters/display_name_search_matches.html', search_results=search_results, nav_image_src=nav_image_src)
+        return render_template('/content/characters/display_name_search_matches.html', search_results=search_results, series_search_results=series_search_results, series_search_results_length=series_search_results_length, nav_image_src=nav_image_src)
 
     nav_image_src = "/static/images/marvel-logo.webp"
     return render_template('/content/characters/search_characters.html', username=username, show_rand_character1=show_rand_character1, show_rand_character2=show_rand_character2, show_rand_character3=show_rand_character3, form=form, nav_image_src=nav_image_src)

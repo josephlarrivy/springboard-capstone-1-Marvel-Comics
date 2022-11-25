@@ -3,17 +3,27 @@
 {% block content %}
 
 <div class="text-center">
-<br>
-<br>
-<br>
-<h1>Search Results</h1>
+    <br>
+    <br>
+    <br>
+    <h1>Character Results</h1>
 
-<br>
-{% for result in search_results %}
-<a href="/view_character/{{result}}">   
-<h3>{{result}}</h3>
-</a>
-{% endfor %}
+    <br>
+    {% for result in search_results %}
+    <a href="/view_character/{{result}}">   
+    <h2>{{result}}</h2>
+    </a>
+    {% endfor %}
+
+
+    <br>
+    <br>
+    <br>
+    <h1>Series Results</h1>
+    {% for item in series_search_results %}
+    <a href='/series/{{item[0]}}'>
+    <h2>{{item[1]}}</h2></a>
+    {% endfor %}
 
 </div>
 <br><br><br><br><br><br>
