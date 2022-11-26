@@ -62,7 +62,7 @@ def show_homepage():
     featured_character3 = Character.query.get(third_seed_character.title())
     issues3 = featured_character3.issues
 
-    searchform = SearchForm
+    searchform = SearchForm()
     # i = len(rand_characters)
     # show_rand_character1 = rand_characters[random.randrange(0, 5)]
     # show_rand_character2 = rand_characters[random.randrange(6, 10)]
@@ -231,7 +231,7 @@ def show_members_home(username):
     # show_rand_character1 = rand_characters[random.randrange(0, j)]
     # show_rand_character3 = rand_characters[random.randrange(k, i)]
 
-    comments = IssueComment.query.order_by(desc(IssueComment.timestamp)).limit(50)
+    searchform = SearchForm()
 
     i = len(rand_characters)
     j = math.floor(len(rand_characters)/6)
@@ -242,12 +242,12 @@ def show_members_home(username):
     show_rand_character2 = rand_characters[random.randrange(k, l)]
     show_rand_character3 = rand_characters[random.randrange(m, i)]
 
-    searchform = SearchForm()
 
     if searchform.validate_on_submit():
         search_term = searchform.search_term.data.strip()
 
         ################
+
 
         # from spell_correction import correct_misspelling
 
@@ -327,6 +327,7 @@ def edit_user(username):
     elif username == session['username']:
         user = User.query.get(username)
         searchform = SearchForm()
+
 
         form = UserEditForm(obj=user)
         if form.validate_on_submit():
@@ -408,6 +409,7 @@ def create_list_form():
     searchform = SearchForm()
 
 
+
     if form.validate_on_submit():
         list_name = form.list_name.data
         list_id = ''.join(random.choices(string.ascii_uppercase + string.digits, k=20))
@@ -435,6 +437,7 @@ def show_member_lists(username):
 
     curr_user = User.query.get(username)
     searchform = SearchForm()
+
 
     lists = curr_user.lists
     nav_image_src = "/static/images/marvel-logo.webp"
@@ -680,7 +683,7 @@ def view_single_issue(issue_id):
     comics = marvel.comics
     series = marvel.series
     form = CommentForm()
-    searchform = SearchForm
+    searchform = SearchForm()
 
     if Issue.query.get(issue_id):
         user = User.query.get(username)
@@ -792,7 +795,7 @@ def view_series(series_id):
         return redirect('/login')
     username = session['username']
 
-    searchform = SearchForm
+    searchform = SearchForm()
     comics = marvel.comics
     series = marvel.series
     series_data = series.get(series_id)['data']['results'][0]
