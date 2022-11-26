@@ -926,3 +926,4 @@ def view_issues():
 
     return render_template('/content/issues/view_issues.html', username=username, get_comics=get_comics, comics=comics)
 
+d
