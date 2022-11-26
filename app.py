@@ -1,7 +1,7 @@
 from flask import Flask, render_template, redirect, session, flash
 from flask_debugtoolbar import DebugToolbarExtension
 from forms import AddUserForm, SearchForm, DisposableUserForm, UserForm, IssueSearch, CreateListForm, CommentForm, UserEditForm
-from models import connect_db, db, User, List, ListIssue, Issue, ListCharacter, Character, CharacterIssue, IssueComment, CharacterSearchResults, SeriesSearchResults
+from models import connect_db, db, User, List, ListIssue, Issue, ListCharacter, Character, CharacterIssue, IssueComment
 from sqlalchemy import desc
 from sqlalchemy.exc import IntegrityError
 import string
@@ -17,17 +17,9 @@ from marvel import Marvel
 from keys import PUBLIC_KEY, PRIVATE_KEY
 from random_content import rand_issues, rand_characters
 import schedule
-
-
-
-# from flask import Blueprint
-# search_blueprint = Blueprint('search_blueprint', __name__)
-
+from search_module import search
 
 app = Flask(__name__)
-# app.register_blueprint(search_blueprint)
-
-
 
 app.config["SQLALCHEMY_DATABASE_URI"] = "postgresql:///Springboard-Capstone-1"
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
@@ -44,22 +36,22 @@ marvel = Marvel(PUBLIC_KEY=PUBLIC_KEY, PRIVATE_KEY=PRIVATE_KEY)
 
 seed_characters = ['rocket raccoon', 'iron man', 'thanos']
 
-# SEARCH MODULE
-def search(search_term, username):
-    searchform = SearchForm()
-    search_results = []
-    series_search_results = {}
-    search_results = CharacterSearchResults(search_term, search_results)
-    character_search_results = search_results.return_characters(
-        search_term, search_results)
-    series_search_results = SeriesSearchResults(
-        search_term, series_search_results)
-    series_search_results = series_search_results.return_series(
-        search_term, series_search_results)
-    nav_image_src = "/static/images/marvel-logo.webp"
-    return render_template('/content/characters/display_search_results.html', character_search_results=character_search_results,
-    series_search_results=series_search_results,nav_image_src=nav_image_src, username=username, searchform=searchform)
-# END SEARCH MODULE
+# # SEARCH MODULE
+# def search(search_term, username):
+#     searchform = SearchForm()
+#     search_results = []
+#     series_search_results = {}
+#     search_results = CharacterSearchResults(search_term, search_results)
+#     character_search_results = search_results.return_characters(
+#         search_term, search_results)
+#     series_search_results = SeriesSearchResults(
+#         search_term, series_search_results)
+#     series_search_results = series_search_results.return_series(
+#         search_term, series_search_results)
+#     nav_image_src = "/static/images/marvel-logo.webp"
+#     return render_template('/content/characters/display_search_results.html', character_search_results=character_search_results,
+#     series_search_results=series_search_results,nav_image_src=nav_image_src, username=username, searchform=searchform)
+# # END SEARCH MODULE
 
 #################################
 
@@ -610,7 +602,13 @@ def view_single_issue(issue_id):
     comics = marvel.comics
     series = marvel.series
     form = CommentForm()
+
+    # SEARCH MODULE
     searchform = SearchForm()
+    if searchform.validate_on_submit():
+        search_term = searchform.search_term.data
+        return search(search_term, username)
+    # END SEARCH MODULE
 
     if Issue.query.get(issue_id):
         user = User.query.get(username)
@@ -722,7 +720,13 @@ def view_series(series_id):
         return redirect('/login')
     username = session['username']
 
+    # SEARCH MODULE
     searchform = SearchForm()
+    if searchform.validate_on_submit():
+        search_term = searchform.search_term.data
+        return search(search_term, username)
+    # END SEARCH MODULE
+
     comics = marvel.comics
     series = marvel.series
     series_data = series.get(series_id)['data']['results'][0]
@@ -788,6 +792,13 @@ def show_list_items(username, list_id):
         return redirect('/login')
     username = session['username']
 
+    # SEARCH MODULE
+    searchform = SearchForm()
+    if searchform.validate_on_submit():
+        search_term = searchform.search_term.data
+        return search(search_term, username)
+    # END SEARCH MODULE
+
     list = List.query.get(list_id)
     issues = list.issues
     characters = list.characters
@@ -801,54 +812,43 @@ def show_list_items(username, list_id):
 #####################
 # use these to return a search that matches some keywords?
 
-@app.route('/search/issues', methods=['GET', 'POST'])
-def search_issues():
-    """search for a comic book issue"""
-    username = session['username']
-    form = IssueSearch()
+# @app.route('/search/issues', methods=['GET', 'POST'])
+# def search_issues():
+#     """search for a comic book issue"""
+#     username = session['username']
+#     form = IssueSearch()
 
-    if form.validate_on_submit():
-        issue_search_term = form.issue_search_term.data
-        return redirect(f'/view_issues/{issue_search_term}')
+#     if form.validate_on_submit():
+#         issue_search_term = form.issue_search_term.data
+#         return redirect(f'/view_issues/{issue_search_term}')
     
-    nav_image_src = "/static/images/marvel-logo.webp"
+#     nav_image_src = "/static/images/marvel-logo.webp"
 
 
-    return render_template('/content/issues/search_issues.html', form=form, username=username, nav_image_src=nav_image_src)
+#     return render_template('/content/issues/search_issues.html', form=form, username=username, nav_image_src=nav_image_src)
 
 
-@app.route('/view_issues/<issue_search_term>')
-def show_searched_issues(issue_search_term):
-    username = session['username']
-    characters = marvel.characters
-    comics = marvel.comics
+# @app.route('/view_issues/<issue_search_term>')
+# def show_searched_issues(issue_search_term):
+#     username = session['username']
+#     characters = marvel.characters
+#     comics = marvel.comics
 
-    issue_search_term = issue_search_term
+#     issue_search_term = issue_search_term
 
-    issues = comics.get(issue_search_term)
-
-
-    nav_image_src = "/static/images/marvel-logo.webp"
-
-    return render_template('/content/issues/issue_search_results.html', username=username, issues=issues, issue_search_term=issue_search_term, nav_image_src=nav_image_src)
+#     issues = comics.get(issue_search_term)
 
 
-    
+#     nav_image_src = "/static/images/marvel-logo.webp"
+
+#     return render_template('/content/issues/issue_search_results.html', username=username, issues=issues, issue_search_term=issue_search_term, nav_image_src=nav_image_src)
 
 
+# @app.route('/view/issues', methods=['GET', 'POST'])
+# def view_issues():
+#     username = session['username']
+#     comics = marvel.comics
 
+#     get_comics = comics.all()['data']['results']
 
-
-
-
-
-
-
-@app.route('/view/issues', methods=['GET', 'POST'])
-def view_issues():
-    username = session['username']
-    comics = marvel.comics
-
-    get_comics = comics.all()['data']['results']
-
-    return render_template('/content/issues/view_issues.html', username=username, get_comics=get_comics, comics=comics)
+#     return render_template('/content/issues/view_issues.html', username=username, get_comics=get_comics, comics=comics)
