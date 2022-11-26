@@ -492,15 +492,6 @@ def search_characters():
     show_rand_character2 = rand_characters[random.randrange(k, l)]
     show_rand_character3 = rand_characters[random.randrange(m, i)]
 
-    searchform = SearchForm()
-
-
-
-
-
-
-
-
 
     # def process_search(search_term, username):
     #     username = username
@@ -546,34 +537,25 @@ def search_characters():
         # route_to_search_results(search_results, series_search_results, username, searchform=searchform)
 
 
-
-
-
-
-
-
+    searchform = SearchForm()
 
     if searchform.validate_on_submit():
         search_term = searchform.search_term.data
-        search_results = SearchResults.search_results(search_term)
+        search_results = []
+        series_search_results = {}
+        search_results = SearchResults(search_term, search_results)
 
-        db.session.add(search_results)
-        db.session.commit()
+        search_results = search_results.return_characters(search_term, search_results)
 
 
-    # def route_to_search_results(search_results, series_search_results, username):
-    #     searchform = SearchForm()
-
-    #     print('hitting route ###############')
-    #     print(series_search_results)
-    #     print(search_results)
 
 
 
 
         nav_image_src = "/static/images/marvel-logo.webp"
+        # return('/')
         return render_template('/content/characters/display_search_results.html', search_results=search_results,
-        # series_search_results=series_search_results,
+        series_search_results=series_search_results,
         nav_image_src=nav_image_src, username=username, searchform=searchform)
 
 

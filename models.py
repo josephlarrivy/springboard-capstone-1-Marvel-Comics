@@ -145,15 +145,14 @@ class IssueComment(db.Model):
 
 
 
-class SearchResults(db.Model):
-    __tablename__ = 'search_results'
-    
-    search_term = db.Column(db.String, primary_key=True)
-    search_results = db.Column(db.Text)
-    series_search_results = db.Column(db.Text)
+class SearchResults:
+    def __init__(self, search_term:str, search_results:list) -> None:
+        self.search_term = search_term
+        self.search_results = search_results
+        # self.search_results = search_results
 
-    @classmethod
-    def search_results(cls, search_term):
+    def return_characters(self, search_term, search_results:list) -> List:
+
         title_search_term = search_term.title()
 
         search_term = title_search_term.strip()
@@ -170,27 +169,44 @@ class SearchResults(db.Model):
                     corrected_name = filename.removesuffix('.txt')
                     if corrected_name not in search_results:
                         search_results.append(corrected_name)
-        search_results=search_results
+        # print(search_results.return_characters(search_term))
+        return search_results
 
 
-        directory = 'series_names/series_names_files'
-        series_search_results = {}
 
-        for filename in os.listdir(directory):
-            f = open(f'{directory}/{filename}', 'r')
-            content = f.read()
 
-            l = open(f'{directory}/{filename}', 'r')
-            first_line = l.readline()
-            series_name = first_line.removesuffix('\n')
+    # __tablename__ = 'search_results'
+    
+    # search_term = db.Column(db.String, primary_key=True)
+    # search_results = db.Column(db.Text)
+    # series_search_results = db.Column(db.Text)
 
-            series_id = filename.removesuffix('.txt')
+    
 
-            split_terms = search_term.split()
 
-            for term in split_terms:
-                if term in content:
-                    series_search_results[series_id] = series_name
-            series_search_results = series_search_results
 
-        return cls(search_term=search_term, search_results=search_results, series_search_results=series_search_results)
+    
+
+
+#     directory = 'series_names/series_names_files'
+#     series_search_results = {}
+
+#     for filename in os.listdir(directory):
+#         f = open(f'{directory}/{filename}', 'r')
+#         content = f.read()
+
+#         l = open(f'{directory}/{filename}', 'r')
+#         first_line = l.readline()
+#         series_name = first_line.removesuffix('\n')
+
+#         series_id = filename.removesuffix('.txt')
+
+#         split_terms = search_term.split()
+
+#         for term in split_terms:
+#             if term in content:
+#                 series_search_results[series_id] = series_name
+#         series_search_results = series_search_results
+    @classmethod
+    def search_results(cls, search_term, search_results):
+        return cls(search_term=search_term, search_results=search_results)
