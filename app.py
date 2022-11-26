@@ -618,6 +618,7 @@ def show_characters(character_name):
         db.session.add(save_character)
         db.session.commit()
 
+
         for comic in comic_series:
             series = marvel.series
             issue_id = comic['id']
