@@ -35,9 +35,9 @@
 <h1>Search Characters</h1>
 
 <form method='POST'>
-    {{form.hidden_tag()}}
+    {{searchform.hidden_tag()}}
 
-    {% for field in form if field.widget.input_type != 'hidden' %}
+    {% for field in searchform if field.widget.input_type != 'hidden' %}
     <p>
         {{field.label}}
         {{field}}

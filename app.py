@@ -1,7 +1,7 @@
 from flask import Flask, render_template, redirect, session, flash
 from flask_debugtoolbar import DebugToolbarExtension
 from forms import AddUserForm, SearchForm, DisposableUserForm, UserForm, IssueSearch, CreateListForm, CommentForm, UserEditForm
-from models import connect_db, db, User, List, ListIssue, Issue, ListCharacter, Character, CharacterIssue, IssueComment
+from models import connect_db, db, User, List, ListIssue, Issue, ListCharacter, Character, CharacterIssue, IssueComment, SearchResults
 from sqlalchemy import desc
 from sqlalchemy.exc import IntegrityError
 import string
@@ -24,7 +24,7 @@ app.config["SQLALCHEMY_DATABASE_URI"] = "postgresql:///Springboard-Capstone-1"
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 app.config["SQLALCHEMY_ECHO"] = False
 app.config["SECRET_KEY"] = "W89#kU*67jL9##fhy@$hdj"
-app.config['DEBUG_TB_INTERCEPT_REDIRECTS'] = False
+app.config['DEBUG_TB_INTERCEPT_REDIRECTS'] = True
 
 connect_db(app)
 
@@ -62,6 +62,7 @@ def show_homepage():
     featured_character3 = Character.query.get(third_seed_character.title())
     issues3 = featured_character3.issues
 
+    searchform = SearchForm
     # i = len(rand_characters)
     # show_rand_character1 = rand_characters[random.randrange(0, 5)]
     # show_rand_character2 = rand_characters[random.randrange(6, 10)]
@@ -76,7 +77,7 @@ def show_homepage():
     return render_template('/main/home.html',
     featured_character1=featured_character1, 
     featured_character2=featured_character2, 
-    featured_character3=featured_character3, issues1=issues1, issues2=issues2, issues3=issues3)
+    featured_character3=featured_character3, issues1=issues1, issues2=issues2, issues3=issues3, searchform=searchform)
 
 
 ##########################
@@ -243,8 +244,8 @@ def show_members_home(username):
 
     searchform = SearchForm()
 
-    if form.validate_on_submit():
-        search_term = form.search_term.data.strip()
+    if searchform.validate_on_submit():
+        search_term = searchform.search_term.data.strip()
 
         ################
 
@@ -284,7 +285,7 @@ def show_members_home(username):
             return redirect(f'/view_character/{search_results[0]}')
 
         nav_image_src = "/static/images/marvel-logo.webp"
-        return render_template('/content/characters/display_name_search_matches.html', search_results=search_results, nav_image_src=nav_image_src, username=username, searchform=searchform)
+        return render_template('/content/characters/display_search_results.html', search_results=search_results, nav_image_src=nav_image_src, username=username, searchform=searchform)
         
     curr_user = User.query.get(username)
     nav_image_src = "/static/images/marvel-logo.webp"
@@ -293,7 +294,7 @@ def show_members_home(username):
         return render_template('/members/members_home.html', user=curr_user, username=username,
         featured_character1=featured_character1, 
         featured_character2=featured_character2, 
-        featured_character3=featured_character3, issues1=issues1, issues2=issues2, issues3=issues3, comments=comments, nav_image_src=nav_image_src, searchform=searchform, show_rand_character1=show_rand_character1, show_rand_character3=show_rand_character3)
+        featured_character3=featured_character3, issues1=issues1, issues2=issues2, issues3=issues3, comments=comments, nav_image_src=nav_image_src, searchform=searchform, show_rand_character1=show_rand_character1, show_rand_character2=show_rand_character2, show_rand_character3=show_rand_character3)
     
     else:
         redirect('/')
@@ -445,6 +446,35 @@ def show_member_lists(username):
 
 # search characters
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+print('test point')
+
+
+
+# def route_to_search_results(search_results, series_search_results, username):   
+#     searchform = SearchForm()
+
+#     nav_image_src = "/static/images/marvel-logo.webp"
+#     return render_template('/content/characters/display_search_results.html', search_results=search_results, series_search_results=series_search_results, nav_image_src=nav_image_src, username=username, searchform=searchform)
+
+
+
+
+
+
 @app.route('/search/characters', methods=['GET', 'POST'])
 def search_characters():
     """search for a character by name"""
@@ -462,91 +492,7 @@ def search_characters():
     show_rand_character2 = rand_characters[random.randrange(k, l)]
     show_rand_character3 = rand_characters[random.randrange(m, i)]
 
-    form = SearchForm()
-
-    if form.validate_on_submit():
-        title_search_term = form.search_term.data.title()
-        search_term = title_search_term.strip()
-
-        ################
-
-        # from spell_correction import correct_misspelling
-
-        # corrected_character_spelling = correct_misspelling(search_term)
-        # print(corrected_character_spelling)
-
-        ################
-
-        # from character_misspellings import spell_correct_character_names as spell_correct
-        # corrected_character_spelling = spell_correct.search_for_misspelling(search_term)
-
-        # return redirect(f'/view_character/{corrected_character_spelling}')
-        directory = 'character_misspellings/misspelling_files'
-        search_results = []
-
-        for filename in os.listdir(directory):
-        # print(f'filename: {filename}')
-            f = open(f'{directory}/{filename}', 'r')
-            content = f.read()
-            lines = content.splitlines()
-            for line in lines:
-                # print(f'content: {line}')
-                if search_term in line:
-                    corrected_name = filename.removesuffix('.txt')
-                    # print('##############')
-                    # print(corrected_name)
-                    if corrected_name not in search_results:
-                        search_results.append(corrected_name)
-                    # print(search_results)
-        # if len(search_results) == 0:
-        #     flash("Cannot find a character with that name")
-        #     return redirect('/search/characters')
-
-        # elif len(search_results) == 1:
-        #     return redirect(f'/view_character/{search_results[0]}')
-        directory = 'series_names/series_names_files'
-        series_search_results = {}
-
-        for filename in os.listdir(directory):
-            # print('$$$$$$$$$$$$$$')
-            # print(f'filename: {filename}')
-            # print('$$$$$$$$$$$$$$')
-            f = open(f'{directory}/{filename}', 'r')
-            content = f.read()
-            # print(content)
-            # print('########')
-
-            l = open(f'{directory}/{filename}', 'r')
-            first_line = l.readline()
-            series_name = first_line.removesuffix('\n')
-
-            # f = open(f'{directory}/{filename}', 'r')
-            series_id = filename.removesuffix('.txt')
-
-            # print(series_name)
-            # print(series_id)
-            print('  ')
-            # time.sleep(0.1)
-
-            split_terms = search_term.split()
-            print(split_terms)
-
-            for term in split_terms:
-                if term in content:
-                    print(term)
-                    print(content)
-                    series_search_results[series_id] = series_name
-
-            print(series_search_results)
-            for item in series_search_results:
-                print(item)
-                print(series_search_results[item])
-
-
-
-
-                # keys = item.keys()
-            # print(keys)
+    searchform = SearchForm()
 
 
 
@@ -554,87 +500,88 @@ def search_characters():
 
 
 
-            # words = content.split(' ')
-            # for word in words:
-                
-            #     # print(f'content: {line}')
-            #     if search_term == word:
-            #         # string_series_id = str(series_id)
-            #         # print(' ')
-            #         # print(string_series_id)
-            #         # print('##############')
-
-            #         append_one = 0
-            #         if append_one == 0:
-            #             series_search_results.append([series_id, series_name])
-            #             append_one = append_one + 1
-            #         #     print(append_one)
-
-            #         # if (string_series_id in sublist for sublist in series_search_results):
-            #         #     print(string_series_id)
-            #         #     print(series_search_results)
 
 
+    # def process_search(search_term, username):
+    #     username = username
+    #     searchform = SearchForm()
+    #     title_search_term = search_term.title()
 
-            #         # # if series_id in series_search_results:
-            #         # #     pass
-            #         # else:
-            #         #     time.sleep(0.1)
+    #     search_term = title_search_term.strip()
 
-            #         #     series_search_results.append([series_id, series_name])
+    #     directory = 'character_misspellings/misspelling_files'
+    #     search_results = []
 
-            #         # # else:
-            #         #     for element in series_search_results:
-            #         #         # print(element[0])
-            #         #         # print(series_search_results)
-            #         #         # print('??????????')
-            #         #         # print(element)
-            #         #         # print(element[0])
-            #         #         # print('??????????')
+    #     for filename in os.listdir(directory):
+    #         f = open(f'{directory}/{filename}', 'r')
+    #         content = f.read()
+    #         lines = content.splitlines()
+    #         for line in lines:
+    #             if search_term in line:
+    #                 corrected_name = filename.removesuffix('.txt')
+    #                 if corrected_name not in search_results:
+    #                     search_results.append(corrected_name)
 
-            #         #         # string_series_id = element[0]
-            #         #         # print('$$$$$$$$$$$')
-            #         #         # print(string_series_id)
-            #         #         # print('$$$$$$$$$$$')
 
-            #         #         if series_id in series_search_results:
-            #         #             pass
-            #         #         else:
-            #         #             series_search_results.append([series_id, series_name])
+    #     directory = 'series_names/series_names_files'
+    #     series_search_results = {}
 
-            #         def find_int(l, target):
-            #             for sub_list in range(len(l)):
-            #                 if target not in l[sub_list]:
-            #                     # print("It's in a list with index " + str(sub_list))
-            #                     print("In list with index " + str(sub_list) + ", it has index " + str(l[sub_list].index(target)))
-            #                     print(' ')
-            #                     print(str(series_search_results[l[sub_list].index(target)]))
-            #                     series_search_results.append([series_id, series_name])
-                                
-            #                 else:
-            #                     pass
-            #         find_int(series_search_results, series_id)
-                    
-                    # if find_int(series_search_results, series_id):
-                    #     pass
-                    # else:
-                    #     series_search_results.append([series_id, series_name])
+    #     for filename in os.listdir(directory):
+    #         f = open(f'{directory}/{filename}', 'r')
+    #         content = f.read()
 
-                    # if string_series_id not in series_search_results:
-                    #     # series_search_results.append(series_id)
-                    #     # series_search_results.append(str(series_name))
-                    #     series_search_results.append([series_id, series_name])
-        
-        # print(series_search_results)
-        series_search_results_length = len(series_search_results)
+    #         l = open(f'{directory}/{filename}', 'r')
+    #         first_line = l.readline()
+    #         series_name = first_line.removesuffix('\n')
+
+    #         series_id = filename.removesuffix('.txt')
+
+    #         split_terms = search_term.split()
+
+    #         for term in split_terms:
+    #             if term in content:
+    #                 series_search_results[series_id] = series_name
+
+        # print('hitting this point')
+        # route_to_search_results(search_results, series_search_results, username, searchform=searchform)
+
+
+
+
+
+
+
+
+
+    if searchform.validate_on_submit():
+        search_term = searchform.search_term.data
+        search_results = SearchResults.search_results(search_term)
+
+        db.session.add(search_results)
+        db.session.commit()
+
+
+    # def route_to_search_results(search_results, series_search_results, username):
+    #     searchform = SearchForm()
+
+    #     print('hitting route ###############')
+    #     print(series_search_results)
+    #     print(search_results)
+
+
+
+
         nav_image_src = "/static/images/marvel-logo.webp"
-        return render_template('/content/characters/display_name_search_matches.html', search_results=search_results, series_search_results=series_search_results, series_search_results_length=series_search_results_length, nav_image_src=nav_image_src, username=username)
+        return render_template('/content/characters/display_search_results.html', search_results=search_results,
+        # series_search_results=series_search_results,
+        nav_image_src=nav_image_src, username=username, searchform=searchform)
+
 
     nav_image_src = "/static/images/marvel-logo.webp"
-    return render_template('/content/characters/search_characters.html', username=username, show_rand_character1=show_rand_character1, show_rand_character2=show_rand_character2, show_rand_character3=show_rand_character3, form=form, nav_image_src=nav_image_src)
+    return render_template('/content/characters/search_characters.html', username=username, show_rand_character1=show_rand_character1, show_rand_character2=show_rand_character2, show_rand_character3=show_rand_character3, searchform=searchform, nav_image_src=nav_image_src)
 
 
-@app.route('/view_character/<character_name>')
+@app.route('/view_character/<character_name>', methods=['POST', 'GET'])
 def show_characters(character_name):
     """show a user the results of their character search. if no character exists for thet name, redirect back to search form"""
     if 'username' not in session:
@@ -644,6 +591,7 @@ def show_characters(character_name):
 
     characters = marvel.characters
     comics = marvel.comics
+    searchform = SearchForm()
 
     if Character.query.get(character_name):
         character = Character.query.get(character_name)
@@ -652,7 +600,7 @@ def show_characters(character_name):
         issues = character.issues
         nav_image_src = "/static/images/marvel-logo.webp"
 
-        return render_template('/content/characters/view_db_character.html', character=character, issues=issues, user=user, lists=lists, username=username, nav_image_src=nav_image_src)
+        return render_template('/content/characters/view_db_character.html', character=character, issues=issues, user=user, lists=lists, username=username, nav_image_src=nav_image_src, searchform=searchform)
 
     else:
         try:
@@ -750,6 +698,7 @@ def view_single_issue(issue_id):
     comics = marvel.comics
     series = marvel.series
     form = CommentForm()
+    searchform = SearchForm
 
     if Issue.query.get(issue_id):
         user = User.query.get(username)
@@ -819,7 +768,7 @@ def view_single_issue(issue_id):
         # comics = series_data['comics']['items']
         nav_image_src = "/static/images/marvel-logo.webp"
 
-        return render_template('/content/issues/view_db_issue.html', user=user, lists=lists, issue=issue, issue_data=issue_data, creators=creators, characters=characters, series_name=series_name, series_id=series_id, form=form, username=username, nav_image_src=nav_image_src)
+        return render_template('/content/issues/view_db_issue.html', user=user, lists=lists, issue=issue, issue_data=issue_data, creators=creators, characters=characters, series_name=series_name, series_id=series_id, form=form, username=username, nav_image_src=nav_image_src, searchform=searchform)
     
 
     else:
@@ -861,6 +810,7 @@ def view_series(series_id):
         return redirect('/login')
     username = session['username']
 
+    searchform = SearchForm
     comics = marvel.comics
     series = marvel.series
     series_data = series.get(series_id)['data']['results'][0]
@@ -868,7 +818,7 @@ def view_series(series_id):
     nav_image_src = "/static/images/marvel-logo.webp"
 
 
-    return render_template('/content/issues/view_series.html', series_data=series_data, series_comics=series_comics, comics=comics, username=username, nav_image_src=nav_image_src)
+    return render_template('/content/issues/view_series.html', series_data=series_data, series_comics=series_comics, comics=comics, username=username, nav_image_src=nav_image_src, searchform=searchform)
 
 
 

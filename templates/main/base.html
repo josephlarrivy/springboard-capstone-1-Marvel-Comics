@@ -87,9 +87,9 @@
                         
                             {% for field in searchform if field.widget.input_type != 'hidden' %}
                             <p>
-                            <button class="navbar-button">Submit</button>   
-                                {{field (placeholder='Search')}}
+                            {{field (placeholder='Search')}}
                             {% endfor %}
+                            <button class="navbar-button">Submit</button>
                             </p>
 
                         </form>
