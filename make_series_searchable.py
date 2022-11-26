@@ -14,6 +14,6 @@ def create_txt_file_of_all_series_names():
         with open(f'series_names/series_names_files/{series_id}.txt', 'w+') as f:
             f.write(series_name)
             f.write('\n')
-
+        print(series_name)
 
 create_txt_file_of_all_series_names()
