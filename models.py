@@ -2,6 +2,8 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_bcrypt import Bcrypt
 from datetime import datetime
 import os
+from forms import SearchForm
+from flask import render_template
 
 bcrypt = Bcrypt()
 db = SQLAlchemy()
@@ -127,6 +129,7 @@ class CharacterIssue(db.Model):
         return cls(character_key=character_key, issue_id=issue_id)
 
 
+
 class IssueComment(db.Model):
     __tablename__ = 'comments'
 
@@ -145,11 +148,14 @@ class IssueComment(db.Model):
 
 
 
-class SearchResults:
+
+
+
+
+class CharacterSearchResults:
     def __init__(self, search_term:str, search_results:list) -> None:
         self.search_term = search_term
         self.search_results = search_results
-        # self.search_results = search_results
 
     def return_characters(self, search_term, search_results:list) -> List:
 
@@ -169,44 +175,66 @@ class SearchResults:
                     corrected_name = filename.removesuffix('.txt')
                     if corrected_name not in search_results:
                         search_results.append(corrected_name)
-        # print(search_results.return_characters(search_term))
         return search_results
 
-
-
-
-    # __tablename__ = 'search_results'
-    
-    # search_term = db.Column(db.String, primary_key=True)
-    # search_results = db.Column(db.Text)
-    # series_search_results = db.Column(db.Text)
-
-    
-
-
-
-    
-
-
-#     directory = 'series_names/series_names_files'
-#     series_search_results = {}
-
-#     for filename in os.listdir(directory):
-#         f = open(f'{directory}/{filename}', 'r')
-#         content = f.read()
-
-#         l = open(f'{directory}/{filename}', 'r')
-#         first_line = l.readline()
-#         series_name = first_line.removesuffix('\n')
-
-#         series_id = filename.removesuffix('.txt')
-
-#         split_terms = search_term.split()
-
-#         for term in split_terms:
-#             if term in content:
-#                 series_search_results[series_id] = series_name
-#         series_search_results = series_search_results
     @classmethod
     def search_results(cls, search_term, search_results):
         return cls(search_term=search_term, search_results=search_results)
+
+
+
+class SeriesSearchResults:
+    def __init__(self, search_term: str, series_search_results: dict) -> None:
+        self.search_term = search_term
+        self.search_results = series_search_results
+
+    def return_series(self, search_term, series_search_results: dict) -> dict:
+
+        title_search_term = search_term.title()
+
+        search_term = title_search_term.strip()
+
+        directory = 'series_names/series_names_files'
+        series_search_results = {}
+
+        for filename in os.listdir(directory):
+            f = open(f'{directory}/{filename}', 'r')
+            content = f.read()
+
+            l = open(f'{directory}/{filename}', 'r')
+            first_line = l.readline()
+            series_name = first_line.removesuffix('\n')
+
+            series_id = filename.removesuffix('.txt')
+
+            split_terms = search_term.split()
+
+            for term in split_terms:
+                if term in content:
+                    series_search_results[series_id] = series_name
+        # print(series_search_results)
+        return series_search_results
+
+    @classmethod
+    def search_results(cls, search_term, series_search_results):
+        return cls(search_term=search_term, series_search_results=series_search_results)
+
+
+# def search(search_term, username):
+#     print('checkpoint2')
+#     print(search_term, username)
+
+#     searchform = SearchForm()
+#     search_results = []
+#     series_search_results = {}
+#     search_results = CharacterSearchResults(
+#         search_term, search_results)
+#     character_search_results = search_results.return_characters(
+#         search_term, search_results)
+#     series_search_results = SeriesSearchResults(
+#         search_term, series_search_results)
+#     series_search_results = series_search_results.return_series(
+#         search_term, series_search_results)
+#     nav_image_src = "/static/images/marvel-logo.webp"
+#     print('checkpoint3')
+#     return render_template('/content/characters/display_search_results.html', character_search_results=character_search_results,series_search_results=series_search_results, nav_image_src=nav_image_src, username=username, searchform=searchform)

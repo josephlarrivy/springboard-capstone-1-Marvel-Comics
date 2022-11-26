@@ -1,7 +1,7 @@
 from flask import Flask, render_template, redirect, session, flash
 from flask_debugtoolbar import DebugToolbarExtension
 from forms import AddUserForm, SearchForm, DisposableUserForm, UserForm, IssueSearch, CreateListForm, CommentForm, UserEditForm
-from models import connect_db, db, User, List, ListIssue, Issue, ListCharacter, Character, CharacterIssue, IssueComment, SearchResults
+from models import connect_db, db, User, List, ListIssue, Issue, ListCharacter, Character, CharacterIssue, IssueComment, CharacterSearchResults, SeriesSearchResults
 from sqlalchemy import desc
 from sqlalchemy.exc import IntegrityError
 import string
@@ -19,7 +19,16 @@ from random_content import rand_issues, rand_characters
 import schedule
 
 
+
+# from flask import Blueprint
+# search_blueprint = Blueprint('search_blueprint', __name__)
+
+
 app = Flask(__name__)
+# app.register_blueprint(search_blueprint)
+
+
+
 app.config["SQLALCHEMY_DATABASE_URI"] = "postgresql:///Springboard-Capstone-1"
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 app.config["SQLALCHEMY_ECHO"] = False
@@ -225,14 +234,6 @@ def show_members_home(username):
     featured_character3 = Character.query.get(third_seed_character.title())
     issues3 = featured_character3.issues
 
-    # i = len(rand_characters)
-    # j = math.floor(len(rand_characters)/2)
-    # k = math.floor(len(rand_characters)/2 + 1)
-    # show_rand_character1 = rand_characters[random.randrange(0, j)]
-    # show_rand_character3 = rand_characters[random.randrange(k, i)]
-
-    searchform = SearchForm()
-
     i = len(rand_characters)
     j = math.floor(len(rand_characters)/6)
     k = math.floor(len(rand_characters)/6 + 1)
@@ -242,54 +243,31 @@ def show_members_home(username):
     show_rand_character2 = rand_characters[random.randrange(k, l)]
     show_rand_character3 = rand_characters[random.randrange(m, i)]
 
-
-    if searchform.validate_on_submit():
-        search_term = searchform.search_term.data.strip()
-
-        ################
-
-
-        # from spell_correction import correct_misspelling
-
-        # corrected_character_spelling = correct_misspelling(search_term)
-        # print(corrected_character_spelling)
-
-        ################
-
-        # from character_misspellings import spell_correct_character_names as spell_correct
-        # corrected_character_spelling = spell_correct.search_for_misspelling(search_term)
-
-        # return redirect(f'/view_character/{corrected_character_spelling}')
-        directory = 'character_misspellings/misspelling_files'
-        search_results = []
-
-        for filename in os.listdir(directory):
-            # print(f'filename: {filename}')
-            f = open(f'{directory}/{filename}', 'r')
-            content = f.read()
-            lines = content.splitlines()
-            for line in lines:
-                # print(f'content: {line}')
-                if search_term in line:
-                    corrected_name = filename.removesuffix('.txt')
-                    # print('##############')
-                    # print(corrected_name)
-                    if corrected_name not in search_results:
-                        search_results.append(corrected_name)
-                    # print(search_results)
-        if len(search_results) == 0:
-            flash("Cannot find a character with that name")
-            return redirect('/search/characters')
-
-        elif len(search_results) == 1:
-            return redirect(f'/view_character/{search_results[0]}')
-
-        nav_image_src = "/static/images/marvel-logo.webp"
-        return render_template('/content/characters/display_search_results.html', search_results=search_results, nav_image_src=nav_image_src, username=username, searchform=searchform)
-        
     curr_user = User.query.get(username)
     nav_image_src = "/static/images/marvel-logo.webp"
 
+    comments = IssueComment.query.order_by(
+        desc(IssueComment.timestamp)).limit(50)
+
+    # SEARCH MODULE
+    searchform = SearchForm()
+    if searchform.validate_on_submit():
+        search_term = searchform.search_term.data
+        search_results = []
+        series_search_results = {}
+        search_results = CharacterSearchResults(search_term, search_results)
+        character_search_results = search_results.return_characters(
+            search_term, search_results)
+        series_search_results = SeriesSearchResults(
+            search_term, series_search_results)
+        series_search_results = series_search_results.return_series(
+            search_term, series_search_results)
+        nav_image_src = "/static/images/marvel-logo.webp"
+        return render_template('/content/characters/display_search_results.html', character_search_results=character_search_results,
+                            series_search_results=series_search_results,
+                            nav_image_src=nav_image_src, username=username, searchform=searchform)
+    # END SEARCH MODULE
+        
     if curr_user.username == session['username']:
         return render_template('/members/members_home.html', user=curr_user, username=username,
         featured_character1=featured_character1, 
@@ -311,6 +289,26 @@ def show_own_profile(username):
     elif username == session['username']:
         lists = user.lists
         nav_image_src = "/static/images/marvel-logo.webp"
+
+        # SEARCH MODULE
+        searchform = SearchForm()
+        if searchform.validate_on_submit():
+            search_term = searchform.search_term.data
+            search_results = []
+            series_search_results = {}
+            search_results = CharacterSearchResults(search_term, search_results)
+            character_search_results = search_results.return_characters(
+                search_term, search_results)
+            series_search_results = SeriesSearchResults(
+                search_term, series_search_results)
+            series_search_results = series_search_results.return_series(
+                search_term, series_search_results)
+            nav_image_src = "/static/images/marvel-logo.webp"
+            return render_template('/content/characters/display_search_results.html', character_search_results=character_search_results,
+                                series_search_results=series_search_results,
+                                nav_image_src=nav_image_src, username=username, searchform=searchform)
+        # END SEARCH MODULE
+
         return render_template('/members/own_member_profile.html', user=user, username=username, lists=lists, nav_image_src=nav_image_src, searchform=searchform)
     else:
         return redirect(f'/members/{username}/view')
@@ -326,10 +324,28 @@ def edit_user(username):
 
     elif username == session['username']:
         user = User.query.get(username)
-        searchform = SearchForm()
-
-
         form = UserEditForm(obj=user)
+
+    # SEARCH MODULE
+        searchform = SearchForm()
+        if searchform.validate_on_submit():
+            search_term = searchform.search_term.data
+            search_results = []
+            series_search_results = {}
+            search_results = CharacterSearchResults(search_term, search_results)
+            character_search_results = search_results.return_characters(
+                search_term, search_results)
+            series_search_results = SeriesSearchResults(
+                search_term, series_search_results)
+            series_search_results = series_search_results.return_series(
+                search_term, series_search_results)
+            nav_image_src = "/static/images/marvel-logo.webp"
+            return render_template('/content/characters/display_search_results.html', character_search_results=character_search_results,
+                                series_search_results=series_search_results,
+                                nav_image_src=nav_image_src, username=username, searchform=searchform)
+        # END SEARCH MODULE
+
+
         if form.validate_on_submit():
             if User.authenticate(user.username, form.password.data):
                 user.first_name = form.first_name.data
@@ -347,7 +363,7 @@ def edit_user(username):
         return redirect(f'/members/{{username}}/profile')
 
 
-@app.route('/members/<view_user>/view')
+@app.route('/members/<view_user>/view', methods=['GET', 'POST'])
 def show_other_profile(view_user):
     """show a user another user's profile"""
     if 'username' not in session:
@@ -355,8 +371,30 @@ def show_other_profile(view_user):
         return redirect('/register')
     else:
         view_user = User.query.get(view_user)
-        searchform = SearchForm()
         username = session['username']
+
+        # SEARCH MODULE
+        searchform = SearchForm()
+        if searchform.validate_on_submit():
+            search_term = searchform.search_term.data
+            search(search_term, username)
+            print(search_term, username)
+            print('checkpoint1')
+            search_results = []
+            series_search_results = {}
+            search_results = CharacterSearchResults(search_term, search_results)
+            character_search_results = search_results.return_characters(
+                search_term, search_results)
+            series_search_results = SeriesSearchResults(
+                search_term, series_search_results)
+            series_search_results = series_search_results.return_series(
+                search_term, series_search_results)
+            nav_image_src = "/static/images/marvel-logo.webp"
+            return render_template('/content/characters/display_search_results.html', character_search_results=character_search_results,
+                                series_search_results=series_search_results,
+                                nav_image_src=nav_image_src, username=username, searchform=searchform)
+        # END SEARCH MODULE
+
         nav_image_src = "/static/images/marvel-logo.webp"
         return render_template('/members/other_member_profile.html', view_user=view_user, username=username, nav_image_src=nav_image_src, searchform=searchform)
 
@@ -496,71 +534,21 @@ def search_characters():
     show_rand_character3 = rand_characters[random.randrange(m, i)]
 
 
-    # def process_search(search_term, username):
-    #     username = username
-    #     searchform = SearchForm()
-    #     title_search_term = search_term.title()
-
-    #     search_term = title_search_term.strip()
-
-    #     directory = 'character_misspellings/misspelling_files'
-    #     search_results = []
-
-    #     for filename in os.listdir(directory):
-    #         f = open(f'{directory}/{filename}', 'r')
-    #         content = f.read()
-    #         lines = content.splitlines()
-    #         for line in lines:
-    #             if search_term in line:
-    #                 corrected_name = filename.removesuffix('.txt')
-    #                 if corrected_name not in search_results:
-    #                     search_results.append(corrected_name)
-
-
-    #     directory = 'series_names/series_names_files'
-    #     series_search_results = {}
-
-    #     for filename in os.listdir(directory):
-    #         f = open(f'{directory}/{filename}', 'r')
-    #         content = f.read()
-
-    #         l = open(f'{directory}/{filename}', 'r')
-    #         first_line = l.readline()
-    #         series_name = first_line.removesuffix('\n')
-
-    #         series_id = filename.removesuffix('.txt')
-
-    #         split_terms = search_term.split()
-
-    #         for term in split_terms:
-    #             if term in content:
-    #                 series_search_results[series_id] = series_name
-
-        # print('hitting this point')
-        # route_to_search_results(search_results, series_search_results, username, searchform=searchform)
-
-
+    # SEARCH MODULE
     searchform = SearchForm()
-
     if searchform.validate_on_submit():
         search_term = searchform.search_term.data
         search_results = []
         series_search_results = {}
-        search_results = SearchResults(search_term, search_results)
-
-        search_results = search_results.return_characters(search_term, search_results)
-
-
-
-
-
-
+        search_results = CharacterSearchResults(search_term, search_results)
+        character_search_results = search_results.return_characters(search_term, search_results)
+        series_search_results = SeriesSearchResults(search_term, series_search_results)
+        series_search_results = series_search_results.return_series(search_term, series_search_results)
         nav_image_src = "/static/images/marvel-logo.webp"
-        # return('/')
-        return render_template('/content/characters/display_search_results.html', search_results=search_results,
+        return render_template('/content/characters/display_search_results.html', character_search_results=character_search_results,
         series_search_results=series_search_results,
         nav_image_src=nav_image_src, username=username, searchform=searchform)
-
+    # END SEARCH MODULE
 
     nav_image_src = "/static/images/marvel-logo.webp"
     return render_template('/content/characters/search_characters.html', username=username, show_rand_character1=show_rand_character1, show_rand_character2=show_rand_character2, show_rand_character3=show_rand_character3, searchform=searchform, nav_image_src=nav_image_src)
