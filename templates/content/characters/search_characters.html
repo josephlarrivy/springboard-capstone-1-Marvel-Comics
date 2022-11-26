@@ -32,14 +32,14 @@
 <br>
 
 
-<h1>Search Characters</h1>
+<h1>Search Marvel</h1>
 
 <form method='POST'>
     {{searchform.hidden_tag()}}
 
     {% for field in searchform if field.widget.input_type != 'hidden' %}
     <p>
-        {{field.label}}
+        <!-- {{field.label}} -->
         {{field}}
     </p>
     {% endfor %}

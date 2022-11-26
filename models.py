@@ -129,7 +129,6 @@ class CharacterIssue(db.Model):
         return cls(character_key=character_key, issue_id=issue_id)
 
 
-
 class IssueComment(db.Model):
     __tablename__ = 'comments'
 
@@ -144,12 +143,6 @@ class IssueComment(db.Model):
     @classmethod
     def link_comment_to_content(cls, comment_id, comment_content, timestamp, issue_id, username):
         return cls(comment_id=comment_id, comment_content=comment_content, timestamp=timestamp, issue_id=issue_id, username=username)
-
-
-
-
-
-
 
 
 class CharacterSearchResults:
@@ -182,7 +175,6 @@ class CharacterSearchResults:
         return cls(search_term=search_term, search_results=search_results)
 
 
-
 class SeriesSearchResults:
     def __init__(self, search_term: str, series_search_results: dict) -> None:
         self.search_term = search_term
@@ -212,7 +204,6 @@ class SeriesSearchResults:
             for term in split_terms:
                 if term in content:
                     series_search_results[series_id] = series_name
-        # print(series_search_results)
         return series_search_results
 
     @classmethod
