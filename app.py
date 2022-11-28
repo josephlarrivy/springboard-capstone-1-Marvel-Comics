@@ -776,4 +776,4 @@ def show_list_items(username, list_id):
     nav_image_src = "/static/images/marvel-logo.webp"
 
 
-    return render_template('/members/view_list_contents.html', list=list, issues=issues, characters=characters, username=username, nav_image_src=nav_image_src)
+    return render_template('/members/view_list_contents.html', list=list, issues=issues, characters=characters, username=username, nav_image_src=nav_image_src, searchform=searchform)
