@@ -16,13 +16,13 @@ from forms import DisposableUserForm
 
 # from flask import redirect
 # import os
-app.config["SQLALCHEMY_DATABASE_URI"] = "postgresql:///Springboard-Capstone-1"
+app.config["SQLALCHEMY_DATABASE_URI"] = "postgresql:///Marvel-Data"
 app.config["SECRET_KEY"] = "W89#kU*67jL9##fhy@$hdj"
 
 
 ###########################################################
 
-# os.environ['DATABASE_URL'] = "postgresql:///Springboard-Capstone-1"
+# os.environ['DATABASE_URL'] = "postgresql:///Marvel-Data"
 
 db.drop_all()
 db.create_all()
@@ -146,13 +146,7 @@ for issue in issues_for_seed_comments:
     print('checkpoint - comment seeded')
 
 
-
-
-
-
-
-
-print('checkpoint seed complete ##############')
+print('checkpoint - seed complete ##############')
 
 #############################################################
 

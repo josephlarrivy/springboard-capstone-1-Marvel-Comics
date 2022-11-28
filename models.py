@@ -58,16 +58,6 @@ class List(db.Model):
         return cls(list_name=list_name, list_id=list_id, username=username)
 
 
-class ListIssue(db.Model):
-    __tablename__ = 'lists_issues'
-
-    list_id = db.Column(db.Text, db.ForeignKey('lists.list_id'), primary_key=True)
-    issue_id = db.Column(db.Integer, db.ForeignKey('issues.issue_id'), primary_key=True)
-
-    @classmethod
-    def add_issue_to_list(cls, list_id, issue_id):
-        return cls(list_id=list_id, issue_id=issue_id)
-
 
 class Issue(db.Model):
     __tablename__ = 'issues'
@@ -88,18 +78,6 @@ class Issue(db.Model):
         return cls(issue_id=issue_id, title=title, thumbnail=thumbnail, description=description, series=series, series_id=series_id)
 
 
-class ListCharacter(db.Model):
-    __tablename__ = 'lists_characters'
-
-    list_id = db.Column(db.Text, db.ForeignKey(
-        'lists.list_id'), primary_key=True)
-    character_key = db.Column(db.Text, db.ForeignKey(
-        'characters.character_key'), primary_key=True)
-
-    @classmethod
-    def add_character_to_list(cls, list_id, character_key):
-        return cls(list_id=list_id, character_key=character_key)
-
 
 class Character(db.Model):
     __tablename__ = 'characters'
@@ -113,6 +91,13 @@ class Character(db.Model):
     @classmethod
     def commit_character_to_db(cls, character_key, character_id, character_name, biography, thumbnail):
         return cls(character_key=character_key, character_id=character_id, character_name=character_name, biography=biography, thumbnail=thumbnail)
+
+
+
+
+
+
+
 
 
 class CharacterIssue(db.Model):
@@ -145,87 +130,27 @@ class IssueComment(db.Model):
         return cls(comment_id=comment_id, comment_content=comment_content, timestamp=timestamp, issue_id=issue_id, username=username)
 
 
-# class CharacterSearchResults:
-#     def __init__(self, search_term:str, search_results:list) -> None:
-#         self.search_term = search_term
-#         self.search_results = search_results
+class ListIssue(db.Model):
+    __tablename__ = 'lists_issues'
 
-#     def return_characters(self, search_term, search_results:list) -> List:
+    list_id = db.Column(db.Text, db.ForeignKey(
+        'lists.list_id'), primary_key=True)
+    issue_id = db.Column(db.Integer, db.ForeignKey(
+        'issues.issue_id'), primary_key=True)
 
-#         title_search_term = search_term.title()
-
-#         search_term = title_search_term.strip()
-
-#         directory = 'character_misspellings/misspelling_files'
-#         search_results = []
-
-#         for filename in os.listdir(directory):
-#             f = open(f'{directory}/{filename}', 'r')
-#             content = f.read()
-#             lines = content.splitlines()
-#             for line in lines:
-#                 if search_term in line:
-#                     corrected_name = filename.removesuffix('.txt')
-#                     if corrected_name not in search_results:
-#                         search_results.append(corrected_name)
-#         return search_results
-
-#     @classmethod
-#     def search_results(cls, search_term, search_results):
-#         return cls(search_term=search_term, search_results=search_results)
+    @classmethod
+    def add_issue_to_list(cls, list_id, issue_id):
+        return cls(list_id=list_id, issue_id=issue_id)
 
 
-# class SeriesSearchResults:
-#     def __init__(self, search_term: str, series_search_results: dict) -> None:
-#         self.search_term = search_term
-#         self.search_results = series_search_results
+class ListCharacter(db.Model):
+    __tablename__ = 'lists_characters'
 
-#     def return_series(self, search_term, series_search_results: dict) -> dict:
+    list_id = db.Column(db.Text, db.ForeignKey(
+        'lists.list_id'), primary_key=True)
+    character_key = db.Column(db.Text, db.ForeignKey(
+        'characters.character_key'), primary_key=True)
 
-#         title_search_term = search_term.title()
-
-#         search_term = title_search_term.strip()
-
-#         directory = 'series_names/series_names_files'
-#         series_search_results = {}
-
-#         for filename in os.listdir(directory):
-#             f = open(f'{directory}/{filename}', 'r')
-#             content = f.read()
-
-#             l = open(f'{directory}/{filename}', 'r')
-#             first_line = l.readline()
-#             series_name = first_line.removesuffix('\n')
-
-#             series_id = filename.removesuffix('.txt')
-
-#             split_terms = search_term.split()
-
-#             for term in split_terms:
-#                 if term in content:
-#                     series_search_results[series_id] = series_name
-#         return series_search_results
-
-#     @classmethod
-#     def search_results(cls, search_term, series_search_results):
-#         return cls(search_term=search_term, series_search_results=series_search_results)
-
-
-# def search(search_term, username):
-#     print('checkpoint2')
-#     print(search_term, username)
-
-#     searchform = SearchForm()
-#     search_results = []
-#     series_search_results = {}
-#     search_results = CharacterSearchResults(
-#         search_term, search_results)
-#     character_search_results = search_results.return_characters(
-#         search_term, search_results)
-#     series_search_results = SeriesSearchResults(
-#         search_term, series_search_results)
-#     series_search_results = series_search_results.return_series(
-#         search_term, series_search_results)
-#     nav_image_src = "/static/images/marvel-logo.webp"
-#     print('checkpoint3')
-#     return render_template('/content/characters/display_search_results.html', character_search_results=character_search_results,series_search_results=series_search_results, nav_image_src=nav_image_src, username=username, searchform=searchform)
+    @classmethod
+    def add_character_to_list(cls, list_id, character_key):
+        return cls(list_id=list_id, character_key=character_key)
