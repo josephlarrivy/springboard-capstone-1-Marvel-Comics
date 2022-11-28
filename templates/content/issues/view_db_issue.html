@@ -57,15 +57,42 @@
     {% if issue.comments %}
         {% for comment in issue.comments %}
             <div class="col-7 m-3">
-                <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title"><b>{{comment.comment_content}}</b></h5>
-                        <p>{{comment.timestamp.strftime('%d %B %Y')}}</p>
-                        <a href="/members/{{comment.username}}/profile"><p>{{comment.username}}</p></a>
+                
+            <div class="comment-thread">
+                <div class="comment" id="comment-1">
+                    <div class="comment-heading">
+                        <div class="comment-info">
+                            <a href="/members/{{comment.username}}/profile" class="comment-author">{{comment.username}}</a>
+                            <p class="m-0">{{comment.timestamp.strftime('%d %B %Y')}}</p>
+                        </div>
+                    </div>
+
+                    <div class="comment-body">
+                        <p>{{comment.comment_content}}</p>
+                        <button type="comment-section-button">Delete</button>
                     </div>
                 </div>
+                <!-- Comment 1 end -->
             </div>
+            </div>
+
         {% endfor %}
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- ####################### -->
+
+
         <div class="col-4">
             <form method='POST'>
                 {{form.hidden_tag()}}

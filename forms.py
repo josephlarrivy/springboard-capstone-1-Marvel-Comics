@@ -42,7 +42,7 @@ class UserForm(FlaskForm):
 
 class SearchForm(FlaskForm):
     """search for a character"""
-    search_term = StringField('Search Characters', validators=[InputRequired()])
+    search_term = StringField('Search Characters', validators=[InputRequired(), Length(min=2)])
 
 class CreateListForm(FlaskForm):
     """name and create a list"""
@@ -74,11 +74,3 @@ class UserEditForm(FlaskForm):
         ('venom.png', 'Venom'),
         ('wolverine.png', 'Wolverine')])
     password = PasswordField('Password', validators=[Length(min=6)])
-
-
-
-
-######################
-
-class IssueSearch(FlaskForm):
-    issue_search_term = StringField('Search Issues', validators=[InputRequired()])

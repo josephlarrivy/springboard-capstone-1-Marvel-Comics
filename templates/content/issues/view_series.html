@@ -2,25 +2,29 @@
 {% block title %}{{series_data['title']}}{% endblock %}
 {% block content %}
 
-<br>
+<br><br>
 <div class="text-center">
 <h1>{{series_data['title']}}</h1>
-<br>
+<br><br>
 
-<div class="row text-center">
-    {% for comic in series_comics %}
-    <div class="p-2 m-2 col">
-        <div class="card" style="width: 300px;">
-            <img src="{{comics.get(comic['resourceURI'].removeprefix('http://gateway.marvel.com/v1/public/comics/'))['data']['results'][0]['thumbnail']['path']}}.jpg" class="card-img-top" style="width: 300px; height: 463px">
-            <div class="card-body" style="width: 300px">
-                <a href="/view_single_issue/{{comic['resourceURI'].removeprefix('http://gateway.marvel.com/v1/public/comics/')}}" class="card-link">
-                    <h5 class="card-title">{{comic['name']}}</h5>
+<div class="character-page-issues-container">
+    <div class="row">
+        {% for comic in series_comics %}
+        <div class="homepage-issue-container">
+            <img src="{{comics.get(comic['resourceURI'].removeprefix('http://gateway.marvel.com/v1/public/comics/'))['data']['results'][0]['thumbnail']['path']}}.jpg" class="homepage-issue-image">
+            <div class="homepage-issue-caption">
+                <a href="/view_single_issue/{{comic['resourceURI'].removeprefix('http://gateway.marvel.com/v1/public/comics/')}}">
+                    <p class="homepage-issue-caption-text"><b>{{comic['name']}}</b></p>
                 </a>
             </div>
         </div>
+        {% endfor %}
     </div>
-    {% endfor %}
 </div>
+
+
+
+
 </div>
 
 {% endblock %}

@@ -1,6 +1,6 @@
 from flask import Flask, render_template, redirect, session, flash
 from flask_debugtoolbar import DebugToolbarExtension
-from forms import AddUserForm, SearchForm, DisposableUserForm, UserForm, IssueSearch, CreateListForm, CommentForm, UserEditForm
+from forms import AddUserForm, SearchForm, DisposableUserForm, UserForm, CreateListForm, CommentForm, UserEditForm
 from models import connect_db, db, User, List, ListIssue, Issue, ListCharacter, Character, CharacterIssue, IssueComment
 from sqlalchemy import desc
 from sqlalchemy.exc import IntegrityError
@@ -36,23 +36,6 @@ marvel = Marvel(PUBLIC_KEY=PUBLIC_KEY, PRIVATE_KEY=PRIVATE_KEY)
 
 seed_characters = ['rocket raccoon', 'iron man', 'thanos']
 
-# # SEARCH MODULE
-# def search(search_term, username):
-#     searchform = SearchForm()
-#     search_results = []
-#     series_search_results = {}
-#     search_results = CharacterSearchResults(search_term, search_results)
-#     character_search_results = search_results.return_characters(
-#         search_term, search_results)
-#     series_search_results = SeriesSearchResults(
-#         search_term, series_search_results)
-#     series_search_results = series_search_results.return_series(
-#         search_term, series_search_results)
-#     nav_image_src = "/static/images/marvel-logo.webp"
-#     return render_template('/content/characters/display_search_results.html', character_search_results=character_search_results,
-#     series_search_results=series_search_results,nav_image_src=nav_image_src, username=username, searchform=searchform)
-# # END SEARCH MODULE
-
 #################################
 
 # home routes
@@ -77,22 +60,10 @@ def show_homepage():
     featured_character3 = Character.query.get(third_seed_character.title())
     issues3 = featured_character3.issues
 
-    searchform = SearchForm()
-    # i = len(rand_characters)
-    # show_rand_character1 = rand_characters[random.randrange(0, 5)]
-    # show_rand_character2 = rand_characters[random.randrange(6, 10)]
-    # show_rand_character3 = rand_characters[random.randrange(11, i)]
-
-    # n = len(rand_issues)
-    # show_rand_issue1 = rand_issues[random.randrange(0, 5)]
-    # show_rand_issue2 = rand_issues[random.randrange(6, 10)]
-    # show_rand_issue3 = rand_issues[random.randrange(11, 17)]
-    # show_rand_issue4 = rand_issues[random.randrange(18, n)]
-
     return render_template('/main/home.html',
     featured_character1=featured_character1, 
     featured_character2=featured_character2, 
-    featured_character3=featured_character3, issues1=issues1, issues2=issues2, issues3=issues3, searchform=searchform)
+    featured_character3=featured_character3, issues1=issues1, issues2=issues2, issues3=issues3)
 
 
 ##########################
@@ -806,49 +777,3 @@ def show_list_items(username, list_id):
 
 
     return render_template('/members/view_list_contents.html', list=list, issues=issues, characters=characters, username=username, nav_image_src=nav_image_src)
-
-
-
-#####################
-# use these to return a search that matches some keywords?
-
-# @app.route('/search/issues', methods=['GET', 'POST'])
-# def search_issues():
-#     """search for a comic book issue"""
-#     username = session['username']
-#     form = IssueSearch()
-
-#     if form.validate_on_submit():
-#         issue_search_term = form.issue_search_term.data
-#         return redirect(f'/view_issues/{issue_search_term}')
-    
-#     nav_image_src = "/static/images/marvel-logo.webp"
-
-
-#     return render_template('/content/issues/search_issues.html', form=form, username=username, nav_image_src=nav_image_src)
-
-
-# @app.route('/view_issues/<issue_search_term>')
-# def show_searched_issues(issue_search_term):
-#     username = session['username']
-#     characters = marvel.characters
-#     comics = marvel.comics
-
-#     issue_search_term = issue_search_term
-
-#     issues = comics.get(issue_search_term)
-
-
-#     nav_image_src = "/static/images/marvel-logo.webp"
-
-#     return render_template('/content/issues/issue_search_results.html', username=username, issues=issues, issue_search_term=issue_search_term, nav_image_src=nav_image_src)
-
-
-# @app.route('/view/issues', methods=['GET', 'POST'])
-# def view_issues():
-#     username = session['username']
-#     comics = marvel.comics
-
-#     get_comics = comics.all()['data']['results']
-
-#     return render_template('/content/issues/view_issues.html', username=username, get_comics=get_comics, comics=comics)

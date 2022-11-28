@@ -6,20 +6,25 @@ from flask import render_template
 
 # SEARCH MODULE
 def search(search_term, username):
+    
     searchform = SearchForm()
     search_results = []
     series_search_results = {}
+    
     search_results = CharacterSearchResults(search_term, search_results)
     character_search_results = search_results.return_characters(
         search_term, search_results)
+    
     series_search_results = SeriesSearchResults(
         search_term, series_search_results)
     series_search_results = series_search_results.return_series(
         search_term, series_search_results)
+    
+    
     nav_image_src = "/static/images/marvel-logo.webp"
+    
     return render_template('/content/characters/display_search_results.html', character_search_results=character_search_results,
     series_search_results=series_search_results,nav_image_src=nav_image_src, username=username, searchform=searchform)
-# END SEARCH MODULE
 
 
 class CharacterSearchResults:
