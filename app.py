@@ -2,7 +2,7 @@ from flask import Flask, render_template, redirect, session, flash
 from flask_debugtoolbar import DebugToolbarExtension
 from forms import AddUserForm, SearchForm, DisposableUserForm, UserForm, CreateListForm, CommentForm, UserEditForm
 from models import connect_db, db, User, List, ListIssue, Issue, ListCharacter, Character, CharacterIssue, IssueComment
-from sqlalchemy import desc
+from sqlalchemy import desc, delete
 from sqlalchemy.exc import IntegrityError
 import string
 import random
@@ -780,3 +780,19 @@ def show_list_items(username, list_id):
 
 
     return render_template('/members/view_list_contents.html', list=list, issues=issues, characters=characters, username=username, nav_image_src=nav_image_src, searchform=searchform)
+
+
+@app.route('/delete_comment/<comment_id>/<issue_id>/<comment_username>', methods=['GET', 'POST'])
+def delete_comment(comment_id, issue_id, comment_username):
+    
+    if comment_username == session['username']:
+
+        comment = IssueComment.query.get(comment_id)
+        print(comment)
+        db.session.delete(comment)
+        db.session.commit()
+    
+    else:
+        flash("cannot delete another user's comment")
+
+    return redirect(f'/view_single_issue/{issue_id}')
