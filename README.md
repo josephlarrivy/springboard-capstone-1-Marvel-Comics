@@ -1,4 +1,4 @@
-Thankyou for visiting this repo.
+Thank you for visiting this repo.
 
 To get the project up and running, use the following steps:
 
