@@ -25,7 +25,7 @@ app.config["SQLALCHEMY_DATABASE_URI"] = "postgresql:///Marvel-Data"
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 app.config["SQLALCHEMY_ECHO"] = False
 app.config["SECRET_KEY"] = "W89#kU*67jL9##fhy@$hdj"
-app.config['DEBUG_TB_INTERCEPT_REDIRECTS'] = False
+app.config['DEBUG_TB_INTERCEPT_REDIRECTS'] = True
 
 connect_db(app)
 
@@ -44,8 +44,11 @@ seed_characters = ['rocket raccoon', 'iron man', 'thanos']
 def redirect_home():
     return redirect('/home')
 
-@app.route('/home')
+
+@app.route('/home', methods=['GET', 'POST'])
 def show_homepage():
+
+    searchform = SearchForm()
 
     # change this to a random seed character
     first_seed_character = seed_characters[0]
@@ -63,7 +66,7 @@ def show_homepage():
     return render_template('/main/home.html',
     featured_character1=featured_character1, 
     featured_character2=featured_character2, 
-    featured_character3=featured_character3, issues1=issues1, issues2=issues2, issues3=issues3)
+    featured_character3=featured_character3, issues1=issues1, issues2=issues2, issues3=issues3, searchform=searchform)
 
 
 ##########################
