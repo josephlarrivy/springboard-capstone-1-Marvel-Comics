@@ -2,6 +2,7 @@ __pycache__
 character_misspellings/__pycache__
 keys.py
 copied_css.css
-character_misspellings/misspelling_files
-series_names/series_names_files
+# character_misspellings/misspelling_files
+# series_names/series_names_files
 /springboard-capstone-1
+second_seed.py
