@@ -3,19 +3,27 @@
 {% block content %}
 
 <br>
-<h1>{{list.list_name}}</h1>
+<h1 class="text-center">{{list.list_name}}</h1>
+<a href="/delete_list/{{list.list_id}}/{{list.username}}"><p class="text-center">delete this list</p></a>
 <br>
 
 
 <div class="row text-center">
-{% for issue in issues %}
-<div class="col-xs-2, p-2 m-2">
-<figure>
-    <img src="{{issue.thumbnail}}" style="width: 300px; height: 463px">
-    <a href="/view_single_issue/{{issue.issue_id}}"><figcaption style="width: 250px; text-align:center">{{issue.title}}</figcaption></a>
-</figure>
+<br>
+<div class="character-page-issues-container">
+    <div class="row">
+        {% for issue in issues %}
+        <div class="homepage-issue-container">
+            <img src="{{issue.thumbnail}}" class="homepage-issue-image">
+            <div class="homepage-issue-caption">
+                <a href="/view_single_issue/{{issue.issue_id}}">
+                    <p class="homepage-issue-caption-text"><b>{{issue.title}}</b></p>
+                </a>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
 </div>
-{% endfor %}
 </div>
 
 

@@ -786,9 +786,7 @@ def show_list_items(username, list_id):
 def delete_comment(comment_id, issue_id, comment_username):
     
     if comment_username == session['username']:
-
         comment = IssueComment.query.get(comment_id)
-        print(comment)
         db.session.delete(comment)
         db.session.commit()
     
@@ -796,3 +794,18 @@ def delete_comment(comment_id, issue_id, comment_username):
         flash("cannot delete another user's comment")
 
     return redirect(f'/view_single_issue/{issue_id}')
+
+
+@app.route('/delete_list/<list_id>/<list_username>', methods=['GET', 'POST'])
+def delete_list(list_id, list_username):
+
+    if list_username == session['username']:
+
+        delete_list = List.query.get(list_id)
+        db.session.delete(delete_list)
+        db.session.commit()
+
+    else:
+        flash("cannot delete another user's list")
+
+    return redirect(f'/members/{list_username}/profile')
