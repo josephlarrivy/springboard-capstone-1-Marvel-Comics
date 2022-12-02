@@ -170,25 +170,4 @@
 </div>
 
 
-<br><br><br><br><br>
-
-<div class="text-center">
-
-    <h1>Lists</h1>
-    <a href="/members/{{user.username}}/lists"><button type="button" class="button">My Lists</button></a>
-    <a href="/members/create_list_form"><button type="button" class="button">Create New List</button></a>
-
-    <ul>
-        {% for list in lists %}
-        <li>{{list.list_name}}</li>
-        {% endfor %}
-    </ul>
-
-    <br>
-    <br>
-
-    <h1>Other Members</h1>
-
-    <a href="/members/ExampleUser/view"><button type="button" class="button">Example User</button></a>
-
 {% endblock %}

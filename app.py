@@ -255,8 +255,6 @@ def show_own_profile(username):
         flash('must log in or register to view')
         return redirect('/register')
     elif username == session['username']:
-        lists = user.lists
-        nav_image_src = "/static/images/marvel-logo.webp"
 
         # SEARCH MODULE
         searchform = SearchForm()
@@ -265,7 +263,18 @@ def show_own_profile(username):
             return search(search_term, username)
         # END SEARCH MODULE
 
-        return render_template('/members/own_member_profile.html', user=user, username=username, lists=lists, nav_image_src=nav_image_src, searchform=searchform)
+        lists = user.lists
+        comments = user.comments
+        number_of_comments = len(comments)
+
+        first_seed_character = seed_characters[0]
+        featured_character1 = Character.query.get(first_seed_character.title())
+        recommended_issues = featured_character1.issues
+
+        rand_int_recommend = random.randint(0,17)
+
+        nav_image_src = "/static/images/marvel-logo.webp"
+        return render_template('/members/own_member_profile.html', user=user, username=username, lists=lists, nav_image_src=nav_image_src, searchform=searchform, recommended_issues=recommended_issues, rand_int_recommend=rand_int_recommend, comments=comments, number_of_comments=number_of_comments)
     else:
         return redirect(f'/members/{username}/view')
 
@@ -325,38 +334,6 @@ def show_other_profile(view_user):
 
         nav_image_src = "/static/images/marvel-logo.webp"
         return render_template('/members/other_member_profile.html', view_user=view_user, username=username, nav_image_src=nav_image_src, searchform=searchform)
-
-
-# @app.route('/edit_avatar/<username>', methods=['GET', 'POST'])
-# def edit_avatar(username):
-#     if 'username' not in session:
-#         flash('must log in or register to view')
-#         return redirect('/register')
-#     elif username == session['username']:
-#         return render_template('/members/edit_avatar.html', username=username)
-#     else:
-#         return redirect(f'/members/{username}/view')
-    
-
-# @app.route('/change/<username>/avatar_to/<image>', methods=['GET', 'POST'])
-# def commit_new_avatar(username, image):
-#     if 'username' not in session:
-#         flash('must log in or register to view')
-#         return redirect('/register')
-#     elif username == session['username']:
-#         user = User.query.get(username)
-
-#         change = User.change_thumbnail(username, image)
-#         db.session.add(change)
-#         db.session.commit()
-
-#         return redirect(f'/members/{username}/profile')
-
-#     else:
-#         return redirect(f'/members/{username}/view')
-
-
-
 
 
 #######################
@@ -539,27 +516,8 @@ def show_characters(character_name):
             db.session.add(connect_character_issue)
             db.session.commit()
 
-            # if Series.query.get(series_id):
-            #     pass
-            # else:
-            #     commit_series = Series.commit_series_to_db(series_id, series)
-            #     db.session.add(commit_series)
-            #     db.session.commit()
-            
-            # connect_issue_to_series = SeriesIssue.link_issues_to_series(issue_id, series_id)
-            # db.session.add(connect_issue_to_series)
-            # db.session.commit()
-
-        # db_character = Character.query.get(character_name)
-        # issues = db_character.issues
-
         return redirect(f'/view_character/{character_name}')
-        # return render_template('/content/characters/view_character.html', single_character=single_character, character_id=character_id, comics=comics, character_data=character_data, comic_series=comic_series, character=character, db_character=db_character, issues=issues,
-        
-        
-        # lists=lists, username=username)
 
-        
 
 
 ##########################
