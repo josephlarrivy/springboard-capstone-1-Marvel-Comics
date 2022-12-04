@@ -25,7 +25,7 @@ app.config["SQLALCHEMY_DATABASE_URI"] = "postgresql:///Marvel-Data"
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 app.config["SQLALCHEMY_ECHO"] = False
 app.config["SECRET_KEY"] = "W89#kU*67jL9##fhy@$hdj"
-app.config['DEBUG_TB_INTERCEPT_REDIRECTS'] = True
+app.config['DEBUG_TB_INTERCEPT_REDIRECTS'] = False
 
 connect_db(app)
 
@@ -322,8 +322,16 @@ def show_other_profile(view_user):
         flash('must log in or register to view')
         return redirect('/register')
     else:
-        view_user = User.query.get(view_user)
+        user = User.query.get(view_user)
         username = session['username']
+        rand_int_recommend = random.randint(0, 17)
+        first_seed_character = seed_characters[0]
+        featured_character1 = Character.query.get(first_seed_character.title())
+        recommended_issues = featured_character1.issues
+        comments = user.comments
+
+
+
 
         # SEARCH MODULE
         searchform = SearchForm()
@@ -333,7 +341,7 @@ def show_other_profile(view_user):
         # END SEARCH MODULE
 
         nav_image_src = "/static/images/marvel-logo.webp"
-        return render_template('/members/other_member_profile.html', view_user=view_user, username=username, nav_image_src=nav_image_src, searchform=searchform)
+        return render_template('/members/other_member_profile.html', user=user, username=username, nav_image_src=nav_image_src, searchform=searchform, rand_int_recommend=rand_int_recommend, recommended_issues=recommended_issues, comments=comments)
 
 
 #######################

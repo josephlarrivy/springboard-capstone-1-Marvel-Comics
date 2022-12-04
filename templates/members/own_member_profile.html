@@ -1,9 +1,9 @@
 {% extends '/main/base.html' %}
 {% block title %}Profile{% endblock %}
 {% block content %}
-<div class="row m-2 p-2">
-    <div class ="col-3 text-center">
-            <img src="/static/icons/{{user.thumbnail}}" style="height: 250px; width: 250px">
+<div class="row">
+    <div class ="col-3 text-center p-3">
+            <img src="/static/icons/{{user.thumbnail}}" class="profile-picture">
             <br>
             <h5>{{user.username}}</h5>
         <hr>
@@ -18,65 +18,62 @@
             <br>
             {% endfor %}
         <br><br>
-            <a href="/members/create_list_form"><button class="button-small" >Create New List</button></a>
+            <a href="/members/create_list_form"><button class="button-small">Create New List</button></a>
     </div>
-
-    <div class="col">
-        <div class="profile-main-container">
-            
-            <h3>Recommendations</h3>
-            <div class="row">
-                {% for issue in recommended_issues[rand_int_recommend:rand_int_recommend+3] %}
-                <div class="homepage-issue-container">
-                    <img src="{{issue.thumbnail}}" class="homepage-issue-image">
-                    <div class="homepage-issue-caption">
-                        <a href="/view_single_issue/{{issue.issue_id}}">
-                            <p class="homepage-issue-caption-text"><b>{{issue.title}}</b></p>
-                        </a>
-                    </div>
+    <div class="col-9">
+    <br><br>
+        <h3>Recommendations</h3>
+        <div class="row p-4">
+            {% for issue in recommended_issues[rand_int_recommend-2:rand_int_recommend+2] %}
+            <div class="homepage-issue-container">
+                <img src="{{issue.thumbnail}}" class="homepage-issue-image">
+                <div class="homepage-issue-caption">
+                    <a href="/view_single_issue/{{issue.issue_id}}">
+                        <p class="homepage-issue-caption-text"><b>{{issue.title}}</b></p>
+                    </a>
                 </div>
-                {% endfor %}
             </div>
-
-            <br><br>
-
-            <h3>Your Comments</h3>
-            
-            {% if number_of_comments == 0 %}
-                <br>
-                <p>You have not commented on anything yet. Future comments will appear here</p>
-                <br><br><br><br>
-            {% else %}
-                {% for comment in comments %}
-                    <div class="homepage-issue-comment-container">
-                        <a href="/view_single_issue/{{comment.issue.issue_id}}"><img src="{{comment.issue.thumbnail}}"
-                                class="homepage-issue-comment-image"></a>
-                        <div class="homepage-issue-comment-text">
-                            <p>{{comment.timestamp.strftime('%d %B %Y')}}</p>
-                            <a href="/members/{{comment.username}}/profile">
-                                <p>{{comment.username}}</p>
-                            </a>
-                            <p>{{comment.comment_content}}</p>
-                        </div>
-                    </div>
-                {% endfor %}
-            {% endif %}
-
-
-
-
-
-
+            {% endfor %}
         </div>
 
+        <br><br>
+
+        <h3>Your Comments</h3>
+
+        <br>
+        {% if number_of_comments == 0 %}
+            <br>
+            <p>You have not commented on anything yet. Future comments will appear here</p>
+            <br><br><br><br>
+
+        {% else %}
+            <div class="row p-4">
+
+            {% for comment in comments %}
+
+                <div class="homepage-issue-container">
+
+                    <img src="{{comment.issue.thumbnail}}" class="homepage-issue-image">
+
+                    <div class="homepage-issue-caption">
+
+                        <a href="/view_single_issue/{{comment.issue.issue_id}}">
+                            <p class="homepage-issue-caption-text"><b>{{comment.issue.title}}</b></p>
+                        </a>
+                        <p class="homepage-issue-caption-text">{{comment.timestamp.strftime('%d %B %Y')}}</p>
         
+                        <p class="homepage-issue-caption-text">{{comment.comment_content}}</p>
+                        <br><br>
 
-
-
-        {% for list in lists %}
-        {% endfor %}
-        <br><br><br>
-    </div>
+                    </div>
+                </div>
+            {% endfor %}
+        {% endif %}
+            </div>
+    {% for list in lists %}
+    {% endfor %}
+    <br><br><br>
 </div>
+
 
 {% endblock %}

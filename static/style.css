@@ -313,10 +313,10 @@ nav a {
   padding: 5vh;
 }
 
-
-
-
-
+.profile-picture {
+  width: 100%;
+  object-fit: cover;
+}
 
 
 
@@ -354,15 +354,15 @@ nav a {
 
 /* homepage comments */
 .scrolling-wrapper {
-  margin: 50px;
+  margin: 30px;
   overflow-x: auto;
   height: auto;
   width: 96vw;
 }
 
 .homepage-issue-comment-container {
-  width: 280px;
-  height: 595px;
+  width: 230px;
+  height: 500px;
   overflow: hidden;
 }
 
@@ -508,4 +508,35 @@ comment-section-button:active {
 
 .replies {
   margin-left: 20px;
+}
+
+
+
+
+
+.homepage-issue-comment-image {
+  /* text-align: center; */
+  width: 12vw;
+  height: 18.48vw;
+}
+
+.homepage-issue-comment-text {
+  padding-top: 1vh;
+  padding-left: 1vh;
+  padding-right: 1vh;
+  color: black;
+}
+
+
+.character-page-issues-container {
+  padding-left: 10vh;
+}
+
+
+
+
+
+.profile-issue-comment-image {
+  width: 12vw;
+  height: 18.48vw;
 }

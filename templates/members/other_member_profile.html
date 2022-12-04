@@ -1,11 +1,69 @@
 {% extends '/main/base.html' %}
-{% block title %}Home{% endblock %}
+{% block title %}{{user.username}}{% endblock %}
 {% block content %}
 
-<h1>Other Member Profile</h1>
 
-<h2>Username: {{view_user.username}}</h2>
-<h2>Name: {{view_user.first_name}} {{view_user.last_name}}</h2>
+<div class="row m-2 p-2">
+    <div class="col-3 text-center">
+        <img src="/static/icons/{{user.thumbnail}}" style="height: 250px; width: 250px">
+        <br>
+        <h5>{{user.username}}</h5>
+        <hr>
+        <p>{{user.first_name}} {{user.last_name}}</p>
+        <p>{{user.email}}</p>
+        <a href="/member/{{username}}/edit"><button class="button-small">Edit Info</button></a>
+        <br>
+        <hr>
+        <h3>Lists</h3>
+        {% for list in lists %}
+        <a href="/view_list_contents/{{username}}/{{list.list_id}}"><button
+                class="button-small">{{list.list_name}}</button></a>
+        <br>
+        {% endfor %}
+        <br><br>
+        <a href="/members/create_list_form"><button class="button-small">Create New List</button></a>
+    </div>
+
+    <div class="col">
+        <div class="profile-main-container">
+
+            <br><br>
+
+            <h3>User Comments</h3>
+            
+            {% if number_of_comments == 0 %}
+            <br>
+            <p>You have not commented on anything yet. Future comments will appear here</p>
+            <br><br><br><br>
+            
+            {% else %}
+            <div class="row p-4">
+            
+                {% for comment in comments %}
+            
+                <div class="homepage-issue-container">
+            
+                    <img src="{{comment.issue.thumbnail}}" class="homepage-issue-image">
+            
+                    <div class="homepage-issue-caption">
+            
+                        <a href="/view_single_issue/{{comment.issue.issue_id}}">
+                            <p class="homepage-issue-caption-text"><b>{{comment.issue.title}}</b></p>
+                        </a>
+                        <p class="homepage-issue-caption-text">{{comment.timestamp.strftime('%d %B %Y')}}</p>
+            
+                        <p class="homepage-issue-caption-text">{{comment.comment_content}}</p>
+                        <br><br>
+            
+                    </div>
+                </div>
+                {% endfor %}
+                {% endif %}
+            </div>
+            {% for list in lists %}
+            {% endfor %}
+        </div>
+</div>
 
 
 {% endblock %}
