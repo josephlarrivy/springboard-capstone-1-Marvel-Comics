@@ -3,6 +3,7 @@ import random
 import string
 import time
 import datetime
+import os
 from datetime import datetime
 from essential_generators import DocumentGenerator
 from marvel import Marvel
