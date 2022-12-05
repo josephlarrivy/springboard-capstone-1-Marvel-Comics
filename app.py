@@ -330,9 +330,6 @@ def show_other_profile(view_user):
         recommended_issues = featured_character1.issues
         comments = user.comments
 
-
-
-
         # SEARCH MODULE
         searchform = SearchForm()
         if searchform.validate_on_submit():

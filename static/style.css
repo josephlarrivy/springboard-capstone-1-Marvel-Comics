@@ -540,3 +540,7 @@ comment-section-button:active {
   width: 12vw;
   height: 18.48vw;
 }
+
+#footer {
+  color: white !important;
+}
