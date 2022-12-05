@@ -16,7 +16,8 @@ from forms import DisposableUserForm
 
 # from flask import redirect
 # import os
-app.config["SQLALCHEMY_DATABASE_URI"] = "postgresql:///Marvel-Data"
+app.config["SQLALCHEMY_DATABASE_URI"] = os.environ.get(
+    'DATABASE_URL', "postgresql:///Marvel-Data")
 app.config["SECRET_KEY"] = "W89#kU*67jL9##fhy@$hdj"
 
 
