@@ -11,8 +11,8 @@
         <hr>
         <p>{{user.first_name}} {{user.last_name}}</p>
         <p>{{user.email}}</p>
-        <a href="/member/{{username}}/edit"><button class="button-small">Edit Info</button></a>
-        <br>
+        
+        
         <hr>
         <h3>Lists</h3>
         {% for list in lists %}
@@ -21,7 +21,6 @@
         <br>
         {% endfor %}
         <br><br>
-        <a href="/members/create_list_form"><button class="button-small">Create New List</button></a>
     </div>
 
     <div class="col">
