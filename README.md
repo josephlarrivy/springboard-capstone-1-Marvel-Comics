@@ -18,3 +18,4 @@ To get the project up and running on your own, use the following steps:
 This application was created using using Python, Flask, Jinja, and Postgres.
 
 If you have any further questions, please feel free to email me directly. Please include 'github' and 'Marvel' in the subject of your email.
+
